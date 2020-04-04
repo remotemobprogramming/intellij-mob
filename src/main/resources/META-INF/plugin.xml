@@ -13,7 +13,9 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
+        <projectConfigurable
+                instance="com.nowsprinting.intellij_mob.config.MobSettingsConfigurable" id="mob.settings"
+                key="mob.settings.name" bundle="com.nowsprinting.intellij_mob.MobBundle"/>
     </extensions>
 
     <actions>
