@@ -18,9 +18,17 @@
                 key="mob.settings.name" bundle="com.nowsprinting.intellij_mob.MobBundle"/>
         <projectService
                 serviceImplementation="com.nowsprinting.intellij_mob.config.MobProjectSettings"/>
+        <projectService
+                serviceImplementation="com.nowsprinting.intellij_mob.MobTimer"/>
     </extensions>
 
     <actions>
-        <!-- Add your actions here -->
+        <action id="com.nowsprinting.intellij_mob.start" class="com.nowsprinting.intellij_mob.action.start.StartAction"
+                text="Start Mob Session and/or My Turn...">
+        </action>
+        <group id="com.nowsprinting.intellij_mob" text="Mob" popup="true">
+            <add-to-group group-id="VcsGlobalGroup" anchor="after" relative-to-action="Git.Menu"/>
+            <reference id="com.nowsprinting.intellij_mob.start"/>
+        </group>
     </actions>
 </idea-plugin>
