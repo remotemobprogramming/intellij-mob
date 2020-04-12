@@ -136,7 +136,9 @@
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <toolTipText value=""/>
+        </properties>
       </component>
       <component id="a509a" class="javax.swing.JCheckBox" binding="startWithShare">
         <constraints>
@@ -144,6 +146,7 @@
         </constraints>
         <properties>
           <text resource-bundle="com/nowsprinting/intellij_mob/MobBundle" key="mob.settings.label.start_with_share"/>
+          <toolTipText resource-bundle="com/nowsprinting/intellij_mob/MobBundle" key="mob.settings.label.start_with_share.tips"/>
         </properties>
       </component>
       <component id="4e190" class="javax.swing.JCheckBox" binding="nextAtExpire">

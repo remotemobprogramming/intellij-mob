@@ -16,6 +16,8 @@
         <projectConfigurable
                 instance="com.nowsprinting.intellij_mob.config.MobSettingsConfigurable" id="mob.settings"
                 key="mob.settings.name" bundle="com.nowsprinting.intellij_mob.MobBundle"/>
+        <projectService
+                serviceImplementation="com.nowsprinting.intellij_mob.config.MobProjectSettings"/>
     </extensions>
 
     <actions>

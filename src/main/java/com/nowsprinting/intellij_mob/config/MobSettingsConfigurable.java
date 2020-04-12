@@ -1,17 +1,15 @@
 package com.nowsprinting.intellij_mob.config;
 
 import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.options.NonDefaultProjectConfigurable;
 import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.openapi.project.Project;
-//import com.intellij.plugins.haxe.util.HaxeUtil;
 import com.nowsprinting.intellij_mob.MobBundle;
 import com.nowsprinting.intellij_mob.config.ui.MobSettingsForm;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
-public class MobSettingsConfigurable implements SearchableConfigurable, NonDefaultProjectConfigurable {
+public class MobSettingsConfigurable implements SearchableConfigurable {
     private MobSettingsForm mySettingsPane;
     private final Project myProject;
 
@@ -46,11 +44,7 @@ public class MobSettingsConfigurable implements SearchableConfigurable, NonDefau
 
     public void apply() throws ConfigurationException {
         if (mySettingsPane != null) {
-            final boolean modified = isModified();
             mySettingsPane.applyEditorTo(getSettings());
-            if (modified) {
-//                HaxeUtil.reparseProjectFiles(myProject);
-            }
         }
     }
 
