@@ -85,7 +85,8 @@ public class MobProjectSettings implements PersistentStateComponent<Element> {
     }
 
     private String getStringAttributeFromElement(Element element, String key) {
-        return element.getAttributeValue(key);
+        String s = element.getAttributeValue(key);
+        return s != null ? s : "";
     }
 
     private int getIntAttributeFromElement(Element element, String key, int defaultValue) {
