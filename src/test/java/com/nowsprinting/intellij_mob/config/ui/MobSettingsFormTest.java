@@ -1,9 +1,9 @@
 package com.nowsprinting.intellij_mob.config.ui;
 
 import com.nowsprinting.intellij_mob.config.MobProjectSettings;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MobSettingsFormTest {
 

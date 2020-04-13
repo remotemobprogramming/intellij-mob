@@ -13,7 +13,8 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    testCompile("junit", "junit", "4.12")
+    testCompile("org.junit.jupiter", "junit-jupiter-api", "5.6.2")
+    testRuntime("org.junit.jupiter", "junit-jupiter-engine", "5.6.2")
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
@@ -29,6 +30,11 @@ tasks {
     }
     compileTestKotlin {
         kotlinOptions.jvmTarget = "1.8"
+    }
+    test {
+        useJUnitPlatform {
+            includeEngines("junit-jupiter")
+        }
     }
 }
 tasks.getByName<org.jetbrains.intellij.tasks.PatchPluginXmlTask>("patchPluginXml") {
