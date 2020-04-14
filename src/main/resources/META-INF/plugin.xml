@@ -19,7 +19,7 @@
         <projectService
                 serviceImplementation="com.nowsprinting.intellij_mob.config.MobProjectSettings"/>
         <projectService
-                serviceImplementation="com.nowsprinting.intellij_mob.MobTimer"/>
+                serviceImplementation="com.nowsprinting.intellij_mob.service.TimerService"/>
         <projectService
                 serviceImplementation="com.nowsprinting.intellij_mob.service.NotificationService"/>
     </extensions>
