@@ -17,7 +17,7 @@ class MobProjectSettingsTest {
         assertFalse(sut.debug);
         assertEquals(sut.timer, 10);
         assertFalse(sut.startWithShare);
-        assertFalse(sut.nextAtExpire);
+        assertTrue(sut.nextAtExpire);
         assertEquals(sut.wipCommitMessage, "mob next [ci-skip]");
         assertFalse(sut.nextStay);
     }

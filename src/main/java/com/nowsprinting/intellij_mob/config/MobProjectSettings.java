@@ -51,7 +51,7 @@ public class MobProjectSettings implements PersistentStateComponent<MobProjectSe
         debug = readBooleanDefaultFromResourceBundle("mob.settings.default.debug");
         timer = readIntDefaultFromResourceBundle("mob.settings.default.timer", TIMER_STATIC_DEFAULT);
         startWithShare = readBooleanDefaultFromResourceBundle("mob.settings.default.start_with_share");
-        nextAtExpire = readBooleanDefaultFromResourceBundle("mob.settings.default.next_at_expire");
+        nextAtExpire = readBooleanDefaultFromResourceBundle("mob.settings.default.appear_next_at_expire");
         wipCommitMessage = readStringDefaultFromResourceBundle("mob.settings.default.wip_commit_message");
         nextStay = readBooleanDefaultFromResourceBundle("mob.settings.default.next_stay");
     }
