@@ -1,7 +1,6 @@
-package com.nowsprinting.intellij_mob.subcommand
+package com.nowsprinting.intellij_mob.util
 
 import com.intellij.openapi.project.Project
-import com.nowsprinting.intellij_mob.service.NotificationService
 import java.awt.AWTException
 import java.awt.Robot
 import java.awt.event.KeyEvent
@@ -11,11 +10,10 @@ import java.awt.event.KeyEvent
  * It only works if you activate make the screenshare hotkey in zoom globally available, and keep the default shortcut at CMD+SHIFT+S (macOS)/ ALT+S (Linux).
  * And if run on macOS Catalina (or later?), Got to Security & Privacy > Privacy tab > Accessibility > Add `IntelliJ IDEA.app`
  */
-fun startScreenShareWithZoom(project: Project) {
+fun screenShareWithZoom(project: Project) {
     val keys = keysByOS()
     if (keys.isEmpty()) {
-        val service = NotificationService.getInstance(project)
-        service?.warning("Start screenshare with Zoom option is not supported your OS")
+        notifyWarning("Start screenshare with Zoom option is not supported your OS")
         return
     }
     try {
