@@ -2,9 +2,11 @@ package com.nowsprinting.intellij_mob.action.start
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.options.ShowSettingsUtil
 import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.action.start.ui.StartDialog
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
+import com.nowsprinting.intellij_mob.config.MobSettingsConfigurable
 import com.nowsprinting.intellij_mob.service.TimerService
 
 class StartAction : AnAction() {
@@ -25,5 +27,16 @@ class StartAction : AnAction() {
         dialog.pack()
         dialog.setLocationRelativeTo(null) // screen center
         dialog.isVisible = true
+
+        if (dialog.isOpenSettings) {
+            ShowSettingsUtil.getInstance().showSettingsDialog(e.project, MobSettingsConfigurable::class.java)
+        }
+
+        if (dialog.isOk) {
+            settings.timer = dialog.timer
+            settings.startWithShare = dialog.isStartWithShare
+            settings.nextAtExpire = dialog.isNextAtExpire
+            // TODO: run start task
+        }
     }
 }

@@ -10,6 +10,9 @@ public class StartDialog extends JDialog {
     private JTextField timer;
     private JCheckBox startWithShare;
     private JCheckBox nextAtExpire;
+    private JButton buttonOpenSettings;
+    private boolean openSettings = false;
+    private boolean ok = false;
 
     public StartDialog() {
         setContentPane(contentPane);
@@ -42,10 +45,25 @@ public class StartDialog extends JDialog {
                 onCancel();
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+        buttonOpenSettings.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onOpenSettings();
+            }
+        });
+
+        // TODO: timerに数値のみの入力制限を入れたい
+    }
+
+    private void onOpenSettings() {
+        openSettings = true;
+        dispose();
     }
 
     private void onOK() {
         // add your code here
+        ok = true;
         dispose();
     }
 
@@ -54,15 +72,35 @@ public class StartDialog extends JDialog {
         dispose();
     }
 
+    public int getTimer() {
+        return Integer.parseInt(this.timer.getText());  // Only numerical because restrict in JTextField
+    }
+
     public void setTimer(int timer) {
         this.timer.setText(Integer.toString(timer));
+    }
+
+    public boolean isStartWithShare() {
+        return this.startWithShare.isSelected();
     }
 
     public void setStartWithShare(boolean startWithShare) {
         this.startWithShare.setSelected(startWithShare);
     }
 
+    public boolean isNextAtExpire() {
+        return this.nextAtExpire.isSelected();
+    }
+
     public void setNextAtExpire(boolean nextAtExpire) {
         this.nextAtExpire.setSelected(nextAtExpire);
+    }
+
+    public boolean isOk() {
+        return ok;
+    }
+
+    public boolean isOpenSettings() {
+        return openSettings;
     }
 }
