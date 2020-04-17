@@ -1,6 +1,6 @@
 package com.nowsprinting.intellij_mob;
 
-import com.intellij.CommonBundle;
+import com.intellij.AbstractBundle;
 import com.intellij.reference.SoftReference;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
@@ -15,7 +15,7 @@ public class MobBundle {
     private static final String BUNDLE = "com.nowsprinting.intellij_mob.MobBundle";
 
     public static String message(@PropertyKey(resourceBundle = BUNDLE) String key, Object... params) {
-        return CommonBundle.message(getBundle(), key, params);
+        return AbstractBundle.message(getBundle(), key, params);
     }
 
     private static ResourceBundle getBundle() {
