@@ -12,7 +12,6 @@ class MobProjectSettingsTest {
         Assertions.assertEquals(sut.wipBranch, "mob-session")
         Assertions.assertEquals(sut.baseBranch, "master")
         Assertions.assertEquals(sut.remoteName, "origin")
-        Assertions.assertFalse(sut.debug)
         Assertions.assertEquals(sut.timer, 10)
         Assertions.assertFalse(sut.startWithShare)
         Assertions.assertTrue(sut.nextAtExpire)

@@ -9,7 +9,6 @@ public class MobSettingsForm {
     JTextField wipBranch;
     JTextField baseBranch;
     JTextField remoteName;
-    JCheckBox debug;
     JTextField timer;
     JCheckBox startWithShare;
     JCheckBox nextAtExpire;
@@ -24,7 +23,6 @@ public class MobSettingsForm {
         if (!wipBranch.getText().equals(settings.wipBranch)) return true;
         if (!baseBranch.getText().equals(settings.baseBranch)) return true;
         if (!remoteName.getText().equals(settings.remoteName)) return true;
-        if (!debug.isSelected() == settings.debug) return true;
         if (!timer.getText().equals(Integer.toString(settings.timer))) return true;
         if (!startWithShare.isSelected() == settings.startWithShare) return true;
         if (!nextAtExpire.isSelected() == settings.nextAtExpire) return true;
@@ -37,7 +35,6 @@ public class MobSettingsForm {
         settings.wipBranch = wipBranch.getText();
         settings.baseBranch = baseBranch.getText();
         settings.remoteName = remoteName.getText();
-        settings.debug = debug.isSelected();
         try {
             settings.timer = Integer.parseInt(timer.getText());
         } catch (NumberFormatException e) {
@@ -53,7 +50,6 @@ public class MobSettingsForm {
         wipBranch.setText(settings.wipBranch);
         baseBranch.setText(settings.baseBranch);
         remoteName.setText(settings.remoteName);
-        debug.setSelected(settings.debug);
         timer.setText(Integer.toString(settings.timer));
         startWithShare.setSelected(settings.startWithShare);
         nextAtExpire.setSelected(settings.nextAtExpire);

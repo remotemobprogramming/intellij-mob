@@ -34,15 +34,6 @@ class MobSettingsFormTest {
     }
 
     @Test
-    fun resetEditorFrom_set_debug() {
-        val settings = MobProjectSettings()
-        settings.debug = true
-        val sut = MobSettingsForm()
-        sut.resetEditorFrom(settings)
-        Assertions.assertTrue(sut.debug.isSelected)
-    }
-
-    @Test
     fun resetEditorFrom_set_timer() {
         val settings = MobProjectSettings()
         settings.timer = 100
@@ -92,7 +83,6 @@ class MobSettingsFormTest {
         settings.wipBranch = "mob-session"
         settings.baseBranch = "master"
         settings.remoteName = "origin"
-        settings.debug = false
         settings.timer = 10
         settings.startWithShare = false
         settings.nextAtExpire = false
@@ -106,7 +96,6 @@ class MobSettingsFormTest {
         form.wipBranch.text = "mob-session"
         form.baseBranch.text = "master"
         form.remoteName.text = "origin"
-        form.debug.isSelected = false
         form.timer.text = "10"
         form.startWithShare.isSelected = false
         form.nextAtExpire.isSelected = false
@@ -146,15 +135,6 @@ class MobSettingsFormTest {
         val settings = createDefaultSettings()
         val sut = createDefaultForm()
         sut.remoteName.text = "upstream"
-        val actual = sut.isModified(settings)
-        Assertions.assertTrue(actual)
-    }
-
-    @Test
-    fun isModified_modified_debug() {
-        val settings = createDefaultSettings()
-        val sut = createDefaultForm()
-        sut.debug.isSelected = true
         val actual = sut.isModified(settings)
         Assertions.assertTrue(actual)
     }
@@ -229,15 +209,6 @@ class MobSettingsFormTest {
         sut.remoteName.text = "upstream"
         sut.applyEditorTo(settings)
         Assertions.assertEquals("upstream", settings.remoteName)
-    }
-
-    @Test
-    fun applyEditorTo_modified_debug() {
-        val settings = createDefaultSettings()
-        val sut = createDefaultForm()
-        sut.debug.isSelected = true
-        sut.applyEditorTo(settings)
-        Assertions.assertTrue(settings.debug)
     }
 
     @Test

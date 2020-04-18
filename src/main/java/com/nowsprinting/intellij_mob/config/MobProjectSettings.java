@@ -22,7 +22,6 @@ public class MobProjectSettings implements PersistentStateComponent<MobProjectSe
     public String wipBranch;
     public String baseBranch;
     public String remoteName;
-    public boolean debug;
     public int timer;
     public boolean startWithShare;
     public boolean nextAtExpire;
@@ -48,7 +47,6 @@ public class MobProjectSettings implements PersistentStateComponent<MobProjectSe
         wipBranch = readStringDefaultFromResourceBundle("mob.settings.default.wip_branch");
         baseBranch = readStringDefaultFromResourceBundle("mob.settings.default.base_branch");
         remoteName = readStringDefaultFromResourceBundle("mob.settings.default.remote_name");
-        debug = readBooleanDefaultFromResourceBundle("mob.settings.default.debug");
         timer = readIntDefaultFromResourceBundle("mob.settings.default.timer", TIMER_STATIC_DEFAULT);
         startWithShare = readBooleanDefaultFromResourceBundle("mob.settings.default.start_with_share");
         nextAtExpire = readBooleanDefaultFromResourceBundle("mob.settings.default.appear_next_at_expire");
