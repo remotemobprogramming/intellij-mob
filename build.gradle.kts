@@ -2,10 +2,13 @@ plugins {
     id("org.jetbrains.intellij") version "0.4.18"
     java
     kotlin("jvm") version "1.3.71"
+    id("com.palantir.git-version") version "0.12.3"
 }
 
 group = "com.nowsprinting"
-version = "1.0-SNAPSHOT"
+
+val gitVersion: groovy.lang.Closure<*> by extra
+version = gitVersion()
 
 repositories {
     mavenCentral()
