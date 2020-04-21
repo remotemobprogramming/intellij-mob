@@ -7,25 +7,45 @@ import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.action.start.ui.StartDialog
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
 import com.nowsprinting.intellij_mob.config.MobSettingsConfigurable
+import com.nowsprinting.intellij_mob.git.RepositoryResult
+import com.nowsprinting.intellij_mob.git.getRepository
 import com.nowsprinting.intellij_mob.service.TimerService
+import git4idea.repo.GitRepository
 
 class StartAction : AnAction() {
     override fun update(e: AnActionEvent) {
         val timer = e.project?.let { TimerService.getInstance(it) }
-        if (timer != null) {
-            e.presentation.isEnabled = !timer.isRunning()
-        }
+        timer?.let { e.presentation.isEnabled = it.isRunning() }
     }
 
     override fun actionPerformed(e: AnActionEvent) {
-        val settings = MobProjectSettings.getInstance(e.project)
         val dialog = StartDialog()
+        dialog.title = MobBundle.message("mob.start.dialog.title")
+
+        val settings = MobProjectSettings.getInstance(e.project)
         dialog.setTimer(settings.timer)
         dialog.setStartWithShare(settings.startWithShare)
         dialog.setNextAtExpire(settings.nextAtExpire)
-        dialog.title = MobBundle.message("mob.start.dialog.title")
+
+        val repository: GitRepository? = e.project?.let {
+            when (val result = getRepository(it)) {
+                is RepositoryResult.Success -> {
+                    result.repository
+                }
+                is RepositoryResult.Failure -> {
+                    val errorMessage = MobBundle.message("mob.start.error.cant_get_git_repository")
+                    dialog.setPreconditionResult(false, errorMessage)
+                    null
+                }
+            }
+        }
+        repository?.let {
+            val (canExecute, errorMessage) = checkStartPrecondition(settings, it);
+            dialog.setPreconditionResult(canExecute, errorMessage)
+        }
+
         dialog.pack()
-        dialog.setLocationRelativeTo(null) // screen center
+        dialog.setLocationRelativeTo(null) // set on screen center
         dialog.isVisible = true
 
         if (dialog.isOpenSettings) {
@@ -36,7 +56,7 @@ class StartAction : AnAction() {
             settings.timer = dialog.timer
             settings.startWithShare = dialog.isStartWithShare
             settings.nextAtExpire = dialog.isNextAtExpire
-            // TODO: run start task
+            start(settings, repository!!)   // if click ok, repository exists
         }
     }
 }

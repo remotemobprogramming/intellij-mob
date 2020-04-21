@@ -1,5 +1,7 @@
 package com.nowsprinting.intellij_mob.action.start.ui;
 
+import org.jetbrains.annotations.Nullable;
+
 import javax.swing.*;
 import java.awt.event.*;
 
@@ -11,6 +13,7 @@ public class StartDialog extends JDialog {
     private JCheckBox startWithShare;
     private JCheckBox nextAtExpire;
     private JButton buttonOpenSettings;
+    private JLabel message;
     private boolean openSettings = false;
     private boolean ok = false;
 
@@ -53,7 +56,19 @@ public class StartDialog extends JDialog {
             }
         });
 
-        // TODO: timerに数値のみの入力制限を入れたい
+        // TODO: Add control that can input only numerical value in `timer`
+    }
+
+    /**
+     * Set pre-condition check results
+     *
+     * @param canExecute   enable ok button
+     * @param errorMessage display message
+     */
+    public void setPreconditionResult(boolean canExecute, @Nullable String errorMessage) {
+        buttonOK.setEnabled(canExecute);
+        message.setVisible(!canExecute);
+        message.setText(errorMessage);
     }
 
     private void onOpenSettings() {
