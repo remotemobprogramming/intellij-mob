@@ -16,6 +16,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+    testImplementation("io.mockk:mockk:1.9")
     testCompile("org.junit.jupiter", "junit-jupiter-api", "5.6.2")
     testRuntime("org.junit.jupiter", "junit-jupiter-engine", "5.6.2")
 }
@@ -23,6 +24,7 @@ dependencies {
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
     version = "2020.1"
+    setPlugins("git4idea")
 }
 configure<JavaPluginConvention> {
     sourceCompatibility = JavaVersion.VERSION_1_8
