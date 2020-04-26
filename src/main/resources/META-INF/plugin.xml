@@ -14,6 +14,9 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>Git4Idea</depends>
 
+    <!-- see: https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html -->
+    <idea-version since-build="201.6668.121"/>
+
     <extensions defaultExtensionNs="com.intellij">
         <projectConfigurable
                 instance="com.nowsprinting.intellij_mob.config.MobSettingsConfigurable" id="mob.settings"
