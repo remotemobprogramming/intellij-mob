@@ -10,7 +10,7 @@ import io.mockk.mockk
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
-internal class RepositoryKtTest {
+internal class GitRepositoryKtTest {
 
     private class StubGitRepository(val repoPath: String) : DummyGitRepository() {
         private class StubVirtualFile(val repoPath: String) : DummyVirtualFile() {
@@ -31,11 +31,11 @@ internal class RepositoryKtTest {
             StubGitRepository("/path/to/repository")
         )
 
-        val actual = getRepository(
+        val actual = getGitRepository(
             mockRepositoryManager,
             FakeLogger()
         )
-        Assertions.assertTrue(actual is RepositoryResult.Success)
+        Assertions.assertTrue(actual is GitRepositoryResult.Success)
     }
 
     @Test
@@ -43,11 +43,11 @@ internal class RepositoryKtTest {
         val mockRepositoryManager = mockk<GitRepositoryManager>()
         every { mockRepositoryManager.repositories } returns listOf()
 
-        val actual = getRepository(
+        val actual = getGitRepository(
             mockRepositoryManager,
             FakeLogger()
         )
-        kotlin.test.assertTrue(actual is RepositoryResult.Failure)
+        kotlin.test.assertTrue(actual is GitRepositoryResult.Failure)
         kotlin.test.assertEquals("Repository not found in this project", actual.reason)
     }
 
@@ -59,11 +59,11 @@ internal class RepositoryKtTest {
             StubGitRepository("/path/to/repository-2")
         )
 
-        val actual = getRepository(
+        val actual = getGitRepository(
             mockRepositoryManager,
             FakeLogger()
         )
-        kotlin.test.assertTrue(actual is RepositoryResult.Failure)
+        kotlin.test.assertTrue(actual is GitRepositoryResult.Failure)
         kotlin.test.assertEquals("Has a multiple repositories in this project", actual.reason)
     }
 }

@@ -1,8 +1,10 @@
 package com.nowsprinting.intellij_mob.action.start
 
+import com.intellij.dvcs.repo.Repository
 import com.intellij.vcs.log.Hash
 import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
+import com.nowsprinting.intellij_mob.git.isNothingToCommit
 import com.nowsprinting.intellij_mob.testdouble.DummyGitRepository
 import com.nowsprinting.intellij_mob.testdouble.DummyHash
 import git4idea.GitLocalBranch
@@ -10,6 +12,8 @@ import git4idea.GitRemoteBranch
 import git4idea.GitStandardRemoteBranch
 import git4idea.branch.GitBranchesCollection
 import git4idea.repo.GitRemote
+import io.mockk.every
+import io.mockk.mockkStatic
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
@@ -18,7 +22,8 @@ internal class StartPreconditionKtTest {
     private class StubGitRepository(
         val remoteSet: MutableCollection<GitRemote>?,
         val localBranches: MutableCollection<GitLocalBranch>?,
-        val remoteBranches: MutableCollection<GitRemoteBranch>?
+        val remoteBranches: MutableCollection<GitRemoteBranch>?,
+        val repositoryState: Repository.State = Repository.State.NORMAL
     ) : DummyGitRepository() {
 
         override fun getRemotes(): MutableCollection<GitRemote> {
@@ -40,6 +45,10 @@ internal class StartPreconditionKtTest {
             }
             return GitBranchesCollection(localBranchesMap, remoteBranchesMap)
         }
+
+        override fun getState(): Repository.State {
+            return repositoryState
+        }
     }
 
     private fun createSettings(): MobProjectSettings {
@@ -54,7 +63,7 @@ internal class StartPreconditionKtTest {
         settings.wipBranch = null
         val (canExecute, errorMessage) = checkStartPrecondition(settings, DummyGitRepository())
         assertFalse(canExecute)
-        assertEquals(MobBundle.message("mob.start.error.unset_wip_branch"), errorMessage)
+        assertEquals(MobBundle.message("mob.start.error.reason.unset_wip_branch"), errorMessage)
     }
 
     @Test
@@ -63,7 +72,7 @@ internal class StartPreconditionKtTest {
         settings.wipBranch = ""
         val (canExecute, errorMessage) = checkStartPrecondition(settings, DummyGitRepository())
         assertFalse(canExecute)
-        assertEquals(MobBundle.message("mob.start.error.unset_wip_branch"), errorMessage)
+        assertEquals(MobBundle.message("mob.start.error.reason.unset_wip_branch"), errorMessage)
     }
 
     @Test
@@ -72,7 +81,7 @@ internal class StartPreconditionKtTest {
         settings.baseBranch = null
         val (canExecute, errorMessage) = checkStartPrecondition(settings, DummyGitRepository())
         assertFalse(canExecute)
-        assertEquals(MobBundle.message("mob.start.error.unset_base_branch"), errorMessage)
+        assertEquals(MobBundle.message("mob.start.error.reason.unset_base_branch"), errorMessage)
     }
 
     @Test
@@ -81,7 +90,7 @@ internal class StartPreconditionKtTest {
         settings.baseBranch = ""
         val (canExecute, errorMessage) = checkStartPrecondition(settings, DummyGitRepository())
         assertFalse(canExecute)
-        assertEquals(MobBundle.message("mob.start.error.unset_base_branch"), errorMessage)
+        assertEquals(MobBundle.message("mob.start.error.reason.unset_base_branch"), errorMessage)
     }
 
     @Test
@@ -90,7 +99,7 @@ internal class StartPreconditionKtTest {
         settings.remoteName = null
         val (canExecute, errorMessage) = checkStartPrecondition(settings, DummyGitRepository())
         assertFalse(canExecute)
-        assertEquals(MobBundle.message("mob.start.error.unset_remote_name"), errorMessage)
+        assertEquals(MobBundle.message("mob.start.error.reason.unset_remote_name"), errorMessage)
     }
 
     @Test
@@ -99,37 +108,7 @@ internal class StartPreconditionKtTest {
         settings.remoteName = ""
         val (canExecute, errorMessage) = checkStartPrecondition(settings, DummyGitRepository())
         assertFalse(canExecute)
-        assertEquals(MobBundle.message("mob.start.error.unset_remote_name"), errorMessage)
-    }
-
-    @Test
-    fun checkStartPrecondition_existLocalBranch_success() {
-        val settings = createSettings()
-        val origin = GitRemote("origin", listOf<String>(), listOf<String>(), listOf<String>(), listOf<String>())
-        val localMaster = GitLocalBranch("master")
-        val repository = StubGitRepository(
-            mutableSetOf(origin),
-            mutableSetOf(localMaster),
-            mutableSetOf()  // not set
-        )
-        val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
-        assertTrue(canExecute)
-        assertNull(errorMessage)
-    }
-
-    @Test
-    fun checkStartPrecondition_existRemoteBranch_success() {
-        val settings = createSettings()
-        val origin = GitRemote("origin", listOf<String>(), listOf<String>(), listOf<String>(), listOf<String>())
-        val remoteMaster = GitStandardRemoteBranch(origin, "master")
-        val repository = StubGitRepository(
-            mutableSetOf(origin),
-            mutableSetOf(), // not set
-            mutableSetOf(remoteMaster)
-        )
-        val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
-        assertTrue(canExecute)
-        assertNull(errorMessage)
+        assertEquals(MobBundle.message("mob.start.error.reason.unset_remote_name"), errorMessage)
     }
 
     @Test
@@ -145,7 +124,7 @@ internal class StartPreconditionKtTest {
         )
         val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
         assertFalse(canExecute)
-        assertEquals(MobBundle.message("mob.start.error.not_exist_remote_name"), errorMessage)
+        assertEquals(MobBundle.message("mob.start.error.reason.not_exist_remote_name"), errorMessage)
     }
 
     @Test
@@ -161,7 +140,7 @@ internal class StartPreconditionKtTest {
         )
         val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
         assertFalse(canExecute)
-        assertEquals(MobBundle.message("mob.start.error.not_exist_remote_name"), errorMessage)
+        assertEquals(MobBundle.message("mob.start.error.reason.not_exist_remote_name"), errorMessage)
     }
 
     @Test
@@ -177,7 +156,7 @@ internal class StartPreconditionKtTest {
         )
         val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
         assertFalse(canExecute)
-        assertEquals(MobBundle.message("mob.start.error.not_exist_base_branch"), errorMessage)
+        assertEquals(MobBundle.message("mob.start.error.reason.not_exist_base_branch"), errorMessage)
     }
 
     @Test
@@ -191,7 +170,24 @@ internal class StartPreconditionKtTest {
         )
         val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
         assertFalse(canExecute)
-        assertEquals(MobBundle.message("mob.start.error.not_exist_base_branch"), errorMessage)
+        assertEquals(MobBundle.message("mob.start.error.reason.not_exist_base_branch"), errorMessage)
+    }
+
+    @Test
+    fun checkStartPrecondition_repositoryStateIsNotNormal_failure() {
+        val settings = createSettings()
+        val origin = GitRemote("origin", listOf<String>(), listOf<String>(), listOf<String>(), listOf<String>())
+        val localMaster = GitLocalBranch("master")
+        val remoteMaster = GitStandardRemoteBranch(origin, "master")
+        val repository = StubGitRepository(
+            mutableSetOf(origin),
+            mutableSetOf(localMaster),
+            mutableSetOf(remoteMaster),
+            Repository.State.MERGING
+        )
+        val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
+        assertFalse(canExecute)
+        assertEquals(MobBundle.message("mob.start.error.reason.has_uncommitted_changes"), errorMessage)
     }
 
     @Test
@@ -205,9 +201,56 @@ internal class StartPreconditionKtTest {
             mutableSetOf(localMaster),
             mutableSetOf(remoteMaster)
         )
-        // TODO: fixture
+
+        mockkStatic("com.nowsprinting.intellij_mob.git.StatusKt")
+        every {
+            isNothingToCommit(repository)
+        } returns false
+
         val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
         assertFalse(canExecute)
-        assertEquals(MobBundle.message("mob.start.error.has_uncommitted_changes"), errorMessage)
+        assertEquals(MobBundle.message("mob.start.error.reason.has_uncommitted_changes"), errorMessage)
+    }
+
+    @Test
+    fun checkStartPrecondition_existLocalBranch_success() {
+        val settings = createSettings()
+        val origin = GitRemote("origin", listOf<String>(), listOf<String>(), listOf<String>(), listOf<String>())
+        val localMaster = GitLocalBranch("master")
+        val repository = StubGitRepository(
+            mutableSetOf(origin),
+            mutableSetOf(localMaster),
+            mutableSetOf()  // not set
+        )
+
+        mockkStatic("com.nowsprinting.intellij_mob.git.StatusKt")
+        every {
+            isNothingToCommit(repository)
+        } returns true
+
+        val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
+        assertTrue(canExecute)
+        assertNull(errorMessage)
+    }
+
+    @Test
+    fun checkStartPrecondition_existRemoteBranch_success() {
+        val settings = createSettings()
+        val origin = GitRemote("origin", listOf<String>(), listOf<String>(), listOf<String>(), listOf<String>())
+        val remoteMaster = GitStandardRemoteBranch(origin, "master")
+        val repository = StubGitRepository(
+            mutableSetOf(origin),
+            mutableSetOf(), // not set
+            mutableSetOf(remoteMaster)
+        )
+
+        mockkStatic("com.nowsprinting.intellij_mob.git.StatusKt")
+        every {
+            isNothingToCommit(repository)
+        } returns true
+
+        val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
+        assertTrue(canExecute)
+        assertNull(errorMessage)
     }
 }

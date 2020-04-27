@@ -1,5 +1,6 @@
 package com.nowsprinting.intellij_mob.action.start.ui;
 
+import com.nowsprinting.intellij_mob.MobBundle;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -62,13 +63,13 @@ public class StartDialog extends JDialog {
     /**
      * Set pre-condition check results
      *
-     * @param canExecute   enable ok button
-     * @param errorMessage display message
+     * @param canExecute enable ok button
+     * @param reason     display message
      */
-    public void setPreconditionResult(boolean canExecute, @Nullable String errorMessage) {
+    public void setPreconditionResult(boolean canExecute, @Nullable String reason) {
         buttonOK.setEnabled(canExecute);
         message.setVisible(!canExecute);
-        message.setText(errorMessage);
+        message.setText(String.format(MobBundle.message("mob.start.error.cant_start"), reason));
     }
 
     private void onOpenSettings() {

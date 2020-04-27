@@ -3,7 +3,7 @@ package com.nowsprinting.intellij_mob.git
 import com.nowsprinting.intellij_mob.testdouble.DummyGitRepository
 import com.nowsprinting.intellij_mob.testdouble.FakeLogger
 import git4idea.repo.GitRemote
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class FetchKtTest {
@@ -14,6 +14,7 @@ internal class FetchKtTest {
         }
     }
 
+    @Disabled("No integration tests fixture")
     @Test
     fun fetch_success() {
         TODO("Not yet implemented")

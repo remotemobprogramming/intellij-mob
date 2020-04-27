@@ -1,8 +1,30 @@
 package com.nowsprinting.intellij_mob.action.start
 
+import com.intellij.openapi.project.Project
 import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
+import com.nowsprinting.intellij_mob.git.GitRepositoryResult
+import com.nowsprinting.intellij_mob.git.getGitRepository
+import com.nowsprinting.intellij_mob.git.isNothingToCommit
 import git4idea.repo.GitRepository
+
+/**
+ * Check precondition for mob start command
+ *
+ * @return success/failure, error message
+ */
+fun checkStartPrecondition(settings: MobProjectSettings, project: Project): Pair<Boolean, String?> {
+    val repository = when (val result = getGitRepository(project)) {
+        is GitRepositoryResult.Success -> {
+            result.repository
+        }
+        is GitRepositoryResult.Failure -> {
+            val errorMessage = MobBundle.message("mob.start.error.reason.cant_get_git_repository")
+            return Pair(false, errorMessage)
+        }
+    }
+    return checkStartPrecondition(settings, repository)
+}
 
 /**
  * Check precondition for mob start command
@@ -11,22 +33,22 @@ import git4idea.repo.GitRepository
  */
 fun checkStartPrecondition(settings: MobProjectSettings, repository: GitRepository): Pair<Boolean, String?> {
     if (settings.wipBranch.isNullOrEmpty()) {
-        return Pair(false, MobBundle.message("mob.start.error.unset_wip_branch"))
+        return Pair(false, MobBundle.message("mob.start.error.reason.unset_wip_branch"))
     }
     if (settings.baseBranch.isNullOrEmpty()) {
-        return Pair(false, MobBundle.message("mob.start.error.unset_base_branch"))
+        return Pair(false, MobBundle.message("mob.start.error.reason.unset_base_branch"))
     }
     if (settings.remoteName.isNullOrEmpty()) {
-        return Pair(false, MobBundle.message("mob.start.error.unset_remote_name"))
+        return Pair(false, MobBundle.message("mob.start.error.reason.unset_remote_name"))
     }
     if (!isExistRemote(settings.remoteName, repository)) {
-        return Pair(false, MobBundle.message("mob.start.error.not_exist_remote_name"))
+        return Pair(false, MobBundle.message("mob.start.error.reason.not_exist_remote_name"))
     }
     if (!isExistBaseBranch(settings.baseBranch, repository)) {
-        return Pair(false, MobBundle.message("mob.start.error.not_exist_base_branch"))
+        return Pair(false, MobBundle.message("mob.start.error.reason.not_exist_base_branch"))
     }
-    if (!isNothingToCommit()) {
-        return Pair(false, MobBundle.message("mob.start.error.has_uncommitted_changes"))
+    if (!isNothingToCommit(repository)) {
+        return Pair(false, MobBundle.message("mob.start.error.reason.has_uncommitted_changes"))
     }
     return Pair(true, null)
 }
@@ -52,11 +74,4 @@ private fun isExistBaseBranch(branchName: String, repository: GitRepository): Bo
         }
     }
     return false
-}
-
-private fun isNothingToCommit(): Boolean {
-//    output : = silentgit("status", "--short")
-//    var isMobbing: = len(strings.TrimSpace(output)) == 0
-//    return isMobbing
-    return true // TODO:
 }
