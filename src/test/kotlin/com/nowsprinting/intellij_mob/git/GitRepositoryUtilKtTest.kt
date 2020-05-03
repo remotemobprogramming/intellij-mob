@@ -10,7 +10,7 @@ import io.mockk.mockk
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
-internal class GitRepositoryKtTest {
+internal class GitRepositoryUtilKtTest {
 
     private class StubGitRepository(val repoPath: String) : DummyGitRepository() {
         private class StubVirtualFile(val repoPath: String) : DummyVirtualFile() {
@@ -48,7 +48,7 @@ internal class GitRepositoryKtTest {
             FakeLogger()
         )
         kotlin.test.assertTrue(actual is GitRepositoryResult.Failure)
-        kotlin.test.assertEquals("Repository not found in this project", actual.reason)
+        kotlin.test.assertEquals("repository not found in this project", actual.reason)
     }
 
     @Test
@@ -64,6 +64,6 @@ internal class GitRepositoryKtTest {
             FakeLogger()
         )
         kotlin.test.assertTrue(actual is GitRepositoryResult.Failure)
-        kotlin.test.assertEquals("Has a multiple repositories in this project", actual.reason)
+        kotlin.test.assertEquals("multiple repositories is not support yet", actual.reason)
     }
 }

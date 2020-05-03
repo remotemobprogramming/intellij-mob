@@ -4,7 +4,7 @@ import git4idea.commands.GitCommand
 import git4idea.repo.GitRepository
 
 /**
- * git fetch --prune
+ * git pull --ff-only
  *
  * Must be called from `Task.Backgroundable#run()`.
  * If an error occurs, show a notification within this function.
@@ -14,9 +14,9 @@ import git4idea.repo.GitRepository
  * @param   verbose         Add `--verbose` option (default: false)
  * @return  true: Git command successful
  */
-fun fetch(repository: GitRepository, notifyContents: MutableList<String>? = null, verbose: Boolean = false): Boolean {
-    val command = GitCommand.FETCH
-    val options = listOf("--prune")
+fun pull(repository: GitRepository, notifyContents: MutableList<String>? = null, verbose: Boolean = false): Boolean {
+    val command = GitCommand.PULL
+    val options = listOf("--ff-only")
 
     return git(command, options, repository, notifyContents, verbose)
 }

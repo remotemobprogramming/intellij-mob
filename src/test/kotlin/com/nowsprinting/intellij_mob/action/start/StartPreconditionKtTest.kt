@@ -156,7 +156,7 @@ internal class StartPreconditionKtTest {
         )
         val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
         assertFalse(canExecute)
-        assertEquals(MobBundle.message("mob.start.error.reason.not_exist_base_branch"), errorMessage)
+        assertEquals(MobBundle.message("mob.start.error.reason.not_exist_base_branch_on_remote"), errorMessage)
     }
 
     @Test
@@ -170,7 +170,28 @@ internal class StartPreconditionKtTest {
         )
         val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
         assertFalse(canExecute)
-        assertEquals(MobBundle.message("mob.start.error.reason.not_exist_base_branch"), errorMessage)
+        assertEquals(MobBundle.message("mob.start.error.reason.not_exist_base_branch_on_remote"), errorMessage)
+    }
+
+    @Test
+    fun checkStartPrecondition_existLocalBranch_failure() {
+        val settings = createSettings()
+        val origin = GitRemote("origin", listOf<String>(), listOf<String>(), listOf<String>(), listOf<String>())
+        val localMaster = GitLocalBranch("master")
+        val repository = StubGitRepository(
+            mutableSetOf(origin),
+            mutableSetOf(localMaster),
+            mutableSetOf()  // not set
+        )
+
+        mockkStatic("com.nowsprinting.intellij_mob.git.StatusKt")
+        every {
+            isNothingToCommit(repository)
+        } returns true
+
+        val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
+        assertFalse(canExecute)
+        assertEquals(MobBundle.message("mob.start.error.reason.not_exist_base_branch_on_remote"), errorMessage)
     }
 
     @Test
@@ -210,27 +231,6 @@ internal class StartPreconditionKtTest {
         val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
         assertFalse(canExecute)
         assertEquals(MobBundle.message("mob.start.error.reason.has_uncommitted_changes"), errorMessage)
-    }
-
-    @Test
-    fun checkStartPrecondition_existLocalBranch_success() {
-        val settings = createSettings()
-        val origin = GitRemote("origin", listOf<String>(), listOf<String>(), listOf<String>(), listOf<String>())
-        val localMaster = GitLocalBranch("master")
-        val repository = StubGitRepository(
-            mutableSetOf(origin),
-            mutableSetOf(localMaster),
-            mutableSetOf()  // not set
-        )
-
-        mockkStatic("com.nowsprinting.intellij_mob.git.StatusKt")
-        every {
-            isNothingToCommit(repository)
-        } returns true
-
-        val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
-        assertTrue(canExecute)
-        assertNull(errorMessage)
     }
 
     @Test

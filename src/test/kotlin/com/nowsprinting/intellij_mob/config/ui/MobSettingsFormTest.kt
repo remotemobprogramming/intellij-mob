@@ -36,10 +36,10 @@ class MobSettingsFormTest {
     @Test
     fun resetEditorFrom_set_timer() {
         val settings = MobProjectSettings()
-        settings.timer = 100
+        settings.timerMinutes = 100
         val sut = MobSettingsForm()
         sut.resetEditorFrom(settings)
-        Assertions.assertEquals(sut.timer.text, "100")
+        Assertions.assertEquals(sut.timerMinutes.text, "100")
     }
 
     @Test
@@ -83,7 +83,7 @@ class MobSettingsFormTest {
         settings.wipBranch = "mob-session"
         settings.baseBranch = "master"
         settings.remoteName = "origin"
-        settings.timer = 10
+        settings.timerMinutes = 10
         settings.startWithShare = false
         settings.nextAtExpire = false
         settings.wipCommitMessage = "mob next [ci-skip]"
@@ -96,7 +96,7 @@ class MobSettingsFormTest {
         form.wipBranch.text = "mob-session"
         form.baseBranch.text = "master"
         form.remoteName.text = "origin"
-        form.timer.text = "10"
+        form.timerMinutes.text = "10"
         form.startWithShare.isSelected = false
         form.nextAtExpire.isSelected = false
         form.wipCommitMessage.text = "mob next [ci-skip]"
@@ -143,7 +143,7 @@ class MobSettingsFormTest {
     fun isModified_modified_timer() {
         val settings = createDefaultSettings()
         val sut = createDefaultForm()
-        sut.timer.text = "100"
+        sut.timerMinutes.text = "100"
         val actual = sut.isModified(settings)
         Assertions.assertTrue(actual)
     }
@@ -215,9 +215,9 @@ class MobSettingsFormTest {
     fun applyEditorTo_modified_timer() {
         val settings = createDefaultSettings()
         val sut = createDefaultForm()
-        sut.timer.text = "100"
+        sut.timerMinutes.text = "100"
         sut.applyEditorTo(settings)
-        Assertions.assertEquals(100, settings.timer)
+        Assertions.assertEquals(100, settings.timerMinutes)
     }
 
     @Test

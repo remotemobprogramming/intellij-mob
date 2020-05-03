@@ -10,7 +10,7 @@ public class StartDialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JTextField timer;
+    private JTextField timerMinutes;
     private JCheckBox startWithShare;
     private JCheckBox nextAtExpire;
     private JButton buttonOpenSettings;
@@ -88,12 +88,12 @@ public class StartDialog extends JDialog {
         dispose();
     }
 
-    public int getTimer() {
-        return Integer.parseInt(this.timer.getText());  // Only numerical because restrict in JTextField
+    public int getTimerMinutes() {
+        return Integer.parseInt(this.timerMinutes.getText());  // Only numerical because restrict in JTextField
     }
 
-    public void setTimer(int timer) {
-        this.timer.setText(Integer.toString(timer));
+    public void setTimerMinutes(int timerMinutes) {
+        this.timerMinutes.setText(Integer.toString(timerMinutes));
     }
 
     public boolean isStartWithShare() {

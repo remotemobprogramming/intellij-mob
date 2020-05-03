@@ -29,7 +29,7 @@
 
     <actions>
         <action id="com.nowsprinting.intellij_mob.start" class="com.nowsprinting.intellij_mob.action.start.StartAction"
-                text="Start Mob Session and/or My Turn...">
+                text="Start Mob Programming as Typist...">
         </action>
         <group id="com.nowsprinting.intellij_mob" text="Mob" popup="true">
             <add-to-group group-id="VcsGlobalGroup" anchor="after" relative-to-action="Git.Menu"/>

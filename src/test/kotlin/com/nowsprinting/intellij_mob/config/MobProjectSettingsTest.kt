@@ -12,7 +12,7 @@ class MobProjectSettingsTest {
         Assertions.assertEquals(sut.wipBranch, "mob-session")
         Assertions.assertEquals(sut.baseBranch, "master")
         Assertions.assertEquals(sut.remoteName, "origin")
-        Assertions.assertEquals(sut.timer, 10)
+        Assertions.assertEquals(sut.timerMinutes, 10)
         Assertions.assertFalse(sut.startWithShare)
         Assertions.assertTrue(sut.nextAtExpire)
         Assertions.assertEquals(sut.wipCommitMessage, "mob next [ci-skip]")

@@ -2,10 +2,11 @@ package com.nowsprinting.intellij_mob.git
 
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
+import com.nowsprinting.intellij_mob.MobBundle
 import git4idea.repo.GitRepository
 import git4idea.repo.GitRepositoryManager
 
-private val logger = Logger.getInstance("#com.nowsprinting.intellij_mob.git.GitRepositoryKt")
+private val logger = Logger.getInstance("#com.nowsprinting.intellij_mob.git.GitRepositoryUtilKt")
 
 sealed class GitRepositoryResult {
     class Failure(val reason: String) : GitRepositoryResult()
@@ -23,22 +24,22 @@ fun getGitRepository(project: Project): GitRepositoryResult {
 internal fun getGitRepository(manager: GitRepositoryManager, log: Logger): GitRepositoryResult {
     val repositories = manager.repositories
     if (repositories.count() == 0) {
-        val result = GitRepositoryResult.Failure("Repository not found in this project")
-        log.warn(result.reason)
+        val result = GitRepositoryResult.Failure(MobBundle.message("mob.start.error.reason.repository_not_found"))
+        log.error(result.reason)
         return result
     }
 
     if (repositories.count() > 1) {
-        val result = GitRepositoryResult.Failure("Has a multiple repositories in this project")
+        val result = GitRepositoryResult.Failure(MobBundle.message("mob.start.error.reason.has_multiple_repositories"))
         // TODO: support multiple repositories
-        var message = result.reason
+        val logMessage = StringBuilder(result.reason)
         for (repo in repositories) {
-            message += "\nFind repository: " + repo.root.path
+            logMessage.append("%nFound repository: $repo.root.path")
         }
-        log.warn(message)
+        log.error(logMessage.toString().format())
         return result
     }
 
-    log.debug("Find repository: $repositories[0].root.path")
+    log.debug("Found repository: $repositories[0].root.path")
     return GitRepositoryResult.Success(repositories[0])
 }

@@ -9,7 +9,7 @@ public class MobSettingsForm {
     JTextField wipBranch;
     JTextField baseBranch;
     JTextField remoteName;
-    JTextField timer;
+    JTextField timerMinutes;
     JCheckBox startWithShare;
     JCheckBox nextAtExpire;
     JTextField wipCommitMessage;
@@ -23,7 +23,7 @@ public class MobSettingsForm {
         if (!wipBranch.getText().equals(settings.wipBranch)) return true;
         if (!baseBranch.getText().equals(settings.baseBranch)) return true;
         if (!remoteName.getText().equals(settings.remoteName)) return true;
-        if (!timer.getText().equals(Integer.toString(settings.timer))) return true;
+        if (!timerMinutes.getText().equals(timerMinutesIfZeroReturnEmpty(settings))) return true;
         if (!startWithShare.isSelected() == settings.startWithShare) return true;
         if (!nextAtExpire.isSelected() == settings.nextAtExpire) return true;
         if (!wipCommitMessage.getText().equals(settings.wipCommitMessage)) return true;
@@ -36,9 +36,9 @@ public class MobSettingsForm {
         settings.baseBranch = baseBranch.getText();
         settings.remoteName = remoteName.getText();
         try {
-            settings.timer = Integer.parseInt(timer.getText());
+            settings.timerMinutes = Integer.parseInt(timerMinutes.getText());
         } catch (NumberFormatException e) {
-            settings.timer = MobProjectSettings.TIMER_STATIC_DEFAULT;
+            settings.timerMinutes = 0;
         }
         settings.startWithShare = startWithShare.isSelected();
         settings.nextAtExpire = nextAtExpire.isSelected();
@@ -50,10 +50,18 @@ public class MobSettingsForm {
         wipBranch.setText(settings.wipBranch);
         baseBranch.setText(settings.baseBranch);
         remoteName.setText(settings.remoteName);
-        timer.setText(Integer.toString(settings.timer));
+        timerMinutes.setText(timerMinutesIfZeroReturnEmpty(settings));
         startWithShare.setSelected(settings.startWithShare);
         nextAtExpire.setSelected(settings.nextAtExpire);
         wipCommitMessage.setText(settings.wipCommitMessage);
         nextStay.setSelected(settings.nextStay);
+    }
+
+    private String timerMinutesIfZeroReturnEmpty(MobProjectSettings settings) {
+        if (settings.timerMinutes > 0) {
+            return Integer.toString(settings.timerMinutes);
+        } else {
+            return "";
+        }
     }
 }

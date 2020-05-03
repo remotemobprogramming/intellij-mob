@@ -10,7 +10,7 @@ private val logger = Logger.getInstance("#com.nowsprinting.intellij_mob.git.Stat
 /**
  * Check nothing to commit changes
  *
- * @return true: Nothing to commit changes
+ * @return true: nothing to commit changes
  */
 fun isNothingToCommit(repository: Repository): Boolean {
     if (repository.state != Repository.State.NORMAL) {

@@ -17,12 +17,10 @@ import org.jetbrains.annotations.Nullable;
         }
 )
 public class MobProjectSettings implements PersistentStateComponent<MobProjectSettings> {
-    public static final int TIMER_STATIC_DEFAULT = 10;  // use only if parse error
-
     public String wipBranch;
     public String baseBranch;
     public String remoteName;
-    public int timer;
+    public int timerMinutes;
     public boolean startWithShare;
     public boolean nextAtExpire;
     public String wipCommitMessage;
@@ -47,7 +45,7 @@ public class MobProjectSettings implements PersistentStateComponent<MobProjectSe
         wipBranch = readStringDefaultFromResourceBundle("mob.settings.default.wip_branch");
         baseBranch = readStringDefaultFromResourceBundle("mob.settings.default.base_branch");
         remoteName = readStringDefaultFromResourceBundle("mob.settings.default.remote_name");
-        timer = readIntDefaultFromResourceBundle("mob.settings.default.timer", TIMER_STATIC_DEFAULT);
+        timerMinutes = readIntDefaultFromResourceBundle("mob.settings.default.timer_minutes", 0);
         startWithShare = readBooleanDefaultFromResourceBundle("mob.settings.default.start_with_share");
         nextAtExpire = readBooleanDefaultFromResourceBundle("mob.settings.default.appear_next_at_expire");
         wipCommitMessage = readStringDefaultFromResourceBundle("mob.settings.default.wip_commit_message");
