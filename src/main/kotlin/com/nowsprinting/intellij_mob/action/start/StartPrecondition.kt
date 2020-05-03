@@ -44,6 +44,16 @@ fun checkStartPrecondition(settings: MobProjectSettings, repository: GitReposito
     if (!repository.hasRemoteBranch(remoteName = settings.remoteName, branchName = settings.baseBranch)) {
         return Pair(false, MobBundle.message("mob.start.error.reason.not_exist_base_branch_on_remote"))
     }
+    repository.getLocalBranch(settings.baseBranch)?.let {
+        if (!it.hasValidUpstream(repository)) {
+            return Pair(false, MobBundle.message("mob.start.error.reason.base_branch_has_not_valid_upstream"))
+        }
+    }
+    repository.currentBranch?.let {
+        if (!it.hasValidUpstream(repository)) {
+            return Pair(false, MobBundle.message("mob.start.error.reason.current_branch_has_not_valid_upstream"))
+        }
+    }
     if (!isNothingToCommit(repository)) {
         return Pair(false, MobBundle.message("mob.start.error.reason.has_uncommitted_changes"))
     }

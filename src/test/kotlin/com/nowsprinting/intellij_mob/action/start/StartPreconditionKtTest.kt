@@ -11,6 +11,7 @@ import git4idea.GitLocalBranch
 import git4idea.GitRemoteBranch
 import git4idea.GitStandardRemoteBranch
 import git4idea.branch.GitBranchesCollection
+import git4idea.repo.GitBranchTrackInfo
 import git4idea.repo.GitRemote
 import io.mockk.every
 import io.mockk.mockkStatic
@@ -23,6 +24,8 @@ internal class StartPreconditionKtTest {
         val remoteSet: MutableCollection<GitRemote>?,
         val localBranches: MutableCollection<GitLocalBranch>?,
         val remoteBranches: MutableCollection<GitRemoteBranch>?,
+        val trackedRemoteBranch: GitRemoteBranch?,
+        val current: GitLocalBranch?,
         val repositoryState: Repository.State = Repository.State.NORMAL
     ) : DummyGitRepository() {
 
@@ -44,6 +47,21 @@ internal class StartPreconditionKtTest {
                 }
             }
             return GitBranchesCollection(localBranchesMap, remoteBranchesMap)
+        }
+
+        override fun getBranchTrackInfo(localBranchName: String): GitBranchTrackInfo? {
+            trackedRemoteBranch?.let {
+                return GitBranchTrackInfo(
+                    GitLocalBranch(localBranchName),
+                    it,
+                    false
+                )
+            }
+            return null
+        }
+
+        override fun getCurrentBranch(): GitLocalBranch? {
+            return current
         }
 
         override fun getState(): Repository.State {
@@ -118,9 +136,11 @@ internal class StartPreconditionKtTest {
         val localMaster = GitLocalBranch("master")
         val remoteMaster = GitStandardRemoteBranch(origin, "master")
         val repository = StubGitRepository(
-            mutableSetOf(), // not set origin
-            mutableSetOf(localMaster),
-            mutableSetOf(remoteMaster)
+            remoteSet = mutableSetOf(), // not set origin
+            localBranches = mutableSetOf(localMaster),
+            remoteBranches = mutableSetOf(remoteMaster),
+            trackedRemoteBranch = null,
+            current = null
         )
         val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
         assertFalse(canExecute)
@@ -134,9 +154,11 @@ internal class StartPreconditionKtTest {
         val localMaster = GitLocalBranch("master")
         val remoteMaster = GitStandardRemoteBranch(notOrigin, "master")
         val repository = StubGitRepository(
-            mutableSetOf(notOrigin),
-            mutableSetOf(localMaster),
-            mutableSetOf(remoteMaster)
+            remoteSet = mutableSetOf(notOrigin),
+            localBranches = mutableSetOf(localMaster),
+            remoteBranches = mutableSetOf(remoteMaster),
+            trackedRemoteBranch = null,
+            current = null
         )
         val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
         assertFalse(canExecute)
@@ -150,9 +172,11 @@ internal class StartPreconditionKtTest {
         val localNotMaster = GitLocalBranch("not_master")
         val remoteNotMaster = GitStandardRemoteBranch(origin, "not_master")
         val repository = StubGitRepository(
-            mutableSetOf(origin),
-            mutableSetOf(localNotMaster),
-            mutableSetOf(remoteNotMaster)
+            remoteSet = mutableSetOf(origin),
+            localBranches = mutableSetOf(localNotMaster),
+            remoteBranches = mutableSetOf(remoteNotMaster),
+            trackedRemoteBranch = null,
+            current = null
         )
         val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
         assertFalse(canExecute)
@@ -164,9 +188,11 @@ internal class StartPreconditionKtTest {
         val settings = createSettings()
         val origin = GitRemote("origin", listOf<String>(), listOf<String>(), listOf<String>(), listOf<String>())
         val repository = StubGitRepository(
-            mutableSetOf(origin),
-            mutableSetOf(), // not set
-            mutableSetOf()  // not set
+            remoteSet = mutableSetOf(origin),
+            localBranches = mutableSetOf(), // not set
+            remoteBranches = mutableSetOf(),  // not set
+            trackedRemoteBranch = null,
+            current = null
         )
         val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
         assertFalse(canExecute)
@@ -179,9 +205,11 @@ internal class StartPreconditionKtTest {
         val origin = GitRemote("origin", listOf<String>(), listOf<String>(), listOf<String>(), listOf<String>())
         val localMaster = GitLocalBranch("master")
         val repository = StubGitRepository(
-            mutableSetOf(origin),
-            mutableSetOf(localMaster),
-            mutableSetOf()  // not set
+            remoteSet = mutableSetOf(origin),
+            localBranches = mutableSetOf(localMaster),
+            remoteBranches = mutableSetOf(),  // not set
+            trackedRemoteBranch = null,
+            current = null
         )
 
         mockkStatic("com.nowsprinting.intellij_mob.git.StatusKt")
@@ -201,11 +229,14 @@ internal class StartPreconditionKtTest {
         val localMaster = GitLocalBranch("master")
         val remoteMaster = GitStandardRemoteBranch(origin, "master")
         val repository = StubGitRepository(
-            mutableSetOf(origin),
-            mutableSetOf(localMaster),
-            mutableSetOf(remoteMaster),
-            Repository.State.MERGING
+            remoteSet = mutableSetOf(origin),
+            localBranches = mutableSetOf(localMaster),
+            remoteBranches = mutableSetOf(remoteMaster),
+            trackedRemoteBranch = remoteMaster,
+            current = null,
+            repositoryState = Repository.State.MERGING
         )
+
         val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
         assertFalse(canExecute)
         assertEquals(MobBundle.message("mob.start.error.reason.has_uncommitted_changes"), errorMessage)
@@ -218,9 +249,11 @@ internal class StartPreconditionKtTest {
         val localMaster = GitLocalBranch("master")
         val remoteMaster = GitStandardRemoteBranch(origin, "master")
         val repository = StubGitRepository(
-            mutableSetOf(origin),
-            mutableSetOf(localMaster),
-            mutableSetOf(remoteMaster)
+            remoteSet = mutableSetOf(origin),
+            localBranches = mutableSetOf(localMaster),
+            remoteBranches = mutableSetOf(remoteMaster),
+            trackedRemoteBranch = remoteMaster,
+            current = null
         )
 
         mockkStatic("com.nowsprinting.intellij_mob.git.StatusKt")
@@ -239,9 +272,11 @@ internal class StartPreconditionKtTest {
         val origin = GitRemote("origin", listOf<String>(), listOf<String>(), listOf<String>(), listOf<String>())
         val remoteMaster = GitStandardRemoteBranch(origin, "master")
         val repository = StubGitRepository(
-            mutableSetOf(origin),
-            mutableSetOf(), // not set
-            mutableSetOf(remoteMaster)
+            remoteSet = mutableSetOf(origin),
+            localBranches = mutableSetOf(), // not set
+            remoteBranches = mutableSetOf(remoteMaster),
+            trackedRemoteBranch = null,
+            current = null
         )
 
         mockkStatic("com.nowsprinting.intellij_mob.git.StatusKt")
@@ -252,5 +287,77 @@ internal class StartPreconditionKtTest {
         val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
         assertTrue(canExecute)
         assertNull(errorMessage)
+    }
+
+    @Test
+    fun checkStartPrecondition_baseAndCurrentHasValidTrackedBranch_success() {
+        val settings = createSettings()
+        val origin = GitRemote("origin", listOf<String>(), listOf<String>(), listOf<String>(), listOf<String>())
+        val localMaster = GitLocalBranch("master")
+        val remoteMaster = GitStandardRemoteBranch(origin, "master")
+        val repository = StubGitRepository(
+            remoteSet = mutableSetOf(origin),
+            localBranches = mutableSetOf(localMaster),
+            remoteBranches = mutableSetOf(remoteMaster),
+            trackedRemoteBranch = remoteMaster,
+            current = localMaster
+        )
+
+        mockkStatic("com.nowsprinting.intellij_mob.git.StatusKt")
+        every {
+            isNothingToCommit(repository)
+        } returns true
+
+        val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
+        assertTrue(canExecute)
+        assertNull(errorMessage)
+    }
+
+    @Test
+    fun checkStartPrecondition_baseHasNotValidTrackedBranch_failure() {
+        val settings = createSettings()
+        val origin = GitRemote("origin", listOf<String>(), listOf<String>(), listOf<String>(), listOf<String>())
+        val localMaster = GitLocalBranch("master")
+        val remoteMaster = GitStandardRemoteBranch(origin, "master")
+        val repository = StubGitRepository(
+            remoteSet = mutableSetOf(origin),
+            localBranches = mutableSetOf(localMaster),
+            remoteBranches = mutableSetOf(remoteMaster),
+            trackedRemoteBranch = null,
+            current = localMaster
+        )
+
+        mockkStatic("com.nowsprinting.intellij_mob.git.StatusKt")
+        every {
+            isNothingToCommit(repository)
+        } returns true
+
+        val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
+        assertFalse(canExecute)
+        assertEquals(MobBundle.message("mob.start.error.reason.base_branch_has_not_valid_upstream"), errorMessage)
+    }
+
+    @Test
+    fun checkStartPrecondition_currentHasNotValidTrackedBranch_failure() {
+        val settings = createSettings()
+        val origin = GitRemote("origin", listOf<String>(), listOf<String>(), listOf<String>(), listOf<String>())
+        val localMaster = GitLocalBranch("master")
+        val remoteMaster = GitStandardRemoteBranch(origin, "master")
+        val repository = StubGitRepository(
+            remoteSet = mutableSetOf(origin),
+            localBranches = mutableSetOf(),
+            remoteBranches = mutableSetOf(remoteMaster),
+            trackedRemoteBranch = null,
+            current = localMaster
+        )
+
+        mockkStatic("com.nowsprinting.intellij_mob.git.StatusKt")
+        every {
+            isNothingToCommit(repository)
+        } returns true
+
+        val (canExecute, errorMessage) = checkStartPrecondition(settings, repository)
+        assertFalse(canExecute)
+        assertEquals(MobBundle.message("mob.start.error.reason.current_branch_has_not_valid_upstream"), errorMessage)
     }
 }

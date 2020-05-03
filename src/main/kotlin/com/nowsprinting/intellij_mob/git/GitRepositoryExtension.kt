@@ -1,6 +1,7 @@
 package com.nowsprinting.intellij_mob.git
 
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
+import git4idea.GitLocalBranch
 import git4idea.repo.GitRepository
 
 fun GitRepository.hasRemote(remoteName: String): Boolean {
@@ -17,12 +18,19 @@ fun GitRepository.hasMobProgrammingBranch(settings: MobProjectSettings): Boolean
 }
 
 fun GitRepository.hasLocalBranch(branchName: String): Boolean {
-    for (branch in this.branches.localBranches) {
-        if (branch.name == branchName) {
-            return true
-        }
+    if (this.getLocalBranch(branchName) != null) {
+        return true
     }
     return false
+}
+
+fun GitRepository.getLocalBranch(branchName: String): GitLocalBranch? {
+    for (branch in this.branches.localBranches) {
+        if (branch.name == branchName) {
+            return branch
+        }
+    }
+    return null
 }
 
 fun GitRepository.hasMobProgrammingBranchOrigin(settings: MobProjectSettings): Boolean {
@@ -31,6 +39,10 @@ fun GitRepository.hasMobProgrammingBranchOrigin(settings: MobProjectSettings): B
 
 fun GitRepository.hasRemoteBranch(remoteName: String, branchName: String): Boolean {
     val remoteBranchName = "${remoteName}/${branchName}"
+    return hasRemoteBranch(remoteBranchName)
+}
+
+fun GitRepository.hasRemoteBranch(remoteBranchName: String): Boolean {
     for (branch in this.branches.remoteBranches) {
         if (branch.name == remoteBranchName) {
             return true
