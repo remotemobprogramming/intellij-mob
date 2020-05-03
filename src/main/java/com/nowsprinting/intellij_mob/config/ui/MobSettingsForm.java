@@ -11,7 +11,6 @@ public class MobSettingsForm {
     JTextField remoteName;
     JTextField timerMinutes;
     JCheckBox startWithShare;
-    JCheckBox nextAtExpire;
     JTextField wipCommitMessage;
     JCheckBox nextStay;
 
@@ -25,7 +24,6 @@ public class MobSettingsForm {
         if (!remoteName.getText().equals(settings.remoteName)) return true;
         if (!timerMinutes.getText().equals(timerMinutesIfZeroReturnEmpty(settings))) return true;
         if (!startWithShare.isSelected() == settings.startWithShare) return true;
-        if (!nextAtExpire.isSelected() == settings.nextAtExpire) return true;
         if (!wipCommitMessage.getText().equals(settings.wipCommitMessage)) return true;
         if (!nextStay.isSelected() == settings.nextStay) return true;
         return false;
@@ -41,7 +39,6 @@ public class MobSettingsForm {
             settings.timerMinutes = 0;
         }
         settings.startWithShare = startWithShare.isSelected();
-        settings.nextAtExpire = nextAtExpire.isSelected();
         settings.wipCommitMessage = wipCommitMessage.getText();
         settings.nextStay = nextStay.isSelected();
     }
@@ -52,7 +49,6 @@ public class MobSettingsForm {
         remoteName.setText(settings.remoteName);
         timerMinutes.setText(timerMinutesIfZeroReturnEmpty(settings));
         startWithShare.setSelected(settings.startWithShare);
-        nextAtExpire.setSelected(settings.nextAtExpire);
         wipCommitMessage.setText(settings.wipCommitMessage);
         nextStay.setSelected(settings.nextStay);
     }

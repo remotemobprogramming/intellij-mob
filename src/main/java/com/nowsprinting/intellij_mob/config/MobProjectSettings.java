@@ -22,7 +22,6 @@ public class MobProjectSettings implements PersistentStateComponent<MobProjectSe
     public String remoteName;
     public int timerMinutes;
     public boolean startWithShare;
-    public boolean nextAtExpire;
     public String wipCommitMessage;
     public boolean nextStay;
 
@@ -47,7 +46,6 @@ public class MobProjectSettings implements PersistentStateComponent<MobProjectSe
         remoteName = readStringDefaultFromResourceBundle("mob.settings.default.remote_name");
         timerMinutes = readIntDefaultFromResourceBundle("mob.settings.default.timer_minutes", 0);
         startWithShare = readBooleanDefaultFromResourceBundle("mob.settings.default.start_with_share");
-        nextAtExpire = readBooleanDefaultFromResourceBundle("mob.settings.default.appear_next_at_expire");
         wipCommitMessage = readStringDefaultFromResourceBundle("mob.settings.default.wip_commit_message");
         nextStay = readBooleanDefaultFromResourceBundle("mob.settings.default.next_stay");
     }

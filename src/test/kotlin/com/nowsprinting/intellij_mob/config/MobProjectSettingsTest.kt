@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 class MobProjectSettingsTest {
 
     @Test
-    fun noStateLoaded_setDEfault() {
+    fun noStateLoaded_setDefault() {
         val sut = MobProjectSettings()
         sut.noStateLoaded()
         Assertions.assertEquals(sut.wipBranch, "mob-session")
@@ -14,7 +14,6 @@ class MobProjectSettingsTest {
         Assertions.assertEquals(sut.remoteName, "origin")
         Assertions.assertEquals(sut.timerMinutes, 10)
         Assertions.assertFalse(sut.startWithShare)
-        Assertions.assertTrue(sut.nextAtExpire)
         Assertions.assertEquals(sut.wipCommitMessage, "mob next [ci-skip]")
         Assertions.assertFalse(sut.nextStay)
     }

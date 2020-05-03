@@ -12,7 +12,6 @@ public class StartDialog extends JDialog {
     private JButton buttonCancel;
     private JTextField timerMinutes;
     private JCheckBox startWithShare;
-    private JCheckBox nextAtExpire;
     private JButton buttonOpenSettings;
     private JLabel message;
     private boolean openSettings = false;
@@ -102,14 +101,6 @@ public class StartDialog extends JDialog {
 
     public void setStartWithShare(boolean startWithShare) {
         this.startWithShare.setSelected(startWithShare);
-    }
-
-    public boolean isNextAtExpire() {
-        return this.nextAtExpire.isSelected();
-    }
-
-    public void setNextAtExpire(boolean nextAtExpire) {
-        this.nextAtExpire.setSelected(nextAtExpire);
     }
 
     public boolean isOk() {

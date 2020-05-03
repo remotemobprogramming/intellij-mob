@@ -52,15 +52,6 @@ class MobSettingsFormTest {
     }
 
     @Test
-    fun resetEditorFrom_set_nextAtExpire() {
-        val settings = MobProjectSettings()
-        settings.nextAtExpire = true
-        val sut = MobSettingsForm()
-        sut.resetEditorFrom(settings)
-        Assertions.assertTrue(sut.nextAtExpire.isSelected)
-    }
-
-    @Test
     fun resetEditorFrom_set_wipCommitMessage() {
         val settings = MobProjectSettings()
         settings.wipCommitMessage = "fix"
@@ -85,7 +76,6 @@ class MobSettingsFormTest {
         settings.remoteName = "origin"
         settings.timerMinutes = 10
         settings.startWithShare = false
-        settings.nextAtExpire = false
         settings.wipCommitMessage = "mob next [ci-skip]"
         settings.nextStay = false
         return settings
@@ -98,7 +88,6 @@ class MobSettingsFormTest {
         form.remoteName.text = "origin"
         form.timerMinutes.text = "10"
         form.startWithShare.isSelected = false
-        form.nextAtExpire.isSelected = false
         form.wipCommitMessage.text = "mob next [ci-skip]"
         form.nextStay.isSelected = false
         return form
@@ -153,15 +142,6 @@ class MobSettingsFormTest {
         val settings = createDefaultSettings()
         val sut = createDefaultForm()
         sut.startWithShare.isSelected = true
-        val actual = sut.isModified(settings)
-        Assertions.assertTrue(actual)
-    }
-
-    @Test
-    fun isModified_modified_nextAtExpire() {
-        val settings = createDefaultSettings()
-        val sut = createDefaultForm()
-        sut.nextAtExpire.isSelected = true
         val actual = sut.isModified(settings)
         Assertions.assertTrue(actual)
     }
@@ -227,15 +207,6 @@ class MobSettingsFormTest {
         sut.startWithShare.isSelected = true
         sut.applyEditorTo(settings)
         Assertions.assertTrue(settings.startWithShare)
-    }
-
-    @Test
-    fun applyEditorTo_modified_nextAtExpire() {
-        val settings = createDefaultSettings()
-        val sut = createDefaultForm()
-        sut.nextAtExpire.isSelected = true
-        sut.applyEditorTo(settings)
-        Assertions.assertTrue(settings.nextAtExpire)
     }
 
     @Test
