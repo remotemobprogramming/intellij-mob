@@ -7,6 +7,7 @@ import com.intellij.openapi.project.Project
 import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
 import com.nowsprinting.intellij_mob.git.*
+import com.nowsprinting.intellij_mob.service.TimerService
 import com.nowsprinting.intellij_mob.util.notify
 import git4idea.repo.GitRepository
 
@@ -86,6 +87,8 @@ class NextTask(val settings: MobProjectSettings, project: Project, title: String
         showNextTypist(settings, repository, notifyContents)
         indicator.fraction += fractionPerCommandSection
 
+        stopTimer()
+
         if (!settings.nextStay) {
             checkout(settings.baseBranch, repository, notifyContents)
             // If it fails, it does not cause an error
@@ -118,5 +121,10 @@ class NextTask(val settings: MobProjectSettings, project: Project, title: String
                 type = NotificationType.ERROR
             )
         }
+    }
+
+    private fun stopTimer() {
+        val timer = TimerService.getInstance(project)
+        timer?.stop()
     }
 }
