@@ -2,7 +2,6 @@ package com.nowsprinting.intellij_mob.action.start
 
 import com.intellij.dvcs.repo.Repository
 import com.intellij.openapi.diagnostic.Logger
-import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.changes.ChangeListManager
 import com.nowsprinting.intellij_mob.MobBundle
@@ -66,8 +65,6 @@ fun isNothingToCommit(repository: Repository): Boolean {
         logger.info("Repository state is ${repository.state.toString()}")
         return false
     }
-
-    FileDocumentManager.getInstance().saveAllDocuments()
 
     val changes = ChangeListManager.getInstance(repository.project).allChanges
     if (changes.isNotEmpty()) {

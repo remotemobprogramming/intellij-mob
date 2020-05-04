@@ -17,7 +17,7 @@ class NextTask(val settings: MobProjectSettings, project: Project, title: String
     private lateinit var repository: GitRepository
 
     override fun run(indicator: ProgressIndicator) {
-        indicator.isIndeterminate = true
+        indicator.isIndeterminate = false
         indicator.fraction = 0.0
         val fractionPerCommandSection = 1.0 / 8
 

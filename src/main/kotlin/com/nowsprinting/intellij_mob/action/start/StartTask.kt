@@ -19,9 +19,9 @@ class StartTask(val settings: MobProjectSettings, project: Project, title: Strin
     private lateinit var repository: GitRepository
 
     override fun run(indicator: ProgressIndicator) {
-        indicator.isIndeterminate = true
+        indicator.isIndeterminate = false
         indicator.fraction = 0.0
-        val fractionPerCommandSection = 1.0 / 4
+        val fractionPerCommandSection = 1.0 / 5
 
         repository = when (val result = getGitRepository(project)) {
             is GitRepositoryResult.Success -> {
@@ -31,6 +31,15 @@ class StartTask(val settings: MobProjectSettings, project: Project, title: Strin
                 notifyContents.add(String.format(MobBundle.message("mob.notify_content.failure"), result.reason))
                 return
             }
+        }
+        indicator.fraction += fractionPerCommandSection
+
+        val (canExecute, reason) = checkStartPrecondition(settings, repository)  // recheck precondition
+        if (!canExecute) {
+            val format = MobBundle.message("mob.notify_content.failure")
+            val message = MobBundle.message("mob.start.error.cant_start")
+            notifyContents.add(String.format(format, String.format(message, reason)))
+            return
         }
         indicator.fraction += fractionPerCommandSection
 

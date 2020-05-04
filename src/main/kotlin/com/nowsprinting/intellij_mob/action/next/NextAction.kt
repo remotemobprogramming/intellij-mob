@@ -2,6 +2,7 @@ package com.nowsprinting.intellij_mob.action.next
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.options.ShowSettingsUtil
 import com.nowsprinting.intellij_mob.action.next.ui.NextDialog
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
@@ -34,6 +35,7 @@ class NextAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: throw NullPointerException("AnActionEvent#getProject() was return null")
         val settings = MobProjectSettings.getInstance(project)
+        FileDocumentManager.getInstance().saveAllDocuments()
         val (canExecute, reason) = checkNextPrecondition(settings, project)
 
         val dialog = NextDialog()

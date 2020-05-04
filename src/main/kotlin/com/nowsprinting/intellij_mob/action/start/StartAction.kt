@@ -2,6 +2,7 @@ package com.nowsprinting.intellij_mob.action.start
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.options.ShowSettingsUtil
 import com.nowsprinting.intellij_mob.action.start.ui.StartDialog
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
@@ -21,13 +22,14 @@ class StartAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: throw NullPointerException("AnActionEvent#getProject() was return null")
         val settings = MobProjectSettings.getInstance(project)
-        val (canExecute, errorMessage) = checkStartPrecondition(settings, project)
+        FileDocumentManager.getInstance().saveAllDocuments()
+        val (canExecute, reason) = checkStartPrecondition(settings, project)
 
         val dialog = StartDialog()
         dialog.title = e.presentation.text.removeSuffix("...")
         dialog.timerMinutes = settings.timerMinutes
         dialog.isStartWithShare = settings.startWithShare
-        dialog.setPreconditionResult(canExecute, errorMessage)
+        dialog.setPreconditionResult(canExecute, reason)
         dialog.pack()
         dialog.setLocationRelativeTo(null) // set on screen center
         dialog.isVisible = true
