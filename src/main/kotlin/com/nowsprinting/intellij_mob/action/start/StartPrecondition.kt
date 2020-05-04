@@ -1,10 +1,16 @@
 package com.nowsprinting.intellij_mob.action.start
 
+import com.intellij.dvcs.repo.Repository
+import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.vcs.changes.ChangeListManager
 import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
 import com.nowsprinting.intellij_mob.git.*
 import git4idea.repo.GitRepository
+
+private val logger = Logger.getInstance("#com.nowsprinting.intellij_mob.action.start.StartPreconditionKt")
 
 /**
  * Check precondition for mob start command
@@ -58,4 +64,25 @@ fun checkStartPrecondition(settings: MobProjectSettings, repository: GitReposito
         return Pair(false, MobBundle.message("mob.start.error.reason.has_uncommitted_changes"))
     }
     return Pair(true, null)
+}
+
+fun isNothingToCommit(repository: Repository): Boolean {
+    if (repository.state != Repository.State.NORMAL) {
+        logger.info("Repository state is ${repository.state.toString()}")
+        return false
+    }
+
+    FileDocumentManager.getInstance().saveAllDocuments()
+
+    val changes = ChangeListManager.getInstance(repository.project).allChanges
+    if (changes.isNotEmpty()) {
+        logger.info("Has uncommitted changes")
+        for (v in changes) {
+            logger.debug("  ${v.type.toString()}: ${v.virtualFile?.path}")
+        }
+        return false
+    }
+    // Note: Untracked files are not detected
+
+    return true
 }

@@ -4,7 +4,6 @@ import com.intellij.dvcs.repo.Repository
 import com.intellij.vcs.log.Hash
 import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
-import com.nowsprinting.intellij_mob.git.isNothingToCommit
 import com.nowsprinting.intellij_mob.testdouble.DummyGitRepository
 import com.nowsprinting.intellij_mob.testdouble.DummyHash
 import git4idea.GitLocalBranch
@@ -212,7 +211,7 @@ internal class StartPreconditionKtTest {
             current = null
         )
 
-        mockkStatic("com.nowsprinting.intellij_mob.git.StatusKt")
+        mockkStatic("com.nowsprinting.intellij_mob.action.start.StartPreconditionKt")
         every {
             isNothingToCommit(repository)
         } returns true
@@ -256,7 +255,7 @@ internal class StartPreconditionKtTest {
             current = null
         )
 
-        mockkStatic("com.nowsprinting.intellij_mob.git.StatusKt")
+        mockkStatic("com.nowsprinting.intellij_mob.action.start.StartPreconditionKt")
         every {
             isNothingToCommit(repository)
         } returns false
@@ -279,7 +278,7 @@ internal class StartPreconditionKtTest {
             current = null
         )
 
-        mockkStatic("com.nowsprinting.intellij_mob.git.StatusKt")
+        mockkStatic("com.nowsprinting.intellij_mob.action.start.StartPreconditionKt")
         every {
             isNothingToCommit(repository)
         } returns true
@@ -303,7 +302,7 @@ internal class StartPreconditionKtTest {
             current = localMaster
         )
 
-        mockkStatic("com.nowsprinting.intellij_mob.git.StatusKt")
+        mockkStatic("com.nowsprinting.intellij_mob.action.start.StartPreconditionKt")
         every {
             isNothingToCommit(repository)
         } returns true
@@ -327,7 +326,7 @@ internal class StartPreconditionKtTest {
             current = localMaster
         )
 
-        mockkStatic("com.nowsprinting.intellij_mob.git.StatusKt")
+        mockkStatic("com.nowsprinting.intellij_mob.action.start.StartPreconditionKt")
         every {
             isNothingToCommit(repository)
         } returns true
@@ -351,7 +350,7 @@ internal class StartPreconditionKtTest {
             current = localMaster
         )
 
-        mockkStatic("com.nowsprinting.intellij_mob.git.StatusKt")
+        mockkStatic("com.nowsprinting.intellij_mob.action.start.StartPreconditionKt")
         every {
             isNothingToCommit(repository)
         } returns true
