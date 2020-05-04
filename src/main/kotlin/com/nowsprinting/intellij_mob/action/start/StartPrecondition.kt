@@ -29,12 +29,7 @@ fun checkStartPrecondition(settings: MobProjectSettings, project: Project): Pair
     }
 }
 
-/**
- * Check precondition for mob start command
- *
- * @return success/failure, error message
- */
-fun checkStartPrecondition(settings: MobProjectSettings, repository: GitRepository): Pair<Boolean, String?> {
+internal fun checkStartPrecondition(settings: MobProjectSettings, repository: GitRepository): Pair<Boolean, String?> {
     if (settings.wipBranch.isNullOrEmpty()) {
         return Pair(false, MobBundle.message("mob.start.error.reason.unset_wip_branch"))
     }
@@ -82,7 +77,7 @@ fun isNothingToCommit(repository: Repository): Boolean {
         }
         return false
     }
-    // Note: Untracked files are not detected
+    // Untracked files are not detected.
 
     return true
 }

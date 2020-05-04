@@ -31,9 +31,13 @@
         <action id="com.nowsprinting.intellij_mob.start" class="com.nowsprinting.intellij_mob.action.start.StartAction"
                 text="Start Mob Programming as Typist...">
         </action>
+        <action id="com.nowsprinting.intellij_mob.next" class="com.nowsprinting.intellij_mob.action.next.NextAction"
+                text="Next: Hand over to Next Typist...">
+        </action>
         <group id="com.nowsprinting.intellij_mob" text="Mob" popup="true">
             <add-to-group group-id="VcsGlobalGroup" anchor="after" relative-to-action="Git.Menu"/>
             <reference id="com.nowsprinting.intellij_mob.start"/>
+            <reference id="com.nowsprinting.intellij_mob.next"/>
         </group>
     </actions>
 </idea-plugin>

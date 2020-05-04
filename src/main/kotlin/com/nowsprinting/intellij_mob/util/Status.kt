@@ -2,7 +2,7 @@ package com.nowsprinting.intellij_mob.util
 
 import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
-import com.nowsprinting.intellij_mob.git.logFrom
+import com.nowsprinting.intellij_mob.git.logInWip
 import com.nowsprinting.intellij_mob.git.isMobProgramming
 import git4idea.repo.GitRepository
 
@@ -21,7 +21,7 @@ fun status(repository: GitRepository, settings: MobProjectSettings): String {
     if (repository.isMobProgramming(settings)) {
         message.append(String.format(notifyFormat, MobBundle.message("mob.status.is_mob_programming")))
 
-        val commitsInWip = logFrom(settings.baseBranch, settings.wipBranch, repository)
+        val commitsInWip = logInWip(settings, repository)
         for (commit in commitsInWip) {
             message.append("%n| ").append(commit)
         }

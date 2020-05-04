@@ -1,8 +1,12 @@
 package com.nowsprinting.intellij_mob.git
 
+import com.intellij.openapi.diagnostic.Logger
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
 import git4idea.GitLocalBranch
+import git4idea.GitReference
 import git4idea.repo.GitRepository
+
+private val logger = Logger.getInstance("#com.nowsprinting.intellij_mob.git.GitRepositoryExtensionKt")
 
 fun GitRepository.hasRemote(remoteName: String): Boolean {
     for (remote in this.remotes) {
