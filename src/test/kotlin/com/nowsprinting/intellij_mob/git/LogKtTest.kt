@@ -1,5 +1,6 @@
 package com.nowsprinting.intellij_mob.git
 
+import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
 import com.nowsprinting.intellij_mob.testdouble.DummyGitRepository
 import git4idea.commands.GitCommand
@@ -96,10 +97,13 @@ internal class LogKtTest {
         showNextTypist(settings, repository, notifyContents)
 
         assertEquals(2, notifyContents.size)
-        assertEquals("\uD83D\uDCE2 Committers after your last commit: Lindsay, Jenny, Katsuro", notifyContents[0])
-        assertEquals("\uD83D\uDCE2 ***Lindsay*** is (probably) next.", notifyContents[1])
+        val notifyFormat = MobBundle.message("mob.notify_content.notify")
+        assertEquals(
+            String.format(notifyFormat, "Committers after your last commit: Lindsay, Jenny, Katsuro"),
+            notifyContents[0]
+        )
+        assertEquals(String.format(notifyFormat, "***Lindsay*** is (probably) next."), notifyContents[1])
     }
-
 
     @Test
     fun showNextTypist_continuousCommit_ignoreContinuousTypist() {
@@ -121,10 +125,13 @@ internal class LogKtTest {
         showNextTypist(settings, repository, notifyContents)
 
         assertEquals(2, notifyContents.size)
+        val notifyFormat = MobBundle.message("mob.notify_content.notify")
         assertEquals(
-            "\uD83D\uDCE2 Committers after your last commit: Lindsay, Jenny, Katsuro, Katsuro",
+            String.format(
+                notifyFormat, "Committers after your last commit: Lindsay, Jenny, Katsuro, Katsuro"
+            ),
             notifyContents[0]
         )
-        assertEquals("\uD83D\uDCE2 ***Lindsay*** is (probably) next.", notifyContents[1])
+        assertEquals(String.format(notifyFormat, "***Lindsay*** is (probably) next."), notifyContents[1])
     }
 }
