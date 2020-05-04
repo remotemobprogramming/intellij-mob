@@ -10,6 +10,7 @@ import com.nowsprinting.intellij_mob.git.*
 import com.nowsprinting.intellij_mob.service.TimerService
 import com.nowsprinting.intellij_mob.util.notify
 import com.nowsprinting.intellij_mob.util.screenShareWithZoom
+import com.nowsprinting.intellij_mob.util.status
 import git4idea.repo.GitRepository
 
 class StartTask(val settings: MobProjectSettings, project: Project, title: String) : Backgroundable(project, title) {
@@ -83,6 +84,8 @@ class StartTask(val settings: MobProjectSettings, project: Project, title: Strin
             }
         }
 
+        notifyContents.add(status(repository, settings))
+
         indicator.fraction = 1.0
         completed = true
     }
@@ -110,7 +113,7 @@ class StartTask(val settings: MobProjectSettings, project: Project, title: Strin
         notifyContents.add(String.format(MobBundle.message("mob.notify_content.notify"), message))
 
         if (!repository.isMobProgramming(settings)) {
-            if (!deleteBranch(settings.wipBranch, repository, notifyContents)) {
+            if (!deleteBranch(settings.wipBranch, repository, notifyContents)) {    // TODO: check if unmerged commits
                 return false
             }
             if (!checkout(settings.wipBranch, repository, notifyContents)) {
@@ -164,7 +167,7 @@ class StartTask(val settings: MobProjectSettings, project: Project, title: Strin
         val message = String.format(messageFormat, settings.wipBranch, settings.baseBranch)
         notifyContents.add(String.format(MobBundle.message("mob.notify_content.notify"), message))
 
-        if (!deleteBranch(settings.wipBranch, repository, notifyContents)) {
+        if (!deleteBranch(settings.wipBranch, repository, notifyContents)) {    // TODO: check if unmerged commits
             return false
         }
         if (!checkout(settings.baseBranch, repository, notifyContents)) {
