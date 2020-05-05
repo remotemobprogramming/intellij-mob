@@ -39,6 +39,23 @@ fun diffFrom(branch: String, repository: GitRepository, verbose: Boolean = false
 }
 
 /**
+ * git diff --cached --stat
+ *
+ * Must be called from `Task.Backgroundable#run()`.
+ * If an error occurs, show a notification within this function.
+ *
+ * @param   repository      Git repository
+ * @param   verbose         Add `--verbose` option (default: false)
+ * @return  change list
+ */
+fun diffCached(repository: GitRepository, verbose: Boolean = false): List<String> {
+    val command = GitCommand.DIFF
+    val options = listOf("--cached", "--stat")
+
+    return git(command, options, repository, verbose)
+}
+
+/**
  * Check exist unpushed commit(s).
  *
  * Must be called from `Task.Backgroundable#run()`.
@@ -52,5 +69,22 @@ fun diffFrom(branch: String, repository: GitRepository, verbose: Boolean = false
  */
 fun hasUnpushedCommit(settings: MobProjectSettings, repository: GitRepository, verbose: Boolean = false): Boolean {
     val commits = diffFrom(settings.remoteName, settings.wipBranch, repository, verbose)
+    return commits.isNotEmpty()
+}
+
+/**
+ * Check diff from remote/base
+ *
+ * Must be called from `Task.Backgroundable#run()`.
+ * If an error occurs, show a notification within this function.
+ *
+ * @param   settings        Use remoteName, wipBranch
+ * @param   repository      Git repository
+ * @param   verbose         Add `--verbose` option (default: false)
+ * @return  true if exist unpushed commit(s)
+ *
+ */
+fun hasChangesForDone(settings: MobProjectSettings, repository: GitRepository, verbose: Boolean = false): Boolean {
+    val commits = diffFrom(settings.remoteName, settings.baseBranch, repository, verbose)
     return commits.isNotEmpty()
 }

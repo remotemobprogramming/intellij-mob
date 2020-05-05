@@ -16,7 +16,7 @@ private val logger = Logger.getInstance("#com.nowsprinting.intellij_mob.action.s
  *
  * @return success/failure, with error message
  */
-fun checkStartPrecondition(settings: MobProjectSettings, project: Project): Pair<Boolean, String?> {
+internal fun checkStartPrecondition(settings: MobProjectSettings, project: Project): Pair<Boolean, String?> {
     return when (val result = getGitRepository(project)) {
         is GitRepositoryResult.Success -> {
             result.repository

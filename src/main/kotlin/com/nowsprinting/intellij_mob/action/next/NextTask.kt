@@ -39,7 +39,7 @@ class NextTask(val settings: MobProjectSettings, project: Project, title: String
 
         val (validSettings, reasonInvalidSettings) = settings.validateForNextTask()
         if (!validSettings) {
-            val format = MobBundle.message("mob.next.error.cant_do_run")
+            val format = MobBundle.message("mob.next.error.precondition")
             val message = String.format(format, reasonInvalidSettings)
             logger.warn(message)
             notifyContents.add(String.format(MobBundle.message("mob.notify_content.failure"), message))
@@ -48,7 +48,7 @@ class NextTask(val settings: MobProjectSettings, project: Project, title: String
 
         val (validRepository, reasonInvalidRepository) = repository.validateForNextPrecondition(settings)
         if (!validRepository) {
-            val format = MobBundle.message("mob.next.error.cant_do_run")
+            val format = MobBundle.message("mob.next.error.precondition")
             val message = String.format(format, reasonInvalidRepository)
             logger.warn(message)
             notifyContents.add(String.format(MobBundle.message("mob.notify_content.failure"), message))
@@ -59,7 +59,8 @@ class NextTask(val settings: MobProjectSettings, project: Project, title: String
         val hasUncommittedChanges = hasUncommittedChanges(repository)
         val hasUnpushedCommit = hasUnpushedCommit(settings, repository)
         if (!hasUncommittedChanges && !hasUnpushedCommit) {
-            val message = MobBundle.message("mob.next.error.reason.has_not_changes")
+            val format = MobBundle.message("mob.next.error.precondition")
+            val message = String.format(format, MobBundle.message("mob.next.error.reason.has_not_changes"))
             logger.warn(message)
             notifyContents.add(String.format(MobBundle.message("mob.notify_content.warning"), message))
             doNotRun = true
@@ -117,7 +118,7 @@ class NextTask(val settings: MobProjectSettings, project: Project, title: String
             logger.debug(String.format(MobBundle.message("mob.notify_content.warning"), title))
             notify(
                 project = project,
-                title = MobBundle.message("mob.next.task_do_not_run"),
+                title = MobBundle.message("mob.next.task_not_run"),
                 contents = notifyContents,
                 type = NotificationType.WARNING
             )

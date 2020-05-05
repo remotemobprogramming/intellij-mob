@@ -37,3 +37,11 @@ fun MobProjectSettings.validateForNextTask(): Pair<Boolean, String?> {
     }
     return Pair(true, null)
 }
+
+fun MobProjectSettings.validateForDonePrecondition(): Pair<Boolean, String?> {
+    return validateCommonPrecondition()
+}
+
+fun MobProjectSettings.validateForDoneTask(): Pair<Boolean, String?> {
+    return validateForDonePrecondition()
+}

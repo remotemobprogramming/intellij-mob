@@ -1,4 +1,4 @@
-package com.nowsprinting.intellij_mob.action.next.ui;
+package com.nowsprinting.intellij_mob.action.done.ui;
 
 import com.nowsprinting.intellij_mob.MobBundle;
 import org.jetbrains.annotations.Nullable;
@@ -6,18 +6,16 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class NextDialog extends JDialog {
+public class DoneDialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JTextField wipCommitMessage;
-    private JCheckBox nextStay;
     private JButton buttonOpenSettings;
     private JLabel message;
     private boolean openSettings = false;
     private boolean ok = false;
 
-    public NextDialog() {
+    public DoneDialog() {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -66,7 +64,7 @@ public class NextDialog extends JDialog {
     public void setPreconditionResult(boolean canExecute, @Nullable String reason) {
         buttonOK.setEnabled(canExecute);
         message.setVisible(!canExecute);
-        message.setText(String.format(MobBundle.message("mob.next.error.precondition"), reason));
+        message.setText(String.format(MobBundle.message("mob.done.error.precondition"), reason));
     }
 
     private void onOpenSettings() {
@@ -83,22 +81,6 @@ public class NextDialog extends JDialog {
     private void onCancel() {
         // add your code here if necessary
         dispose();
-    }
-
-    public String getWipCommitMessage() {
-        return wipCommitMessage.getText();
-    }
-
-    public void setWipCommitMessage(String wipCommitMessage) {
-        this.wipCommitMessage.setText(wipCommitMessage);
-    }
-
-    public boolean isNextStay() {
-        return nextStay.isSelected();
-    }
-
-    public void setNextStay(boolean nextStay) {
-        this.nextStay.setSelected(nextStay);
     }
 
     public boolean isOpenSettings() {

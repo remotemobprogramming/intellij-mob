@@ -40,7 +40,7 @@ class StartTask(val settings: MobProjectSettings, project: Project, title: Strin
 
         val (validSettings, reasonInvalidSettings) = settings.validateForStartTask()
         if (!validSettings) {
-            val format = MobBundle.message("mob.start.error.cant_start")
+            val format = MobBundle.message("mob.start.error.precondition")
             val message = String.format(format, reasonInvalidSettings)
             logger.warn(message)
             notifyContents.add(String.format(MobBundle.message("mob.notify_content.failure"), message))
@@ -49,7 +49,7 @@ class StartTask(val settings: MobProjectSettings, project: Project, title: Strin
 
         val (validRepository, reasonInvalidRepository) = repository.validateForStartPrecondition(settings)
         if (!validRepository) {
-            val format = MobBundle.message("mob.start.error.cant_start")
+            val format = MobBundle.message("mob.start.error.precondition")
             val message = String.format(format, reasonInvalidRepository)
             logger.warn(message)
             notifyContents.add(String.format(MobBundle.message("mob.notify_content.failure"), message))
@@ -165,7 +165,7 @@ class StartTask(val settings: MobProjectSettings, project: Project, title: Strin
         if (!checkout(settings.baseBranch, repository, notifyContents)) {
             return false
         }
-        if (!merge(settings.remoteName, settings.baseBranch, repository, notifyContents)) {
+        if (!mergeFastForward(settings.remoteName, settings.baseBranch, repository, notifyContents)) {
             return false
         }
         if (!createBranch(settings.wipBranch, repository, notifyContents)) {
@@ -206,7 +206,7 @@ class StartTask(val settings: MobProjectSettings, project: Project, title: Strin
         if (!checkout(settings.baseBranch, repository, notifyContents)) {
             return false
         }
-        if (!merge(settings.remoteName, settings.baseBranch, repository, notifyContents)) {
+        if (!mergeFastForward(settings.remoteName, settings.baseBranch, repository, notifyContents)) {
             return false
         }
         if (!createBranch(settings.wipBranch, repository, notifyContents)) {

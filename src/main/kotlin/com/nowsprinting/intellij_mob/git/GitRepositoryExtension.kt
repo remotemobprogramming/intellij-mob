@@ -106,7 +106,7 @@ private fun GitRepository.validateCommonPrecondition(settings: MobProjectSetting
 }
 
 /**
- * Validate repository for start precondition check and start task.
+ * Validate repository for start precondition check and task.
  */
 fun GitRepository.validateForStartPrecondition(settings: MobProjectSettings): Pair<Boolean, String?> {
     val (valid, reason) = validateCommonPrecondition(settings)
@@ -125,11 +125,30 @@ fun GitRepository.validateForStartPrecondition(settings: MobProjectSettings): Pa
 }
 
 /**
- * Validate repository for next precondition check and next task.
+ * Validate repository for next precondition check and task.
  *
  * Note: Do not check nothing uncommitted changes, because can not detect unpushed commits here.
  */
 fun GitRepository.validateForNextPrecondition(settings: MobProjectSettings): Pair<Boolean, String?> {
+    val (valid, reason) = validateCommonPrecondition(settings)
+    if (!valid) {
+        return Pair(valid, reason)
+    }
+    if (!stayBranch(settings.wipBranch)) {
+        val message = MobBundle.message("mob.validate_reason.not_stay_wip_branch")
+        return Pair(false, String.format(message, settings.wipBranch))
+    }
+    // Validate about upstream is passed inside validateCommonPrecondition()
+
+    return Pair(true, null)
+}
+
+/**
+ * Validate repository for done precondition check and task.
+ *
+ * Note: Do not check nothing uncommitted changes, because can not detect unpushed commits here.
+ */
+fun GitRepository.validateForDonePrecondition(settings: MobProjectSettings): Pair<Boolean, String?> {
     val (valid, reason) = validateCommonPrecondition(settings)
     if (!valid) {
         return Pair(valid, reason)

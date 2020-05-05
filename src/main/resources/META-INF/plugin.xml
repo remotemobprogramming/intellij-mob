@@ -34,10 +34,14 @@
         <action id="com.nowsprinting.intellij_mob.next" class="com.nowsprinting.intellij_mob.action.next.NextAction"
                 text="Next: Hand over to Next Typist...">
         </action>
+        <action id="com.nowsprinting.intellij_mob.done" class="com.nowsprinting.intellij_mob.action.done.DoneAction"
+                text="Done: Finish Mob Session...">
+        </action>
         <group id="com.nowsprinting.intellij_mob" text="Mob" popup="true">
             <add-to-group group-id="VcsGlobalGroup" anchor="after" relative-to-action="Git.Menu"/>
             <reference id="com.nowsprinting.intellij_mob.start"/>
             <reference id="com.nowsprinting.intellij_mob.next"/>
+            <reference id="com.nowsprinting.intellij_mob.done"/>
         </group>
     </actions>
 </idea-plugin>

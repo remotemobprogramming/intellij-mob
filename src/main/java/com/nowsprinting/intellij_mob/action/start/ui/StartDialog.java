@@ -68,7 +68,7 @@ public class StartDialog extends JDialog {
     public void setPreconditionResult(boolean canExecute, @Nullable String reason) {
         buttonOK.setEnabled(canExecute);
         message.setVisible(!canExecute);
-        message.setText(String.format(MobBundle.message("mob.start.error.cant_start"), reason));
+        message.setText(String.format(MobBundle.message("mob.start.error.precondition"), reason));
     }
 
     private void onOpenSettings() {
