@@ -1,21 +1,24 @@
 package com.nowsprinting.intellij_mob.action.start
 
 import com.intellij.notification.NotificationType
+import com.intellij.openapi.actionSystem.ActionManager
+import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.Task.Backgroundable
 import com.intellij.openapi.project.Project
 import com.nowsprinting.intellij_mob.MobBundle
+import com.nowsprinting.intellij_mob.action.share.ShareAction
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
 import com.nowsprinting.intellij_mob.config.validateForStartTask
 import com.nowsprinting.intellij_mob.git.*
 import com.nowsprinting.intellij_mob.service.TimerService
 import com.nowsprinting.intellij_mob.util.notify
-import com.nowsprinting.intellij_mob.util.screenShareWithZoom
 import com.nowsprinting.intellij_mob.util.status
 import git4idea.repo.GitRepository
 
-class StartTask(val settings: MobProjectSettings, project: Project, title: String) : Backgroundable(project, title) {
+class StartTask(val settings: MobProjectSettings, val e: AnActionEvent, project: Project, title: String) :
+    Backgroundable(project, title) {
     private val logger = Logger.getInstance(javaClass)
     private val notifyContents = mutableListOf<String>()
     private var completed = false
@@ -101,14 +104,9 @@ class StartTask(val settings: MobProjectSettings, project: Project, title: Strin
         }
 
         if (settings.startWithShare) {
-            val (success, message) = screenShareWithZoom()
-            if (success) {
-                logger.debug(message)
-                notifyContents.add(String.format(MobBundle.message("mob.notify_content.notify"), message))
-            } else {
-                logger.warn(message)
-                notifyContents.add(String.format(MobBundle.message("mob.notify_content.warning"), message))
-            }
+            ActionManager.getInstance().getAction(ShareAction.ActionId).actionPerformed(e)
+            val message = MobBundle.message("mob.screenshare.share_successful")
+            notifyContents.add(String.format(MobBundle.message("mob.notify_content.notify"), message))
         }
 
         notifyContents.add(status(repository, settings))

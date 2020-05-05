@@ -42,6 +42,8 @@
         <action id="com.nowsprinting.intellij_mob.reset" class="com.nowsprinting.intellij_mob.action.reset.ResetAction"
                 text="Resets Any Unfinished Mob Session...">
         </action>
+        <action id="com.nowsprinting.intellij_mob.share" class="com.nowsprinting.intellij_mob.action.share.ShareAction"
+                text="Screenshare with Zoom"/>
         <group id="com.nowsprinting.intellij_mob" text="Mob" popup="true">
             <add-to-group group-id="VcsGlobalGroup" anchor="after" relative-to-action="Git.Menu"/>
             <reference id="com.nowsprinting.intellij_mob.start"/>

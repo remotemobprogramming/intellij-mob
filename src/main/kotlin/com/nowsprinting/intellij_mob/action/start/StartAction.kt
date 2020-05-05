@@ -41,7 +41,7 @@ class StartAction : AnAction() {
         if (dialog.isOk) {
             settings.timerMinutes = dialog.timerMinutes
             settings.startWithShare = dialog.isStartWithShare
-            StartTask(settings, project, dialog.title).queue()
+            StartTask(settings, e, project, dialog.title).queue()
         }
     }
 }
