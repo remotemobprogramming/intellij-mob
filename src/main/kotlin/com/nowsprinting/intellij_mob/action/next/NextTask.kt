@@ -1,6 +1,7 @@
 package com.nowsprinting.intellij_mob.action.next
 
 import com.intellij.notification.NotificationType
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.Task.Backgroundable
 import com.intellij.openapi.project.Project
@@ -12,40 +13,45 @@ import com.nowsprinting.intellij_mob.util.notify
 import git4idea.repo.GitRepository
 
 class NextTask(val settings: MobProjectSettings, project: Project, title: String) : Backgroundable(project, title) {
+    private val logger = Logger.getInstance(javaClass)
     private val notifyContents = mutableListOf<String>()
     private var completed = false
     private var doNotRun = false
     private lateinit var repository: GitRepository
 
     override fun run(indicator: ProgressIndicator) {
+        val fractionPerCommandSection = 1.0 / 8
         indicator.isIndeterminate = false
         indicator.fraction = 0.0
-        val fractionPerCommandSection = 1.0 / 8
+        logger.debug(String.format(MobBundle.message("mob.notify_content.begin"), title))
 
         repository = when (val result = getGitRepository(project)) {
             is GitRepositoryResult.Success -> {
                 result.repository
             }
             is GitRepositoryResult.Failure -> {
+                logger.warn(result.reason)
                 notifyContents.add(String.format(MobBundle.message("mob.notify_content.failure"), result.reason))
                 return
             }
         }
         indicator.fraction += fractionPerCommandSection
 
-        val (canExecute, reason) = checkNextPrecondition(settings, repository)  // recheck precondition
+        val (canExecute, errorReason) = checkNextPrecondition(settings, repository)  // recheck precondition
         if (!canExecute) {
-            val format = MobBundle.message("mob.notify_content.failure")
-            val message = MobBundle.message("mob.next.error.cant_do_next")
-            notifyContents.add(String.format(format, String.format(message, reason)))
+            val format = MobBundle.message("mob.next.error.cant_do_next")
+            val message = String.format(format, errorReason)
+            logger.warn(message)
+            notifyContents.add(String.format(MobBundle.message("mob.notify_content.failure"), message))
             return
         }
         indicator.fraction += fractionPerCommandSection
 
         if (settings.wipCommitMessage.isEmpty()) {
-            val format = MobBundle.message("mob.notify_content.failure")
-            val message = MobBundle.message("mob.next.error.reason.unset_wip_commit_message")
-            notifyContents.add(String.format(format, message))
+            val format = MobBundle.message("mob.next.error.cant_do_next")
+            val message = String.format(format, errorReason)
+            logger.warn(message)
+            notifyContents.add(String.format(MobBundle.message("mob.notify_content.failure"), message))
             return
         }
         indicator.fraction += fractionPerCommandSection
@@ -53,9 +59,9 @@ class NextTask(val settings: MobProjectSettings, project: Project, title: String
         val hasUncommittedChanges = hasUncommittedChanges(repository)
         val hasUnpushedCommit = hasUnpushedCommit(settings, repository)
         if (!hasUncommittedChanges && !hasUnpushedCommit) {
-            val format = MobBundle.message("mob.notify_content.warning")
             val message = MobBundle.message("mob.next.error.reason.has_not_uncommitted_changes")
-            notifyContents.add(String.format(format, message))
+            logger.warn(message)
+            notifyContents.add(String.format(MobBundle.message("mob.notify_content.warning"), message))
             doNotRun = true
             return
         }
@@ -100,6 +106,7 @@ class NextTask(val settings: MobProjectSettings, project: Project, title: String
 
     override fun onFinished() {
         if (completed) {
+            logger.debug(String.format(MobBundle.message("mob.notify_content.success"), title))
             notify(
                 project = project,
                 title = MobBundle.message("mob.next.task_successful"),
@@ -107,6 +114,7 @@ class NextTask(val settings: MobProjectSettings, project: Project, title: String
                 type = NotificationType.INFORMATION
             )
         } else if (doNotRun) {
+            logger.debug(String.format(MobBundle.message("mob.notify_content.warning"), title))
             notify(
                 project = project,
                 title = MobBundle.message("mob.next.task_do_not_run"),
@@ -114,6 +122,7 @@ class NextTask(val settings: MobProjectSettings, project: Project, title: String
                 type = NotificationType.WARNING
             )
         } else {
+            logger.debug(String.format(MobBundle.message("mob.notify_content.failure"), title))
             notify(
                 project = project,
                 title = MobBundle.message("mob.next.task_failure"),
