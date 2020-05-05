@@ -2,8 +2,10 @@ package com.nowsprinting.intellij_mob.action.reset
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.options.ShowSettingsUtil
+import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.action.reset.ui.ResetDialog
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
 import com.nowsprinting.intellij_mob.config.MobSettingsConfigurable
@@ -13,6 +15,7 @@ import com.nowsprinting.intellij_mob.git.stayBranch
 import com.nowsprinting.intellij_mob.util.notifyError
 
 class ResetAction : AnAction() {
+    private val logger = Logger.getInstance(javaClass)
 
     override fun update(e: AnActionEvent) {
         super.update(e)
@@ -35,7 +38,9 @@ class ResetAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: throw NullPointerException("AnActionEvent#getProject() was return null")
         val settings = MobProjectSettings.getInstance(project)
+
         FileDocumentManager.getInstance().saveAllDocuments()
+        logger.debug(MobBundle.message("mob.logging.save_all_documents"))
         val (canExecute, reason) = checkResetPrecondition(settings, project)
 
         val dialog = ResetDialog()

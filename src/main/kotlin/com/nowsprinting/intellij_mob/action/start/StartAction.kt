@@ -2,14 +2,17 @@ package com.nowsprinting.intellij_mob.action.start
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.options.ShowSettingsUtil
+import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.action.start.ui.StartDialog
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
 import com.nowsprinting.intellij_mob.config.MobSettingsConfigurable
 import com.nowsprinting.intellij_mob.service.TimerService
 
 class StartAction : AnAction() {
+    private val logger = Logger.getInstance(javaClass)
 
     override fun update(e: AnActionEvent) {
         super.update(e)
@@ -22,7 +25,9 @@ class StartAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: throw NullPointerException("AnActionEvent#getProject() was return null")
         val settings = MobProjectSettings.getInstance(project)
+
         FileDocumentManager.getInstance().saveAllDocuments()
+        logger.debug(MobBundle.message("mob.logging.save_all_documents"))
         val (canExecute, reason) = checkStartPrecondition(settings, project)
 
         val dialog = StartDialog()
@@ -41,6 +46,7 @@ class StartAction : AnAction() {
         if (dialog.isOk) {
             settings.timerMinutes = dialog.timerMinutes
             settings.startWithShare = dialog.isStartWithShare
+            // Do not call saveAllDocuments() before run start task, Because there may be changes in mob.xml
             StartTask(settings, e, project, dialog.title).queue()
         }
     }

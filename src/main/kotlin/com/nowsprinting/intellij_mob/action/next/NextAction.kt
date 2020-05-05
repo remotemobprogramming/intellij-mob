@@ -2,8 +2,10 @@ package com.nowsprinting.intellij_mob.action.next
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.options.ShowSettingsUtil
+import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.action.next.ui.NextDialog
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
 import com.nowsprinting.intellij_mob.config.MobSettingsConfigurable
@@ -13,6 +15,7 @@ import com.nowsprinting.intellij_mob.git.stayBranch
 import com.nowsprinting.intellij_mob.util.notifyError
 
 class NextAction : AnAction() {
+    private val logger = Logger.getInstance(javaClass)
 
     override fun update(e: AnActionEvent) {
         super.update(e)
@@ -35,7 +38,9 @@ class NextAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: throw NullPointerException("AnActionEvent#getProject() was return null")
         val settings = MobProjectSettings.getInstance(project)
+
         FileDocumentManager.getInstance().saveAllDocuments()
+        logger.debug(MobBundle.message("mob.logging.save_all_documents"))
         val (canExecute, reason) = checkNextPrecondition(settings, project)
 
         val dialog = NextDialog()
@@ -54,6 +59,8 @@ class NextAction : AnAction() {
         if (dialog.isOk) {
             settings.wipCommitMessage = dialog.wipCommitMessage
             settings.nextStay = dialog.isNextStay
+            FileDocumentManager.getInstance().saveAllDocuments()
+            logger.debug(MobBundle.message("mob.logging.save_all_documents"))
             NextTask(settings, project, dialog.title).queue()
         }
     }
