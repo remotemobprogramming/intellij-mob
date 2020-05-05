@@ -30,20 +30,21 @@
     <actions>
         <action id="com.nowsprinting.intellij_mob.start" class="com.nowsprinting.intellij_mob.action.start.StartAction"
                 text="Start Mob Programming as Typist...">
+            <keyboard-shortcut keymap="$default" first-keystroke="alt M" second-keystroke="S"/>
         </action>
         <action id="com.nowsprinting.intellij_mob.next" class="com.nowsprinting.intellij_mob.action.next.NextAction"
-                text="Next: Hand over to Next Typist...">
+                text="Next : Handover to Next Typist...">
+            <keyboard-shortcut keymap="$default" first-keystroke="alt M" second-keystroke="N"/>
         </action>
         <action id="com.nowsprinting.intellij_mob.done" class="com.nowsprinting.intellij_mob.action.done.DoneAction"
-                text="Done: Finish Mob Session...">
+                text="Done : Finish Mob Session...">
         </action>
         <action id="com.nowsprinting.intellij_mob.reset" class="com.nowsprinting.intellij_mob.action.reset.ResetAction"
-                text="Reset: Resets Any Unfinished Mob Session">
+                text="Resets Any Unfinished Mob Session...">
         </action>
         <group id="com.nowsprinting.intellij_mob" text="Mob" popup="true">
             <add-to-group group-id="VcsGlobalGroup" anchor="after" relative-to-action="Git.Menu"/>
             <reference id="com.nowsprinting.intellij_mob.start"/>
-            <separator/>
             <reference id="com.nowsprinting.intellij_mob.next"/>
             <reference id="com.nowsprinting.intellij_mob.done"/>
             <separator/>
