@@ -32,12 +32,18 @@ jobs:
 
     - name: Run tests with Gradle
       run: ./gradlew test
-
-    - name: Upload
-      uses: actions/upload-artifact@v1.0.0
+    - name: Upload test results
+      uses: actions/upload-artifact@v2
       with:
-        name: test results
         path: build/reports/tests/test
+      if: always()
+
+    - name: Build with Gradle
+      run: ./gradlew buildPlugin
+    - name: Upload build
+      uses: actions/upload-artifact@v2
+      with:
+        path: build/distributions/*.zip
 
     - uses: 8398a7/action-slack@v3
       with:
