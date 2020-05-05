@@ -30,7 +30,8 @@ internal class LogKtTest {
         val notifyContents = mutableListOf<String>()
         showNextTypist(settings, repository, notifyContents)
 
-        assertEquals(0, notifyContents.size)
+        val expected = listOf<String>()
+        assertEquals(expected, notifyContents)
     }
 
     @Test
@@ -52,7 +53,8 @@ internal class LogKtTest {
         val notifyContents = mutableListOf<String>()
         showNextTypist(settings, repository, notifyContents)
 
-        assertEquals(0, notifyContents.size)
+        val expected = listOf<String>()
+        assertEquals(expected, notifyContents)
     }
 
     @Test
@@ -74,7 +76,8 @@ internal class LogKtTest {
         val notifyContents = mutableListOf<String>()
         showNextTypist(settings, repository, notifyContents)
 
-        assertEquals(0, notifyContents.size)
+        val expected = listOf<String>()
+        assertEquals(expected, notifyContents)
     }
 
     @Test
@@ -96,13 +99,12 @@ internal class LogKtTest {
         val notifyContents = mutableListOf<String>()
         showNextTypist(settings, repository, notifyContents)
 
-        assertEquals(2, notifyContents.size)
         val notifyFormat = MobBundle.message("mob.notify_content.notify")
-        assertEquals(
+        val expected = listOf(
             String.format(notifyFormat, "Committers after your last commit: Lindsay, Jenny, Katsuro"),
-            notifyContents[0]
+            String.format(notifyFormat, "***Lindsay*** is (probably) next.")
         )
-        assertEquals(String.format(notifyFormat, "***Lindsay*** is (probably) next."), notifyContents[1])
+        assertEquals(expected, notifyContents)
     }
 
     @Test
@@ -124,14 +126,71 @@ internal class LogKtTest {
         val notifyContents = mutableListOf<String>()
         showNextTypist(settings, repository, notifyContents)
 
-        assertEquals(2, notifyContents.size)
         val notifyFormat = MobBundle.message("mob.notify_content.notify")
-        assertEquals(
-            String.format(
-                notifyFormat, "Committers after your last commit: Lindsay, Jenny, Katsuro, Katsuro"
-            ),
-            notifyContents[0]
+        val expected = listOf(
+            String.format(notifyFormat, "Committers after your last commit: Lindsay, Jenny, Katsuro, Katsuro"),
+            String.format(notifyFormat, "***Lindsay*** is (probably) next.")
         )
-        assertEquals(String.format(notifyFormat, "***Lindsay*** is (probably) next."), notifyContents[1])
+        assertEquals(expected, notifyContents)
+    }
+
+    @Test
+    fun getCoAuthors_nothingCommit_nothingCoAuthors() {
+        val repository = DummyGitRepository()
+        val settings = MobProjectSettings()
+        settings.baseBranch = "base"
+        settings.wipBranch = "wip"
+
+        mockkStatic("com.nowsprinting.intellij_mob.git.GitCommandUtilKt")
+        every {
+            git(GitCommand.LOG, listOf("base..wip", "--pretty=format:%an <%ae>", "--abbrev-commit"), repository, false)
+        } returns listOf()  // nothing commit
+
+        every {
+            git(GitCommand.CONFIG, listOf("--get", "user.name"), repository, false)
+        } returns listOf("Katsuro")
+
+        every {
+            git(GitCommand.CONFIG, listOf("--get", "user.email"), repository, false)
+        } returns listOf("katsuro@example.com")
+
+        val actual = getCoAuthors(settings, repository)
+        val expected = setOf<String>()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun getCoAuthors_anyCommit_getCoAuthors() {
+        val repository = DummyGitRepository()
+        val settings = MobProjectSettings()
+        settings.baseBranch = "base"
+        settings.wipBranch = "wip"
+
+        mockkStatic("com.nowsprinting.intellij_mob.git.GitCommandUtilKt")
+        every {
+            git(GitCommand.LOG, listOf("base..wip", "--pretty=format:%an <%ae>", "--abbrev-commit"), repository, false)
+        } returns listOf(
+            "Jenny <jenny@example.com>",
+            "Lindsay <lindsay@example.com>",
+            "Katsuro <katsuro@example.com>",
+            "Jenny <jenny@example.com>",
+            "Lindsay <lindsay@example.com>",
+            "Katsuro <katsuro@example.com>"
+        )  // exist past commit
+
+        every {
+            git(GitCommand.CONFIG, listOf("--get", "user.name"), repository, false)
+        } returns listOf("Katsuro")
+
+        every {
+            git(GitCommand.CONFIG, listOf("--get", "user.email"), repository, false)
+        } returns listOf("katsuro@example.com")
+
+        val actual = getCoAuthors(settings, repository)
+        val expected = setOf(
+            "Lindsay <lindsay@example.com>",
+            "Jenny <jenny@example.com>"
+        )
+        assertEquals(expected, actual)
     }
 }

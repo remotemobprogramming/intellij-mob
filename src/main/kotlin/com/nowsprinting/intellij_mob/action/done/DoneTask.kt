@@ -72,6 +72,8 @@ class DoneTask(val settings: MobProjectSettings, project: Project, title: String
         }
         indicator.fraction += fractionPerCommandSection
 
+        val coAuthors = getCoAuthors(settings, repository)
+
         if (repository.hasMobProgrammingBranchOrigin(settings)) {
             if (!mergeRemoteWipBranchToBaseBranch(indicator)) {
                 return
@@ -83,7 +85,7 @@ class DoneTask(val settings: MobProjectSettings, project: Project, title: String
         }
 
         stopTimer()
-        openGitCommitDialog()
+        openGitCommitDialog(coAuthors)
 
         indicator.fraction = 1.0
         completed = true
@@ -196,7 +198,7 @@ class DoneTask(val settings: MobProjectSettings, project: Project, title: String
         timer?.stop()
     }
 
-    private fun openGitCommitDialog() {
+    private fun openGitCommitDialog(coAuthors: Set<String>) {
         // TODO:
     }
 }

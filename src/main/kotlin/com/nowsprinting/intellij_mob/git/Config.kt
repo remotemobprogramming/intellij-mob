@@ -13,9 +13,31 @@ import git4idea.repo.GitRepository
  * @param   verbose         Add `--verbose` option (default: false)
  * @return  git user name
  */
-fun gitGitUserName(repository: GitRepository, verbose: Boolean = false): String {
+fun gitUserName(repository: GitRepository, verbose: Boolean = false): String {
     val command = GitCommand.CONFIG
     val options = listOf("--get", "user.name")
+
+    val output = git(command, options, repository, verbose)
+    if (output.isNotEmpty()) {
+        return output[0].trim()
+    } else {
+        return String()
+    }
+}
+
+/**
+ * git config --get user.email
+ *
+ * Must be called from `Task.Backgroundable#run()`.
+ * If an error occurs, show a notification within this function.
+ *
+ * @param   repository      Git repository
+ * @param   verbose         Add `--verbose` option (default: false)
+ * @return  git user name
+ */
+fun gitUserEmail(repository: GitRepository, verbose: Boolean = false): String {
+    val command = GitCommand.CONFIG
+    val options = listOf("--get", "user.email")
 
     val output = git(command, options, repository, verbose)
     if (output.isNotEmpty()) {

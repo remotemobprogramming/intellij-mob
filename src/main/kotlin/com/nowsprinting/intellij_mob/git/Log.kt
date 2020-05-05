@@ -53,7 +53,7 @@ fun showNextTypist(
     val authors = git(command, options, repository, verbose)
     logger.debug("there have been ${authors.size} changes")
 
-    val gitUserName = gitGitUserName(repository)
+    val gitUserName = gitUserName(repository)
     logger.debug("current git user.name is '$gitUserName'")
 
     var foundAnotherAuthor = false
@@ -77,4 +77,41 @@ fun showNextTypist(
             foundAnotherAuthor = true
         }
     }
+}
+
+/**
+ * Create co-author list for `Co-authored-by:` trailer.
+ *
+ * Must be called from `Task.Backgroundable#run()`.
+ * If an error occurs, show a notification within this function.
+ *
+ * @param   settings        Use base and wip branch
+ * @param   repository      Git repository
+ * @param   verbose         Add `--verbose` option (default: false)
+ */
+fun getCoAuthors(
+    settings: MobProjectSettings,
+    repository: GitRepository,
+    verbose: Boolean = false
+): Set<String> {
+    val command = GitCommand.LOG
+    val from = settings.baseBranch
+    val to = settings.wipBranch
+    val options = listOf("$from..$to", "--pretty=format:%an <%ae>", "--abbrev-commit")
+
+    val authors = git(command, options, repository, verbose)
+    logger.debug("there have been ${authors.size} changes")
+
+    val gitUserName = gitUserName(repository)
+    val gitUserEmail = gitUserEmail(repository)
+    val gitUser = "$gitUserName <$gitUserEmail>"
+    logger.debug("current git user is '$gitUser'")
+
+    val uniqueAuthors = mutableSetOf<String>()
+    for (author in authors) {
+        if (!author.equals(gitUser)) {
+            uniqueAuthors.add(author)
+        }
+    }
+    return uniqueAuthors
 }
