@@ -37,11 +37,17 @@
         <action id="com.nowsprinting.intellij_mob.done" class="com.nowsprinting.intellij_mob.action.done.DoneAction"
                 text="Done: Finish Mob Session...">
         </action>
+        <action id="com.nowsprinting.intellij_mob.reset" class="com.nowsprinting.intellij_mob.action.reset.ResetAction"
+                text="Reset: Resets Any Unfinished Mob Session">
+        </action>
         <group id="com.nowsprinting.intellij_mob" text="Mob" popup="true">
             <add-to-group group-id="VcsGlobalGroup" anchor="after" relative-to-action="Git.Menu"/>
             <reference id="com.nowsprinting.intellij_mob.start"/>
+            <separator/>
             <reference id="com.nowsprinting.intellij_mob.next"/>
             <reference id="com.nowsprinting.intellij_mob.done"/>
+            <separator/>
+            <reference id="com.nowsprinting.intellij_mob.reset"/>
         </group>
     </actions>
 </idea-plugin>

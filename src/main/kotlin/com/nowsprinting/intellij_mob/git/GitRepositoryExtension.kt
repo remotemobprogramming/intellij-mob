@@ -161,3 +161,20 @@ fun GitRepository.validateForDonePrecondition(settings: MobProjectSettings): Pai
 
     return Pair(true, null)
 }
+
+/**
+ * Validate repository for reset precondition check and task.
+ */
+fun GitRepository.validateForResetPrecondition(settings: MobProjectSettings): Pair<Boolean, String?> {
+    val (valid, reason) = validateCommonPrecondition(settings)
+    if (!valid) {
+        return Pair(valid, reason)
+    }
+    if (!stayBranch(settings.wipBranch)) {
+        val message = MobBundle.message("mob.validate_reason.not_stay_wip_branch")
+        return Pair(false, String.format(message, settings.wipBranch))
+    }
+    // Validate about upstream is passed inside validateCommonPrecondition()
+
+    return Pair(true, null)
+}

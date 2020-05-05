@@ -45,3 +45,11 @@ fun MobProjectSettings.validateForDonePrecondition(): Pair<Boolean, String?> {
 fun MobProjectSettings.validateForDoneTask(): Pair<Boolean, String?> {
     return validateForDonePrecondition()
 }
+
+fun MobProjectSettings.validateForResetPrecondition(): Pair<Boolean, String?> {
+    return validateCommonPrecondition()
+}
+
+fun MobProjectSettings.validateForResetTask(): Pair<Boolean, String?> {
+    return validateForResetPrecondition()
+}
