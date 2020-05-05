@@ -39,14 +39,11 @@ jobs:
         name: test results
         path: build/reports/tests/test
 
-    - name: Notification with successful
-      uses: rtCamp/action-slack-notify@v2.0.0
+    - uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow # selectable (default: repo,message)
       env:
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-
-    - name: Notification with failure
-      if: failure()
-      uses: rtCamp/action-slack-notify@v2.0.0
-      env:
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-        SLACK_COLOR: danger
+        # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # optional
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }} # required
+      if: always() # Pick up events even if the job fails or is canceled.
