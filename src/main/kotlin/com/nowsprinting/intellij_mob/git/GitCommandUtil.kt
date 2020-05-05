@@ -35,6 +35,7 @@ fun git(
         commandFull.append(" ").append(v)
     }
     logger.debug(String.format(MobBundle.message("mob.notify_content.begin"), commandFull))
+    logCurrentRevision(repository)
 
     val handler = GitLineHandler(repository.project, repository.root, command)
     handler.addParameters(options)
@@ -60,6 +61,8 @@ fun git(
     val message = String.format(MobBundle.message("mob.notify_content.success"), commandFull)
     notifyContents?.add(message)
     logger.info(message)
+    logCurrentRevision(repository)
+
     return true
 }
 
@@ -86,6 +89,7 @@ fun git(
         commandFull.append(" ").append(v)
     }
     logger.debug(String.format(MobBundle.message("mob.notify_content.begin"), commandFull))
+    logCurrentRevision(repository)
 
     val handler = GitLineHandler(repository.project, repository.root, command)  // maybe with "--no-pager"
     handler.addParameters(options)
@@ -109,5 +113,14 @@ fun git(
 
     val message = String.format(MobBundle.message("mob.notify_content.success"), commandFull)
     logger.info(message)
+    logCurrentRevision(repository)
+
     return result.output
+}
+
+private fun logCurrentRevision(repository: GitRepository) {
+    if (!repository.isFresh) {
+        repository.update()
+    }
+    logger.debug("repository current revision: ${repository.currentRevision}")
 }
