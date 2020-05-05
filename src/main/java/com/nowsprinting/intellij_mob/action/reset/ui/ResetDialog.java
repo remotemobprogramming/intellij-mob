@@ -4,6 +4,8 @@ import com.nowsprinting.intellij_mob.MobBundle;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.event.*;
 
 public class ResetDialog extends JDialog {
@@ -12,6 +14,7 @@ public class ResetDialog extends JDialog {
     private JButton buttonCancel;
     private JButton buttonOpenSettings;
     private JLabel message;
+    private JCheckBox confirmCheckBox;
     private boolean openSettings = false;
     private boolean ok = false;
 
@@ -53,6 +56,15 @@ public class ResetDialog extends JDialog {
                 onOpenSettings();
             }
         });
+
+        confirmCheckBox.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                buttonOK.setEnabled(confirmCheckBox.isSelected());
+            }
+        });
+
+        buttonOK.setEnabled(false);
     }
 
     /**
@@ -62,7 +74,7 @@ public class ResetDialog extends JDialog {
      * @param reason     display message
      */
     public void setPreconditionResult(boolean canExecute, @Nullable String reason) {
-        buttonOK.setEnabled(canExecute);
+        confirmCheckBox.setEnabled(canExecute);
         message.setVisible(!canExecute);
         message.setText(String.format(MobBundle.message("mob.done.error.precondition"), reason));
     }
