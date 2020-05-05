@@ -7,6 +7,7 @@ import com.intellij.openapi.progress.Task.Backgroundable
 import com.intellij.openapi.project.Project
 import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
+import com.nowsprinting.intellij_mob.config.validateForNextTask
 import com.nowsprinting.intellij_mob.git.*
 import com.nowsprinting.intellij_mob.service.TimerService
 import com.nowsprinting.intellij_mob.util.notify
@@ -20,7 +21,7 @@ class NextTask(val settings: MobProjectSettings, project: Project, title: String
     private lateinit var repository: GitRepository
 
     override fun run(indicator: ProgressIndicator) {
-        val fractionPerCommandSection = 1.0 / 8
+        val fractionPerCommandSection = 1.0 / 6
         indicator.isIndeterminate = false
         indicator.fraction = 0.0
         logger.debug(String.format(MobBundle.message("mob.notify_content.begin"), title))
@@ -35,21 +36,20 @@ class NextTask(val settings: MobProjectSettings, project: Project, title: String
                 return
             }
         }
-        indicator.fraction += fractionPerCommandSection
 
-        val (canExecute, errorReason) = checkNextPrecondition(settings, repository)  // recheck precondition
-        if (!canExecute) {
-            val format = MobBundle.message("mob.next.error.cant_do_next")
-            val message = String.format(format, errorReason)
+        val (validSettings, reasonInvalidSettings) = settings.validateForNextTask()
+        if (!validSettings) {
+            val format = MobBundle.message("mob.next.error.cant_do_run")
+            val message = String.format(format, reasonInvalidSettings)
             logger.warn(message)
             notifyContents.add(String.format(MobBundle.message("mob.notify_content.failure"), message))
             return
         }
-        indicator.fraction += fractionPerCommandSection
 
-        if (settings.wipCommitMessage.isEmpty()) {
-            val format = MobBundle.message("mob.next.error.cant_do_next")
-            val message = String.format(format, errorReason)
+        val (validRepository, reasonInvalidRepository) = repository.validateForNextPrecondition(settings)
+        if (!validRepository) {
+            val format = MobBundle.message("mob.next.error.cant_do_run")
+            val message = String.format(format, reasonInvalidRepository)
             logger.warn(message)
             notifyContents.add(String.format(MobBundle.message("mob.notify_content.failure"), message))
             return
@@ -59,7 +59,7 @@ class NextTask(val settings: MobProjectSettings, project: Project, title: String
         val hasUncommittedChanges = hasUncommittedChanges(repository)
         val hasUnpushedCommit = hasUnpushedCommit(settings, repository)
         if (!hasUncommittedChanges && !hasUnpushedCommit) {
-            val message = MobBundle.message("mob.next.error.reason.has_not_uncommitted_changes")
+            val message = MobBundle.message("mob.next.error.reason.has_not_changes")
             logger.warn(message)
             notifyContents.add(String.format(MobBundle.message("mob.notify_content.warning"), message))
             doNotRun = true

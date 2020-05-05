@@ -66,7 +66,7 @@ public class NextDialog extends JDialog {
     public void setPreconditionResult(boolean canExecute, @Nullable String reason) {
         buttonOK.setEnabled(canExecute);
         message.setVisible(!canExecute);
-        message.setText(String.format(MobBundle.message("mob.next.error.cant_do_next"), reason));
+        message.setText(String.format(MobBundle.message("mob.next.error.cant_do_run"), reason));
     }
 
     private void onOpenSettings() {

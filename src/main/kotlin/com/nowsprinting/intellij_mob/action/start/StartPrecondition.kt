@@ -1,12 +1,12 @@
 package com.nowsprinting.intellij_mob.action.start
 
-import com.intellij.dvcs.repo.Repository
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.vcs.changes.ChangeListManager
-import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
-import com.nowsprinting.intellij_mob.git.*
+import com.nowsprinting.intellij_mob.config.validateForStartPrecondition
+import com.nowsprinting.intellij_mob.git.GitRepositoryResult
+import com.nowsprinting.intellij_mob.git.getGitRepository
+import com.nowsprinting.intellij_mob.git.validateForStartPrecondition
 import git4idea.repo.GitRepository
 
 private val logger = Logger.getInstance("#com.nowsprinting.intellij_mob.action.start.StartPreconditionKt")
@@ -29,52 +29,13 @@ fun checkStartPrecondition(settings: MobProjectSettings, project: Project): Pair
 }
 
 internal fun checkStartPrecondition(settings: MobProjectSettings, repository: GitRepository): Pair<Boolean, String?> {
-    if (settings.wipBranch.isNullOrEmpty()) {
-        return Pair(false, MobBundle.message("mob.start.error.reason.unset_wip_branch"))
+    val (validSettings, reasonInvalidSettings) = settings.validateForStartPrecondition()
+    if (!validSettings) {
+        return Pair(validSettings, reasonInvalidSettings)
     }
-    if (settings.baseBranch.isNullOrEmpty()) {
-        return Pair(false, MobBundle.message("mob.start.error.reason.unset_base_branch"))
-    }
-    if (settings.remoteName.isNullOrEmpty()) {
-        return Pair(false, MobBundle.message("mob.start.error.reason.unset_remote_name"))
-    }
-    if (!repository.hasRemote(remoteName = settings.remoteName)) {
-        return Pair(false, MobBundle.message("mob.start.error.reason.not_exist_remote_name"))
-    }
-    if (!repository.hasRemoteBranch(remoteName = settings.remoteName, branchName = settings.baseBranch)) {
-        return Pair(false, MobBundle.message("mob.start.error.reason.not_exist_base_branch_on_remote"))
-    }
-    repository.getLocalBranch(settings.baseBranch)?.let {
-        if (!it.hasValidUpstream(repository)) {
-            return Pair(false, MobBundle.message("mob.start.error.reason.base_branch_has_not_valid_upstream"))
-        }
-    }
-    repository.currentBranch?.let {
-        if (!it.hasValidUpstream(repository)) {
-            return Pair(false, MobBundle.message("mob.start.error.reason.current_branch_has_not_valid_upstream"))
-        }
-    }
-    if (!isNothingToCommit(repository)) {
-        return Pair(false, MobBundle.message("mob.start.error.reason.has_uncommitted_changes"))
+    val (validRepository, reasonInvalidRepository) = repository.validateForStartPrecondition(settings)
+    if (!validRepository) {
+        return Pair(validRepository, reasonInvalidRepository)
     }
     return Pair(true, null)
-}
-
-fun isNothingToCommit(repository: Repository): Boolean {
-    if (repository.state != Repository.State.NORMAL) {
-        logger.info("Repository state is ${repository.state.toString()}")
-        return false
-    }
-
-    val changes = ChangeListManager.getInstance(repository.project).allChanges
-    if (changes.isNotEmpty()) {
-        logger.info("Has uncommitted changes")
-        for (v in changes) {
-            logger.debug("  ${v.type.toString()}: ${v.virtualFile?.path}")
-        }
-        return false
-    }
-    // Untracked files are not detected.
-
-    return true
 }

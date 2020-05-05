@@ -7,6 +7,7 @@ import com.intellij.openapi.progress.Task.Backgroundable
 import com.intellij.openapi.project.Project
 import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
+import com.nowsprinting.intellij_mob.config.validateForStartTask
 import com.nowsprinting.intellij_mob.git.*
 import com.nowsprinting.intellij_mob.service.TimerService
 import com.nowsprinting.intellij_mob.util.notify
@@ -36,12 +37,20 @@ class StartTask(val settings: MobProjectSettings, project: Project, title: Strin
                 return
             }
         }
-        indicator.fraction += fractionPerCommandSection
 
-        val (canExecute, errorReason) = checkStartPrecondition(settings, repository)  // recheck precondition
-        if (!canExecute) {
+        val (validSettings, reasonInvalidSettings) = settings.validateForStartTask()
+        if (!validSettings) {
             val format = MobBundle.message("mob.start.error.cant_start")
-            val message = String.format(format, errorReason)
+            val message = String.format(format, reasonInvalidSettings)
+            logger.warn(message)
+            notifyContents.add(String.format(MobBundle.message("mob.notify_content.failure"), message))
+            return
+        }
+
+        val (validRepository, reasonInvalidRepository) = repository.validateForStartPrecondition(settings)
+        if (!validRepository) {
+            val format = MobBundle.message("mob.start.error.cant_start")
+            val message = String.format(format, reasonInvalidRepository)
             logger.warn(message)
             notifyContents.add(String.format(MobBundle.message("mob.notify_content.failure"), message))
             return

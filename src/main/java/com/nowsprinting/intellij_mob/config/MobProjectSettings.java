@@ -17,9 +17,9 @@ import org.jetbrains.annotations.Nullable;
         }
 )
 public class MobProjectSettings implements PersistentStateComponent<MobProjectSettings> {
-    public String wipBranch;
-    public String baseBranch;
     public String remoteName;
+    public String baseBranch;
+    public String wipBranch;
     public int timerMinutes;
     public boolean startWithShare;
     public String wipCommitMessage;
@@ -41,9 +41,9 @@ public class MobProjectSettings implements PersistentStateComponent<MobProjectSe
     }
 
     public void noStateLoaded() {
-        wipBranch = readStringDefaultFromResourceBundle("mob.settings.default.wip_branch");
-        baseBranch = readStringDefaultFromResourceBundle("mob.settings.default.base_branch");
         remoteName = readStringDefaultFromResourceBundle("mob.settings.default.remote_name");
+        baseBranch = readStringDefaultFromResourceBundle("mob.settings.default.base_branch");
+        wipBranch = readStringDefaultFromResourceBundle("mob.settings.default.wip_branch");
         timerMinutes = readIntDefaultFromResourceBundle("mob.settings.default.timer_minutes", 0);
         startWithShare = readBooleanDefaultFromResourceBundle("mob.settings.default.start_with_share");
         wipCommitMessage = readStringDefaultFromResourceBundle("mob.settings.default.wip_commit_message");

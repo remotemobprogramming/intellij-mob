@@ -15,6 +15,6 @@ class MobProjectSettingsTest {
         Assertions.assertEquals(sut.timerMinutes, 10)
         Assertions.assertFalse(sut.startWithShare)
         Assertions.assertEquals(sut.wipCommitMessage, "mob next [ci-skip]")
-        Assertions.assertFalse(sut.nextStay)
+        Assertions.assertTrue(sut.nextStay)
     }
 }

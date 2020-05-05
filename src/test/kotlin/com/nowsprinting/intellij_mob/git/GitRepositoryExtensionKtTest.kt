@@ -180,4 +180,7 @@ internal class GitRepositoryExtensionKtTest {
         val actual = repository.isMobProgramming(settings)
         assertFalse(actual)
     }
+
+    // Cover validateForStartPrecondition() tests, in StartPreconditionKtTest class
+    // Cover validateForNextPrecondition() tests, in NextPreconditionKtTest class
 }

@@ -2,7 +2,6 @@ package com.nowsprinting.intellij_mob.action.next
 
 import com.intellij.dvcs.repo.Repository
 import com.intellij.vcs.log.Hash
-import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
 import com.nowsprinting.intellij_mob.testdouble.DummyGitRepository
 import com.nowsprinting.intellij_mob.testdouble.DummyHash
@@ -12,8 +11,6 @@ import git4idea.GitStandardRemoteBranch
 import git4idea.branch.GitBranchesCollection
 import git4idea.repo.GitBranchTrackInfo
 import git4idea.repo.GitRemote
-import io.mockk.every
-import io.mockk.mockkStatic
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
@@ -21,9 +18,9 @@ internal class NextPreconditionKtTest {
 
     private class StubGitRepository(
         val remoteSet: MutableCollection<GitRemote>?,
-        val remoteBranches: MutableCollection<GitRemoteBranch>?,
-        val localBranches: MutableCollection<GitLocalBranch>?,
-        val trackedRemoteBranch: GitRemoteBranch?,
+        val remoteBranches: Collection<GitRemoteBranch>?,
+        val localBranches: Collection<GitLocalBranch>?,
+        val trackedRemoteBranches: Collection<GitRemoteBranch>?,
         val current: GitLocalBranch?,
         val repositoryState: Repository.State = Repository.State.NORMAL
     ) : DummyGitRepository() {
@@ -49,12 +46,16 @@ internal class NextPreconditionKtTest {
         }
 
         override fun getBranchTrackInfo(localBranchName: String): GitBranchTrackInfo? {
-            trackedRemoteBranch?.let {
-                return GitBranchTrackInfo(
-                    GitLocalBranch(localBranchName),
-                    it,
-                    false
-                )
+            trackedRemoteBranches?.let {
+                for (remoteBranch in it) {
+                    if (remoteBranch.name.endsWith(localBranchName)) {
+                        return GitBranchTrackInfo(
+                            GitLocalBranch(localBranchName),
+                            remoteBranch,
+                            false
+                        )
+                    }
+                }
             }
             return null
         }
@@ -88,9 +89,9 @@ internal class NextPreconditionKtTest {
         val localWip = GitLocalBranch("mob-session")
         val repository = StubGitRepository(
             remoteSet = mutableSetOf(origin),
-            remoteBranches = mutableSetOf(remoteMaster, remoteWip),
-            localBranches = mutableSetOf(localMaster, localWip),
-            trackedRemoteBranch = remoteWip,
+            remoteBranches = setOf(remoteMaster, remoteWip),
+            localBranches = setOf(localMaster, localWip),
+            trackedRemoteBranches = setOf(remoteMaster, remoteWip),
             current = localMaster   // not stay wip branch
         )
 
@@ -109,9 +110,9 @@ internal class NextPreconditionKtTest {
         val localWip = GitLocalBranch("mob-session")
         val repository = StubGitRepository(
             remoteSet = mutableSetOf(origin),
-            remoteBranches = mutableSetOf(remoteMaster, remoteWip),
-            localBranches = mutableSetOf(localMaster, localWip),
-            trackedRemoteBranch = remoteWip,
+            remoteBranches = setOf(remoteMaster, remoteWip),
+            localBranches = setOf(localMaster, localWip),
+            trackedRemoteBranches = setOf(remoteWip),
             current = localWip
         )
 

@@ -1,9 +1,11 @@
 package com.nowsprinting.intellij_mob.action.next
 
 import com.intellij.openapi.project.Project
-import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
-import com.nowsprinting.intellij_mob.git.*
+import com.nowsprinting.intellij_mob.config.validateForNextPrecondition
+import com.nowsprinting.intellij_mob.git.GitRepositoryResult
+import com.nowsprinting.intellij_mob.git.getGitRepository
+import com.nowsprinting.intellij_mob.git.validateForNextPrecondition
 import git4idea.repo.GitRepository
 
 /**
@@ -24,32 +26,13 @@ fun checkNextPrecondition(settings: MobProjectSettings, project: Project): Pair<
 }
 
 internal fun checkNextPrecondition(settings: MobProjectSettings, repository: GitRepository): Pair<Boolean, String?> {
-    if (settings.wipBranch.isNullOrEmpty()) {
-        return Pair(false, MobBundle.message("mob.start.error.reason.unset_wip_branch"))
+    val (validSettings, reasonInvalidSettings) = settings.validateForNextPrecondition()
+    if (!validSettings) {
+        return Pair(validSettings, reasonInvalidSettings)
     }
-    if (settings.baseBranch.isNullOrEmpty()) {
-        return Pair(false, MobBundle.message("mob.start.error.reason.unset_base_branch"))
+    val (validRepository, reasonInvalidRepository) = repository.validateForNextPrecondition(settings)
+    if (!validRepository) {
+        return Pair(validRepository, reasonInvalidRepository)
     }
-    if (settings.remoteName.isNullOrEmpty()) {
-        return Pair(false, MobBundle.message("mob.start.error.reason.unset_remote_name"))
-    }
-    if (!repository.hasRemote(remoteName = settings.remoteName)) {
-        return Pair(false, MobBundle.message("mob.start.error.reason.not_exist_remote_name"))
-    }
-    if (!repository.hasRemoteBranch(remoteName = settings.remoteName, branchName = settings.baseBranch)) {
-        return Pair(false, MobBundle.message("mob.start.error.reason.not_exist_base_branch_on_remote"))
-    }
-    if (!repository.stayBranch(settings.wipBranch)) {
-        val message = MobBundle.message("mob.next.error.reason.not_stay_wip_branch")
-        return Pair(false, String.format(message, settings.wipBranch))
-    }
-    repository.currentBranch?.let {
-        if (!it.hasValidUpstream(repository)) {
-            return Pair(false, MobBundle.message("mob.start.error.reason.current_branch_has_not_valid_upstream"))
-        }
-    }
-
-    // Do not check uncommitted changes, because can not detect unpushed commits here.
-
     return Pair(true, null)
 }
