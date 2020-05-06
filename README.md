@@ -75,6 +75,24 @@ Open Settings(Windows, Linux)/Preferences(macOS) > Tools > Mob
 ![preferences](documents/preferences.png)
 
 
+## Milestones
+
+### Beta
+
+- Display timer on status bar
+- Restart timer
+- Open commit & push dialog after done. with add Co-authored-by trailer to commit comment, if possible
+
+### Release
+
+- Integration tests
+- Refactor: dialogs uses `DialogWrapper`
+- Refactor: tests about `GitRepository`
+- Validate on dialogs
+- Support multiple repository
+- Publish JetBrains plugins repository
+
+
 ## How to contribute
 
 Open an issue or create a pull request.
