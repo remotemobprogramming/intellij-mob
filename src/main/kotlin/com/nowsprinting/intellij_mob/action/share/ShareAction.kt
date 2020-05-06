@@ -57,8 +57,4 @@ class ShareAction : AnAction() {
         }
         return intArrayOf()
     }
-
-    companion object {
-        public const val ActionId = "com.nowsprinting.intellij_mob.share"
-    }
 }

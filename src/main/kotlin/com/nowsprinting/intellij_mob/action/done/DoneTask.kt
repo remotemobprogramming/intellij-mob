@@ -55,6 +55,8 @@ class DoneTask(val settings: MobProjectSettings, project: Project, title: String
         }
         indicator.fraction += fractionPerCommandSection
 
+        stopTimer()
+
         val hasUncommittedChanges = hasUncommittedChanges(repository)
         val hasUnpushedCommit = hasChangesForDone(settings, repository)
         if (!hasUncommittedChanges && !hasUnpushedCommit) {
@@ -84,7 +86,6 @@ class DoneTask(val settings: MobProjectSettings, project: Project, title: String
             }
         }
 
-        stopTimer()
         openGitCommitDialog(coAuthors)
 
         indicator.fraction = 1.0

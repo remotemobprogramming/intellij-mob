@@ -1,7 +1,6 @@
 package com.nowsprinting.intellij_mob.action.start
 
 import com.intellij.notification.NotificationType
-import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.progress.ProgressIndicator
@@ -91,23 +90,8 @@ class StartTask(val settings: MobProjectSettings, val e: AnActionEvent, project:
         }
         indicator.fraction += fractionPerCommandSection
 
-        val timer = TimerService.getInstance(project)
-        if (timer != null && !timer.isRunning()) {
-            timer.start(settings.timerMinutes)
-            val message = MobBundle.message("mob.timer.start_successful")
-            logger.debug(message)
-            notifyContents.add(String.format(MobBundle.message("mob.notify_content.notify"), message))
-        } else {
-            val message = MobBundle.message("mob.timer.start_failure")
-            logger.warn(message)
-            notifyContents.add(String.format(MobBundle.message("mob.notify_content.warning"), message))
-        }
-
-        if (settings.startWithShare) {
-            ActionManager.getInstance().getAction(ShareAction.ActionId).actionPerformed(e)
-            val message = MobBundle.message("mob.screenshare.share_successful")
-            notifyContents.add(String.format(MobBundle.message("mob.notify_content.notify"), message))
-        }
+        startTimer()
+        startWithShare()
 
         notifyContents.add(status(repository, settings))
 
@@ -217,5 +201,26 @@ class StartTask(val settings: MobProjectSettings, val e: AnActionEvent, project:
             return false
         }
         return true
+    }
+
+    private fun startTimer() {
+        val timer = TimerService.getInstance(project)
+        if (timer != null && !timer.isRunning()) {
+            timer.start(settings.timerMinutes)
+            val message = MobBundle.message("mob.timer.start_successful")
+            notifyContents.add(String.format(MobBundle.message("mob.notify_content.notify"), message))
+        } else {
+            val message = MobBundle.message("mob.timer.start_failure")
+            logger.warn(message)
+            notifyContents.add(String.format(MobBundle.message("mob.notify_content.warning"), message))
+        }
+    }
+
+    private fun startWithShare() {
+        if (settings.startWithShare) {
+            ShareAction().actionPerformed(e)
+            val message = MobBundle.message("mob.screenshare.share_successful")
+            notifyContents.add(String.format(MobBundle.message("mob.notify_content.notify"), message))
+        }
     }
 }

@@ -54,6 +54,8 @@ class ResetTask(val settings: MobProjectSettings, project: Project, title: Strin
         }
         indicator.fraction += fractionPerCommandSection
 
+        stopTimer()
+
         if (!fetch(repository, notifyContents)) {
             return
         }
@@ -77,8 +79,6 @@ class ResetTask(val settings: MobProjectSettings, project: Project, title: Strin
             }
         }
         indicator.fraction += fractionPerCommandSection
-
-        stopTimer()
 
         indicator.fraction = 1.0
         completed = true

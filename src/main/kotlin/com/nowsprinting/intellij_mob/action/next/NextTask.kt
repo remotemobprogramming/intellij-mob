@@ -56,6 +56,8 @@ class NextTask(val settings: MobProjectSettings, project: Project, title: String
         }
         indicator.fraction += fractionPerCommandSection
 
+        stopTimer()
+
         val hasUncommittedChanges = hasUncommittedChanges(repository)
         val hasUnpushedCommit = hasUnpushedCommit(settings, repository)
         if (!hasUncommittedChanges && !hasUnpushedCommit) {
@@ -93,8 +95,6 @@ class NextTask(val settings: MobProjectSettings, project: Project, title: String
 
         showNextTypist(settings, repository, notifyContents)
         indicator.fraction += fractionPerCommandSection
-
-        stopTimer()
 
         if (!settings.nextStay) {
             checkout(settings.baseBranch, repository, notifyContents)
