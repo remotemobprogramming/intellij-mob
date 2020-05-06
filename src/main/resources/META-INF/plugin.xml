@@ -5,12 +5,13 @@
 <idea-plugin>
     <id>com.nowsprinting.intellij-mob</id>
     <name>Mob</name>
-    <vendor url="https://github.com/nowsprinting">nowsprinting</vendor>
+    <vendor url="https://github.com/nowsprinting">Koji Hasegawa</vendor>
 
     <description><![CDATA[
     Swift handover for <a href="https://www.remotemobprogramming.org/">remote mob programming</a> using git.
     It keeps your master branch clean and creates WIP commits on <code>mob-session</code> branch.<br>
-    It is a port of the <a href="https://github.com/remotemobprogramming/mob">mob</a> to a IntelliJ plugin.
+    <p>
+    It is a port of <a href="https://github.com/remotemobprogramming/mob">mob</a> to the IntelliJ plugin.
     ]]></description>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
