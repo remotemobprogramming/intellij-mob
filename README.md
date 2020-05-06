@@ -12,7 +12,7 @@ It is a port of <a href="https://github.com/remotemobprogramming/mob">mob</a> to
 
 ## How to install
 
-1. Download zip file from [Latest release](./releases)
+1. Download zip file from [Latest release](https://github.com/nowsprinting/intellij-mob/releases)
 1. Settings(Windows, Linux)/Preferences(macOS)... | Plugins | upper gear icon | Install Plugin from Disk...
 
 This method is **temporary**.
