@@ -15,7 +15,7 @@ Swift [git handover](https://www.remotemobprogramming.org/#git-handover) with mo
 
 ## How to install
 
-1. Download zip file from [Latest release](https://github.com/nowsprinting/intellij-mob/releases)
+1. Download zip file from [Latest release](https://github.com/remotemobprogramming/intellij-mob/releases)
 1. Settings(Windows, Linux)/Preferences(macOS)... | Plugins | upper gear icon | Install Plugin from Disk...
 
 This method is **temporary**.
@@ -65,6 +65,7 @@ Please commit & push into base branch yourself.
 ### Zoom Screen Share Integration
 
 The "Also activates screenshare in zoom" feature uses the zoom keyboard shortcut "Start/Stop Screen Sharing". This only works if you
+
 - make the shortcut globally available (Zoom > Preferences > Keyboard Shortcuts), and
 - keep the default shortcut at CMD+SHIFT+S (macOS)/ ALT+S (Linux).
 - following setting under System Preferences is required on macOS Catalina (or later?); Security & Privacy -> Privacy tab -> Accessibility, And add your JetBrains IDE .app
