@@ -1,6 +1,6 @@
 # Swift git handover with mob IntelliJ plugin
 
-![build](https://github.com/nowsprinting/intellij-mob/workflows/build/badge.svg)
+![build](https://github.com/remotemobprogramming/intellij-mob/workflows/build/badge.svg)
 
 ![mob Logo](documents/logo.svg)
 
