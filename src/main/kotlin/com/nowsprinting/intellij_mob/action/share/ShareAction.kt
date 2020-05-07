@@ -8,6 +8,8 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.diagnostic.Logger
 import com.nowsprinting.intellij_mob.MobBundle
+import com.nowsprinting.intellij_mob.util.notifyError
+import com.nowsprinting.intellij_mob.util.notifyWarning
 import java.awt.AWTException
 import java.awt.Robot
 import java.awt.event.KeyEvent
@@ -25,6 +27,7 @@ class ShareAction : AnAction() {
         if (keys.isEmpty()) {
             val message = MobBundle.message("mob.screenshare.share_not_supported_os")
             logger.warn(message)
+            notifyWarning(message)
             return
         }
         try {
@@ -39,6 +42,7 @@ class ShareAction : AnAction() {
         } catch (e: AWTException) {
             val message = MobBundle.message("mob.screenshare.share_failure")
             logger.error(message, e)
+            notifyError(message)
             return
         }
         val message = MobBundle.message("mob.screenshare.share_successful")
