@@ -49,7 +49,11 @@ tasks {
     }
 }
 tasks.getByName<org.jetbrains.intellij.tasks.PatchPluginXmlTask>("patchPluginXml") {
-    changeNotes("""
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>""")
+    changeNotes(
+        """
+1.0-alpha3
+<ul>
+    <li>Implements mob start, next, done, reset, timer expired notification, and start screenshare in Zoom</li>
+</ul>"""
+    )
 }
