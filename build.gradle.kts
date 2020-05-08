@@ -12,7 +12,8 @@ plugins {
 group = "com.nowsprinting"
 
 val gitVersion: groovy.lang.Closure<*> by extra
-version = gitVersion()
+val suppressPrefix = { s: Any -> (s as String).replace("^v".toRegex(), "") }
+version = suppressPrefix(gitVersion())
 
 repositories {
     mavenCentral()
