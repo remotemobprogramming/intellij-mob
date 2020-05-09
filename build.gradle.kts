@@ -55,6 +55,10 @@ tasks {
             includeEngines("junit-jupiter")
         }
     }
+    publishPlugin {
+        token(System.getenv("INTELLIJ_PUBLISH_TOKEN"))
+        channels(arrayOf(System.getenv("INTELLIJ_PUBLISH_CHANNEL")))
+    }
 }
 tasks.getByName<org.jetbrains.intellij.tasks.PatchPluginXmlTask>("patchPluginXml") {
     changeNotes(

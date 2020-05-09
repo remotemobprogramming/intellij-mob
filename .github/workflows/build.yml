@@ -49,6 +49,20 @@ jobs:
       with:
         path: build/distributions
 
+    - name: Publish plugin to EAP channel
+      run: ./gradlew publishPlugin
+      env:
+        INTELLIJ_PUBLISH_TOKEN: ${{ secrets.JETBRAINS_MARKETPLACE_TOKEN }}
+        INTELLIJ_PUBLISH_CHANNEL: eap
+      if: contains(github.ref, 'tags/v')
+
+    - name: Publish plugin to Stable channel
+      run: ./gradlew publishPlugin
+      env:
+        INTELLIJ_PUBLISH_TOKEN: ${{ secrets.JETBRAINS_MARKETPLACE_TOKEN }}
+        INTELLIJ_PUBLISH_CHANNEL: Stable
+      if: contains(github.ref, 'tags/v') && !contains(github.ref, '-alpha') && !contains(github.ref, '-beta') && !contains(github.ref, '-rc')
+
     - uses: 8398a7/action-slack@v3
       with:
         status: ${{ job.status }}
