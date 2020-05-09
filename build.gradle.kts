@@ -11,7 +11,7 @@ plugins {
 
 group = "com.nowsprinting"
 
-val gitVersion: groovy.lang.Closure<*> by extra
+val gitVersion: groovy.lang.Closure<String> by extra
 val suppressPrefix = { s: Any -> (s as String).replace("^v".toRegex(), "") }
 version = suppressPrefix(gitVersion())
 
@@ -50,10 +50,40 @@ tasks {
 }
 tasks.getByName<org.jetbrains.intellij.tasks.PatchPluginXmlTask>("patchPluginXml") {
     changeNotes(
-        """
-1.0-alpha3
-<ul>
-    <li>Implements mob start, next, done, reset, timer expired notification, and start screenshare in Zoom</li>
-</ul>"""
+        changeNotesFromChangeLog()
     )
+}
+
+/**
+ * Create latest version change notes from CHANGELOG.md
+ */
+fun changeNotesFromChangeLog(): String {
+    val builder = StringBuilder()
+    builder.append("<ul>")
+    builder.append(latestChangeLog())
+    builder.append("</ul>")
+    builder.append("<p>Older version changes are listed on <a href=\"https://github.com/remotemobprogramming/intellij-mob/blob/master/CHANGELOG.md\">CHANGELOG.md</a></p>")
+    return builder.toString()
+}
+
+fun latestChangeLog(): String {
+    val builder = StringBuilder()
+    val changelog = File("CHANGELOG.md")
+    var inLatestVersion = false
+    changelog.bufferedReader().use() {
+        it.lineSequence()
+            .filter(String::isNotBlank)
+            .forEach {
+                if (it.startsWith("#")) {
+                    if (inLatestVersion && builder.isNotEmpty()) {
+                        return@use  // break, found older version
+                    } else {
+                        inLatestVersion = true
+                        return@forEach  // continue next line
+                    }
+                }
+                builder.append("<li>${it.substring(2)}</li>")
+            }
+    }
+    return builder.toString()
 }
