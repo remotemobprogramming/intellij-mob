@@ -8,6 +8,7 @@ on:
     branches-ignore:
       - 'mob-session'
     tags:
+      - 'v*'
     paths-ignore:
       - '**.md'
   pull_request:
@@ -33,7 +34,7 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Run tests with Gradle
+    - name: Run tests
       run: ./gradlew test
     - name: Upload test results
       uses: actions/upload-artifact@v2
@@ -41,7 +42,7 @@ jobs:
         path: build/reports/tests/test
       if: always()
 
-    - name: Build with Gradle
+    - name: Build plugin
       run: ./gradlew buildPlugin
     - name: Upload build
       uses: actions/upload-artifact@v2
