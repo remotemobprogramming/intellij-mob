@@ -25,14 +25,14 @@ Publish to Stable Channel in the near future!
 
 ### EAP channel of JetBrains Plugins Repository
 
-1. Open Settings(Windows, Linux)/Preferences(macOS)... | Plugins | :gear: | Manage Plugin Repositories...
+1. Open Settings(Windows, Linux) / Preferences(macOS)... | Plugins | :gear: | Manage Plugin Repositories...
 2. Add "https://plugins.jetbrains.com/plugins/eap/list"
 3. Search "Mob" and install
 
 ### GitHub release page
 
 1. Download zip file from [Latest release](https://github.com/remotemobprogramming/intellij-mob/releases)
-1. Open Settings(Windows, Linux)/Preferences(macOS)... | Plugins | :gear: | Install Plugin from Disk...
+1. Open Settings(Windows, Linux) / Preferences(macOS)... | Plugins | :gear: | Install Plugin from Disk...
 1. Select downloaded zip file
 
 
@@ -89,7 +89,7 @@ The "Also activates screenshare in zoom" feature uses the zoom keyboard shortcut
 
 ## How to configure
 
-Open Settings(Windows, Linux)/Preferences(macOS) | Tools | Mob
+Open Settings(Windows, Linux) / Preferences(macOS) | Tools | Mob
 
 ![preferences](documents/preferences.png)
 
