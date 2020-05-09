@@ -11,9 +11,17 @@ plugins {
 
 group = "com.nowsprinting"
 
-val gitVersion: groovy.lang.Closure<String> by extra
-val suppressPrefix = { s: Any -> (s as String).replace("^v".toRegex(), "") }
-version = suppressPrefix(gitVersion())
+val makeVersion = {
+    val githubRef = System.getenv("GITHUB_REF") ?: ""
+    val match = Regex("""^refs/tags/v(.+)$""").matchEntire(githubRef)
+    if (match != null) {
+        match.groupValues[1]
+    } else {
+        val gitVersion: groovy.lang.Closure<String> by extra
+        gitVersion().replace("^v".toRegex(), "")
+    }
+}
+version = makeVersion()
 
 repositories {
     mavenCentral()
