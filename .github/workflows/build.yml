@@ -5,7 +5,7 @@ name: build
 
 on:
   push:
-    branches-ignore:
+    branches-ignore:  # Branches corresponding to this will not record the start of the job in GitHub Actions
       - 'mob-session'
     tags:
       - 'v*'
@@ -16,7 +16,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[ci-skip]')"
+    if: "!contains(github.event.head_commit.message, '[ci-skip]')"  # Jobs ignored in this step are marked as "skipped" in GitHub Actions
 
     steps:
     - uses: actions/checkout@v2
@@ -40,7 +40,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         path: build/reports/tests/test
-      if: always()
+      if: always()  # Leave the test result as an artifact even if tests fails
 
     - name: Build plugin
       run: ./gradlew buildPlugin
@@ -54,7 +54,7 @@ jobs:
       env:
         INTELLIJ_PUBLISH_TOKEN: ${{ secrets.JETBRAINS_MARKETPLACE_TOKEN }}
         INTELLIJ_PUBLISH_CHANNEL: eap
-      if: contains(github.ref, 'tags/v')
+      if: contains(github.ref, 'tags/v')  # Even stable releases need to be uploaded to the eap channel. see: https://plugins.jetbrains.com/docs/marketplace/custom-release-channels.html#CustomReleaseChannels-ChannelPriorityNotice
 
     - name: Publish plugin to Stable channel
       run: ./gradlew publishPlugin

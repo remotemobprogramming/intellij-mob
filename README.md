@@ -21,9 +21,11 @@ There are three ways to install.
 ### Stable channel of JetBrains Plugins Repository
 
 **TBD:**
-Publish to Stable Channel in the near future!
+Publish to stable channel in the near future!
 
 ### EAP channel of JetBrains Plugins Repository
+
+Alpha, Beta, and RC versions will only be released on EAP channel.
 
 1. Open Settings(Windows, Linux) / Preferences(macOS)... | Plugins | :gear: | Manage Plugin Repositories...
 1. Add `https://plugins.jetbrains.com/plugins/eap/list`
@@ -31,9 +33,9 @@ Publish to Stable Channel in the near future!
 
 ### Download from plugin page
 
-1. Download zip file from [Mob - plugin for IntelliJ IDEs](https://plugins.jetbrains.com/plugin/14266-mob) page
+1. Open [Mob - plugin for IntelliJ IDEs](https://plugins.jetbrains.com/plugin/14266-mob) page and download latest zip file
 1. Open Settings(Windows, Linux) / Preferences(macOS)... | Plugins | :gear: | Install Plugin from Disk...
-1. Select downloaded zip file
+1. Select downloaded zip file to install plugin
 
 
 ## How to use
@@ -130,7 +132,6 @@ Open Help | Diagnostic Tools | Debug Log Settings…, and input `#com.nowsprinti
 - Input Validation on dialogs
 - Support multiple repository
 - Can rollback on "done" by splitting the done process into two phases
-- Publish JetBrains plugins repository
 
 
 ## How to contribute
