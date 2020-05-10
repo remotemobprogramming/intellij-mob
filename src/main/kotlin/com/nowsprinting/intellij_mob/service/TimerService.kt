@@ -11,8 +11,8 @@ import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.nowsprinting.intellij_mob.MobBundle
-import com.nowsprinting.intellij_mob.action.done.DoneActionFromNotification
-import com.nowsprinting.intellij_mob.action.next.NextActionFromNotification
+import com.nowsprinting.intellij_mob.action.done.DoneNotificationAction
+import com.nowsprinting.intellij_mob.action.next.NextNotificationAction
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -109,8 +109,8 @@ class TimerService {
             MobBundle.message("mob.timer.expired.title"),
             NotificationType.INFORMATION
         )
-        notification.addAction(NextActionFromNotification())
-        notification.addAction(DoneActionFromNotification())
+        notification.addAction(NextNotificationAction())
+        notification.addAction(DoneNotificationAction())
         notification.notify(null)
     }
 
