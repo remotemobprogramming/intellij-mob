@@ -4,8 +4,8 @@
 
 ![mob Logo](documents/logo.svg)
 
-Swift [git handover](https://www.remotemobprogramming.org/#git-handover) with mob IntelliJ plugin.
-It useful for [Remote Mob Programming](https://www.remotemobprogramming.org).
+Swift [git handover](https://www.remotemobprogramming.org/#git-handover) with mob IntelliJ plugin,
+it useful for [Remote Mob Programming](https://www.remotemobprogramming.org).
 
 - mob IntelliJ plugin is ported [mob command line tool](https://github.com/remotemobprogramming/mob)
 - mob is the fasted way to [handover code via git](https://www.remotemobprogramming.org/#git-handover)
