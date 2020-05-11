@@ -34,7 +34,11 @@
         <projectService
                 serviceImplementation="com.nowsprinting.intellij_mob.config.MobProjectSettings"/>
         <projectService
-                serviceImplementation="com.nowsprinting.intellij_mob.service.TimerService"/>
+                serviceImplementation="com.nowsprinting.intellij_mob.timer.TimerService"/>
+        <statusBarWidgetFactory
+                id="com.nowsprinting.intellij_mob.TimerWidget"
+                implementation="com.nowsprinting.intellij_mob.timer.statusbar.TimerWidgetFactory"
+                order="before gitWidget"/>
     </extensions>
 
     <actions>

@@ -15,7 +15,7 @@ import com.nowsprinting.intellij_mob.action.share.ShareAction
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
 import com.nowsprinting.intellij_mob.config.validateForStartTask
 import com.nowsprinting.intellij_mob.git.*
-import com.nowsprinting.intellij_mob.service.TimerService
+import com.nowsprinting.intellij_mob.timer.TimerService
 import com.nowsprinting.intellij_mob.util.notify
 import com.nowsprinting.intellij_mob.util.status
 import git4idea.repo.GitRepository

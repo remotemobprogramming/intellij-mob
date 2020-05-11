@@ -2,7 +2,7 @@
  * Copyright 2020 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
-package com.nowsprinting.intellij_mob.service
+package com.nowsprinting.intellij_mob.timer
 
 import com.intellij.notification.NotificationDisplayType
 import com.intellij.notification.NotificationGroup
@@ -31,9 +31,24 @@ class TimerService {
     private var startTime: LocalDateTime? = null
     private var expireTime: LocalDateTime? = null
     private var notified = false
+    private var timerListeners = mutableSetOf<TimerListener>()
 
     init {
         timerCoroutine()
+    }
+
+    fun addListener(listener: TimerListener) {
+        timerListeners.add(listener)
+    }
+
+    fun removeListener(listener: TimerListener) {
+        timerListeners.remove(listener)
+    }
+
+    private fun notifyUpdate() {
+        timerListeners.forEach {
+            it.timerUpdate()
+        }
     }
 
     fun start(minutes: Int = 0, now: LocalDateTime = LocalDateTime.now()) {
@@ -41,6 +56,7 @@ class TimerService {
         if (minutes > 0) {
             expireTime = startTime?.plusMinutes(minutes.toLong())
         }
+        notifyUpdate()
         logger.info("mob timer started")
     }
 
@@ -48,6 +64,7 @@ class TimerService {
         startTime = null
         expireTime = null
         notified = false
+        notifyUpdate()
         logger.info("mob timer stopped")
     }
 
@@ -92,17 +109,6 @@ class TimerService {
         return !notified && isExpired(now)
     }
 
-    private fun timerCoroutine() = GlobalScope.launch {
-        while (true) {
-            if (isNeedNotify(LocalDateTime.now())) {
-                notifyExpire()
-                notified = true
-                logger.info("mob timer expired")
-            }
-            delay(1000L)
-        }
-    } // may it leak???
-
     private fun notifyExpire() {
         val stickyGroup = NotificationGroup("Mob Timer", NotificationDisplayType.STICKY_BALLOON, false)
         val notification = stickyGroup.createNotification(
@@ -113,6 +119,20 @@ class TimerService {
         notification.addAction(DoneNotificationAction())
         notification.notify(null)
     }
+
+    private fun timerCoroutine() = GlobalScope.launch {
+        while (true) {
+            if (isRunning()) {
+                notifyUpdate()
+            }
+            if (isNeedNotify(LocalDateTime.now())) {
+                notifyExpire()
+                notified = true
+                logger.info("mob timer expired")
+            }
+            delay(1000L)
+        }
+    } // may it leak???
 
     companion object {
         fun getInstance(project: Project): TimerService? {

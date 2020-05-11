@@ -13,7 +13,7 @@ import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
 import com.nowsprinting.intellij_mob.config.validateForResetTask
 import com.nowsprinting.intellij_mob.git.*
-import com.nowsprinting.intellij_mob.service.TimerService
+import com.nowsprinting.intellij_mob.timer.TimerService
 import com.nowsprinting.intellij_mob.util.notify
 import git4idea.repo.GitRepository
 

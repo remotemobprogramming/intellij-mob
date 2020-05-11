@@ -13,7 +13,7 @@ import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.action.start.ui.StartDialog
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
 import com.nowsprinting.intellij_mob.config.MobSettingsConfigurable
-import com.nowsprinting.intellij_mob.service.TimerService
+import com.nowsprinting.intellij_mob.timer.TimerService
 
 class StartAction : AnAction() {
     private val logger = Logger.getInstance(javaClass)
