@@ -61,7 +61,7 @@ Continue with "Start" and handover to the next person with "Next".
 
 When you're done,
 
-VCS | Mob | Done : Finish Mob Session...
+VCS | Mob | Done : Finish Mob Session... (shortcut: ALT+M, D)
 
 After confirm in a dialog,
 get your changes into the staging area of the `master` branch. 
