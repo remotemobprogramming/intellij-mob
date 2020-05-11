@@ -118,14 +118,15 @@ Open Help | Diagnostic Tools | Debug Log Settings…, and input `#com.nowsprinti
 
 ## Milestones
 
-### Beta
+### 1.0
 
-- Display timer on status bar
-- Restart timer
-- Open commit & push dialog after done. with add `Co-authored-by:` trailer to commit message, if possible
+- Open commit & push dialog after done
 
-### GM
+### 1.x
 
+- Good looking timer widget on statusbar
+- Restart timer action launch from statusbar
+- Set `Co-authored-by:` trailer to commit message automatically
 - Integration tests
 - Refactor: dialogs uses `DialogWrapper`
 - Refactor: tests about `GitRepository`
