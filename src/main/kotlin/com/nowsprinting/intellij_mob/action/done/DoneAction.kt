@@ -61,7 +61,7 @@ class DoneAction : AnAction() {
         if (dialog.isOk) {
             FileDocumentManager.getInstance().saveAllDocuments()
             logger.debug(MobBundle.message("mob.logging.save_all_documents"))
-            DoneTask(settings, project, dialog.title).queue()
+            DoneTask(settings, e, project, dialog.title).queue()
         }
     }
 }
