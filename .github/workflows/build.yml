@@ -49,6 +49,13 @@ jobs:
       with:
         path: build/distributions
 
+    - name: Check version format in tag
+      id: version
+      run: |
+        if [[ ${{ github.ref }} =~ ^refs/tags/v[0-9]+(\.[0-9]+)*$ ]]; then
+          echo ::set-output name=is_stable::true
+        fi
+
     - name: Publish plugin to EAP channel
       run: ./gradlew publishPlugin
       env:
@@ -61,7 +68,7 @@ jobs:
       env:
         INTELLIJ_PUBLISH_TOKEN: ${{ secrets.JETBRAINS_MARKETPLACE_TOKEN }}
         INTELLIJ_PUBLISH_CHANNEL: Stable
-      if: contains(github.ref, 'tags/v') && !contains(github.ref, '-alpha') && !contains(github.ref, '-beta') && !contains(github.ref, '-rc')
+      if: steps.version.outputs.is_stable == 'true'
 
     - uses: 8398a7/action-slack@v3
       with:
