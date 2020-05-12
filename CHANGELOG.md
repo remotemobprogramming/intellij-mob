@@ -1,5 +1,6 @@
 ## Unreleased
 - Add shortcut for done action (ALT+M, D)
+- Refresh project files after start/next/done/reset
 
 ## 1.0-beta1
 - Display timer on statusbar

@@ -9,6 +9,7 @@ import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.Task.Backgroundable
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.VirtualFileManager
 import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.config.MobProjectSettings
 import com.nowsprinting.intellij_mob.config.validateForDoneTask
@@ -121,6 +122,9 @@ class DoneTask(val settings: MobProjectSettings, project: Project, title: String
                 contents = notifyContents,
                 type = NotificationType.ERROR
             )
+        }
+        VirtualFileManager.getInstance().asyncRefresh {
+            logger.debug(MobBundle.message("mob.logging.refresh"))
         }
     }
 
