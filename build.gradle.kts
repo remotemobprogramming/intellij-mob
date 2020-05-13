@@ -3,7 +3,7 @@
  */
 
 plugins {
-    id("org.jetbrains.intellij") version "0.4.18"
+    id("org.jetbrains.intellij") version "0.4.21"
     java
     kotlin("jvm") version "1.3.71"
     id("com.palantir.git-version") version "0.12.3"
