@@ -66,7 +66,6 @@ fun changeNotesFromChangeLog(): String {
     builder.append("<ul>")
     builder.append(latestChangeLog())
     builder.append("</ul>")
-    builder.append("<p>Older version changes are listed on <a href=\"https://github.com/remotemobprogramming/intellij-mob/blob/master/CHANGELOG.md\">CHANGELOG.md</a></p>")
     return builder.toString()
 }
 
