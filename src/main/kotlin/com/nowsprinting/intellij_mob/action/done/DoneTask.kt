@@ -63,8 +63,8 @@ class DoneTask(val settings: MobProjectSettings, project: Project, title: String
         stopTimer()
 
         val hasUncommittedChanges = hasUncommittedChanges(repository)
-        val hasUnpushedCommit = hasChangesForDone(settings, repository)
-        if (!hasUncommittedChanges && !hasUnpushedCommit) {
+        val hasChangesForDone = hasChangesForDone(settings, repository)
+        if (!hasUncommittedChanges && !hasChangesForDone) {
             val format = MobBundle.message("mob.done.error.precondition")
             val message = String.format(format, MobBundle.message("mob.done.error.reason.nothing_changes_to_squash"))
             logger.warn(message)
@@ -175,8 +175,9 @@ class DoneTask(val settings: MobProjectSettings, project: Project, title: String
         for (v in diffCached(repository)) {
             changes.append("%n| ").append(v)
         }
-        notifyContents.add(changes.substring(2))
-
+        if (changes.isNotEmpty()) {
+            notifyContents.add(changes.substring(2))
+        }
         notifyContents.add(
             String.format(
                 MobBundle.message("mob.notify_content.notify"),
