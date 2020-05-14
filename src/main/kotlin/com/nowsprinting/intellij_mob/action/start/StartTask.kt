@@ -54,7 +54,7 @@ class StartTask(val settings: MobProjectSettings, val e: AnActionEvent, project:
             return
         }
 
-        val (validRepository, reasonInvalidRepository) = repository.validateForStartPrecondition(settings)
+        val (validRepository, reasonInvalidRepository) = repository.validateForStart(settings)
         if (!validRepository) {
             val format = MobBundle.message("mob.start.error.precondition")
             val message = String.format(format, reasonInvalidRepository)

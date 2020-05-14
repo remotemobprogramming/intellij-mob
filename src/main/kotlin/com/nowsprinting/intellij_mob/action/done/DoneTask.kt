@@ -50,7 +50,7 @@ class DoneTask(val settings: MobProjectSettings, project: Project, title: String
             return
         }
 
-        val (validRepository, reasonInvalidRepository) = repository.validateForDonePrecondition(settings)
+        val (validRepository, reasonInvalidRepository) = repository.validateForDone(settings)
         if (!validRepository) {
             val format = MobBundle.message("mob.done.error.precondition")
             val message = String.format(format, reasonInvalidRepository)

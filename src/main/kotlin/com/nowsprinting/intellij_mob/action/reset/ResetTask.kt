@@ -49,7 +49,7 @@ class ResetTask(val settings: MobProjectSettings, project: Project, title: Strin
             return
         }
 
-        val (validRepository, reasonInvalidRepository) = repository.validateForResetPrecondition(settings)
+        val (validRepository, reasonInvalidRepository) = repository.validateForReset(settings)
         if (!validRepository) {
             val format = MobBundle.message("mob.reset.error.precondition")
             val message = String.format(format, reasonInvalidRepository)

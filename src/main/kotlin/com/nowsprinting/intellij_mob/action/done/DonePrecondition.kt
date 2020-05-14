@@ -9,7 +9,7 @@ import com.nowsprinting.intellij_mob.config.MobProjectSettings
 import com.nowsprinting.intellij_mob.config.validateForDonePrecondition
 import com.nowsprinting.intellij_mob.git.GitRepositoryResult
 import com.nowsprinting.intellij_mob.git.getGitRepository
-import com.nowsprinting.intellij_mob.git.validateForDonePrecondition
+import com.nowsprinting.intellij_mob.git.validateForDone
 import git4idea.repo.GitRepository
 
 /**
@@ -34,7 +34,7 @@ internal fun checkDonePrecondition(settings: MobProjectSettings, repository: Git
     if (!validSettings) {
         return Pair(validSettings, reasonInvalidSettings)
     }
-    val (validRepository, reasonInvalidRepository) = repository.validateForDonePrecondition(settings)
+    val (validRepository, reasonInvalidRepository) = repository.validateForDone(settings)
     if (!validRepository) {
         return Pair(validRepository, reasonInvalidRepository)
     }

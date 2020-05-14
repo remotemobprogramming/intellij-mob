@@ -10,7 +10,7 @@ import com.nowsprinting.intellij_mob.config.MobProjectSettings
 import com.nowsprinting.intellij_mob.config.validateForStartPrecondition
 import com.nowsprinting.intellij_mob.git.GitRepositoryResult
 import com.nowsprinting.intellij_mob.git.getGitRepository
-import com.nowsprinting.intellij_mob.git.validateForStartPrecondition
+import com.nowsprinting.intellij_mob.git.validateForStart
 import git4idea.repo.GitRepository
 
 private val logger = Logger.getInstance("#com.nowsprinting.intellij_mob.action.start.StartPreconditionKt")
@@ -37,7 +37,7 @@ internal fun checkStartPrecondition(settings: MobProjectSettings, repository: Gi
     if (!validSettings) {
         return Pair(validSettings, reasonInvalidSettings)
     }
-    val (validRepository, reasonInvalidRepository) = repository.validateForStartPrecondition(settings)
+    val (validRepository, reasonInvalidRepository) = repository.validateForStart(settings)
     if (!validRepository) {
         return Pair(validRepository, reasonInvalidRepository)
     }

@@ -51,7 +51,7 @@ class NextTask(val settings: MobProjectSettings, project: Project, title: String
             return
         }
 
-        val (validRepository, reasonInvalidRepository) = repository.validateForNextPrecondition(settings)
+        val (validRepository, reasonInvalidRepository) = repository.validateForNext(settings)
         if (!validRepository) {
             val format = MobBundle.message("mob.next.error.precondition")
             val message = String.format(format, reasonInvalidRepository)
