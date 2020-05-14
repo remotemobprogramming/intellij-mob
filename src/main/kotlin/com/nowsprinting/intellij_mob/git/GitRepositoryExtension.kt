@@ -94,7 +94,7 @@ fun GitRepository.isNothingToCommit(): Boolean {
     return true
 }
 
-private fun GitRepository.validateCommonPrecondition(settings: MobProjectSettings): Pair<Boolean, String?> {
+private fun GitRepository.validateCommon(settings: MobProjectSettings): Pair<Boolean, String?> {
     if (!hasRemote(remoteName = settings.remoteName)) {
         return Pair(false, MobBundle.message("mob.validate_reason.not_exist_remote_name"))
     }
@@ -112,8 +112,8 @@ private fun GitRepository.validateCommonPrecondition(settings: MobProjectSetting
 /**
  * Validate repository for start precondition check and task.
  */
-fun GitRepository.validateForStartPrecondition(settings: MobProjectSettings): Pair<Boolean, String?> {
-    val (valid, reason) = validateCommonPrecondition(settings)
+fun GitRepository.validateForStart(settings: MobProjectSettings): Pair<Boolean, String?> {
+    val (valid, reason) = validateCommon(settings)
     if (!valid) {
         return Pair(valid, reason)
     }
@@ -133,8 +133,8 @@ fun GitRepository.validateForStartPrecondition(settings: MobProjectSettings): Pa
  *
  * Note: Do not check nothing uncommitted changes, because can not detect unpushed commits here.
  */
-fun GitRepository.validateForNextPrecondition(settings: MobProjectSettings): Pair<Boolean, String?> {
-    val (valid, reason) = validateCommonPrecondition(settings)
+fun GitRepository.validateForNext(settings: MobProjectSettings): Pair<Boolean, String?> {
+    val (valid, reason) = validateCommon(settings)
     if (!valid) {
         return Pair(valid, reason)
     }
@@ -152,8 +152,8 @@ fun GitRepository.validateForNextPrecondition(settings: MobProjectSettings): Pai
  *
  * Note: Do not check nothing uncommitted changes, because can not detect unpushed commits here.
  */
-fun GitRepository.validateForDonePrecondition(settings: MobProjectSettings): Pair<Boolean, String?> {
-    val (valid, reason) = validateCommonPrecondition(settings)
+fun GitRepository.validateForDone(settings: MobProjectSettings): Pair<Boolean, String?> {
+    val (valid, reason) = validateCommon(settings)
     if (!valid) {
         return Pair(valid, reason)
     }
@@ -169,8 +169,8 @@ fun GitRepository.validateForDonePrecondition(settings: MobProjectSettings): Pai
 /**
  * Validate repository for reset precondition check and task.
  */
-fun GitRepository.validateForResetPrecondition(settings: MobProjectSettings): Pair<Boolean, String?> {
-    val (valid, reason) = validateCommonPrecondition(settings)
+fun GitRepository.validateForReset(settings: MobProjectSettings): Pair<Boolean, String?> {
+    val (valid, reason) = validateCommon(settings)
     if (!valid) {
         return Pair(valid, reason)
     }

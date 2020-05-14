@@ -39,9 +39,6 @@ class TimerWidgetFactory : StatusBarWidgetFactory {
 
     override fun disposeWidget(widget: StatusBarWidget) {
         logger.info("dispose mob timer widget")
-        if (widget is TimerWidget) {
-            TimerService.getInstance(myProject)?.removeListener(widget)
-        }
         Disposer.dispose(widget)
     }
 

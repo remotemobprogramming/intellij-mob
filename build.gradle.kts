@@ -3,7 +3,7 @@
  */
 
 plugins {
-    id("org.jetbrains.intellij") version "0.4.18"
+    id("org.jetbrains.intellij") version "0.4.21"
     java
     kotlin("jvm") version "1.3.71"
     id("com.palantir.git-version") version "0.12.3"
@@ -66,7 +66,6 @@ fun changeNotesFromChangeLog(): String {
     builder.append("<ul>")
     builder.append(latestChangeLog())
     builder.append("</ul>")
-    builder.append("<p>Older version changes are listed on <a href=\"https://github.com/remotemobprogramming/intellij-mob/blob/master/CHANGELOG.md\">CHANGELOG.md</a></p>")
     return builder.toString()
 }
 

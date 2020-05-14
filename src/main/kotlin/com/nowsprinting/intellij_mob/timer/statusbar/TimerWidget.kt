@@ -4,13 +4,12 @@
 
 package com.nowsprinting.intellij_mob.timer.statusbar
 
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.popup.ListPopup
 import com.intellij.openapi.wm.StatusBar
-import com.intellij.openapi.wm.StatusBarWidget
-import com.intellij.openapi.wm.StatusBarWidget.*
+import com.intellij.openapi.wm.StatusBarWidget.MultipleTextValuesPresentation
+import com.intellij.openapi.wm.StatusBarWidget.WidgetPresentation
 import com.intellij.openapi.wm.impl.status.EditorBasedWidget
 import com.intellij.util.Consumer
 import com.nowsprinting.intellij_mob.MobBundle
@@ -21,8 +20,7 @@ import org.jetbrains.annotations.CalledInAwt
 import java.awt.event.MouseEvent
 import javax.swing.Icon
 
-class TimerWidget(project: Project) : EditorBasedWidget(project), MultipleTextValuesPresentation, Multiframe,
-    TimerListener {
+class TimerWidget(project: Project) : EditorBasedWidget(project), MultipleTextValuesPresentation, TimerListener {
     private val logger = Logger.getInstance(javaClass)
     private lateinit var timer: TimerService
 
@@ -32,20 +30,23 @@ class TimerWidget(project: Project) : EditorBasedWidget(project), MultipleTextVa
             timer.addListener(this)
             logger.debug("got a timer service")
         }
-        logger.debug("setup mob timer widget")
+        logger.debug("init mob timer widget completed")
     }
 
     override fun ID(): String {
         return ID
     }
 
-    override fun copy(): StatusBarWidget {
-        return TimerWidget(project)
-    }
-
     override fun install(statusBar: StatusBar) {
         super.install(statusBar)
-        updateLater()
+        update()
+        logger.debug("install mob timer widget completed")
+    }
+
+    override fun dispose() {
+        super.dispose()
+        timer.removeListener(this)
+        logger.debug("dispose mob timer widget completed")
     }
 
     override fun getPresentation(): WidgetPresentation? {
@@ -82,23 +83,14 @@ class TimerWidget(project: Project) : EditorBasedWidget(project), MultipleTextVa
         return null
     }
 
-    override fun timerUpdate() {
-        updateLater()
-    }
-
-    private fun updateLater() {
-        if (project.isDisposed) return
-        ApplicationManager.getApplication().invokeLater(Runnable {
-            update()
-        }, project.disposed)
+    override fun notifyUpdate() {
+        update()
     }
 
     @CalledInAwt
     private fun update() {
         if (project.isDisposed) return
-        if (myStatusBar != null) {
-            myStatusBar.updateWidget(ID())
-        }
+        myStatusBar.updateWidget(ID())
     }
 
     companion object {

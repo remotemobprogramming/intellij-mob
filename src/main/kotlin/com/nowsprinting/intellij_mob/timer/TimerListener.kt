@@ -5,5 +5,5 @@
 package com.nowsprinting.intellij_mob.timer
 
 interface TimerListener {
-    fun timerUpdate()
+    fun notifyUpdate()
 }

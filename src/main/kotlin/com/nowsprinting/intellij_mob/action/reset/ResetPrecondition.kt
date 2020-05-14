@@ -9,7 +9,7 @@ import com.nowsprinting.intellij_mob.config.MobProjectSettings
 import com.nowsprinting.intellij_mob.config.validateForResetPrecondition
 import com.nowsprinting.intellij_mob.git.GitRepositoryResult
 import com.nowsprinting.intellij_mob.git.getGitRepository
-import com.nowsprinting.intellij_mob.git.validateForResetPrecondition
+import com.nowsprinting.intellij_mob.git.validateForReset
 import git4idea.repo.GitRepository
 
 /**
@@ -34,7 +34,7 @@ internal fun checkResetPrecondition(settings: MobProjectSettings, repository: Gi
     if (!validSettings) {
         return Pair(validSettings, reasonInvalidSettings)
     }
-    val (validRepository, reasonInvalidRepository) = repository.validateForResetPrecondition(settings)
+    val (validRepository, reasonInvalidRepository) = repository.validateForReset(settings)
     if (!validRepository) {
         return Pair(validRepository, reasonInvalidRepository)
     }

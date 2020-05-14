@@ -47,7 +47,7 @@ class TimerService {
 
     private fun notifyUpdate() {
         timerListeners.forEach {
-            it.timerUpdate()
+            it.notifyUpdate()
         }
     }
 
