@@ -5,7 +5,6 @@
 package com.nowsprinting.intellij_mob.action.done
 
 import com.intellij.notification.NotificationType
-import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.progress.ProgressIndicator
@@ -26,7 +25,9 @@ class DoneTask(val settings: MobProjectSettings, val e: AnActionEvent, project: 
     private val notifyContents = mutableListOf<String>()
     private var completed = false
     private var doNotRun = false
+    private var needOpenCommitDialog = false
     private lateinit var repository: GitRepository
+    private lateinit var coAuthors: Set<String>
 
     override fun run(indicator: ProgressIndicator) {
         val fractionPerCommandSection = 1.0 / 10
@@ -82,13 +83,12 @@ class DoneTask(val settings: MobProjectSettings, val e: AnActionEvent, project: 
         }
         indicator.fraction += fractionPerCommandSection
 
-        val coAuthors = getCoAuthors(settings, repository)
-
         if (repository.hasMobProgrammingBranchOrigin(settings)) {
+            coAuthors = getCoAuthors(settings, repository)  // create before squash
             if (!mergeRemoteWipBranchToBaseBranch(indicator)) {
                 return
             }
-            openGitCommitDialog(coAuthors)
+            needOpenCommitDialog = true
         } else {
             if (!noRemoteWipBranch()) {
                 return
@@ -127,6 +127,9 @@ class DoneTask(val settings: MobProjectSettings, val e: AnActionEvent, project: 
         }
         VirtualFileManager.getInstance().asyncRefresh {
             logger.debug(MobBundle.message("mob.logging.refresh"))
+            if (needOpenCommitDialog) {
+                openGitCommitAndPushDialog(project, coAuthors)
+            }
         }
     }
 
@@ -202,26 +205,5 @@ class DoneTask(val settings: MobProjectSettings, val e: AnActionEvent, project: 
     private fun stopTimer() {
         val timer = TimerService.getInstance(project)
         timer?.stop()
-    }
-
-    private fun openGitCommitDialog(coAuthors: Set<String>) {
-        try {
-            ActionManager.getInstance().getAction("Git.Commit.And.Push.Executor").actionPerformed(e)
-            // refs: https://intellij-support.jetbrains.com/hc/en-us/community/posts/206780745-Is-it-possible-to-trigger-function-action-of-another-plugin-from-a-plugin-
-            // FIXME: KotlinNullPointerException occurred at com.intellij.openapi.vcs.changes.actions.BaseCommitExecutorAction.actionPerformed(BaseCommitExecutorAction.kt:24)
-
-            // TODO: set coAuthors to commit message on commit & push dialog
-
-            val message = MobBundle.message("mob.done.commit_dialog.open_successful")
-            notifyContents.add(String.format(MobBundle.message("mob.notify_content.notify"), message))
-
-        } catch (t: Throwable) {
-            val message = String.format(MobBundle.message("mob.done.commit_dialog.open_failure"), t.toString())
-            logger.error(message, t)
-            notifyContents.add(String.format(MobBundle.message("mob.notify_content.failure"), message))
-
-            val message2 = MobBundle.message("mob.done.please_commit_and_push")
-            notifyContents.add(String.format(MobBundle.message("mob.notify_content.warning"), message2))
-        }
     }
 }
