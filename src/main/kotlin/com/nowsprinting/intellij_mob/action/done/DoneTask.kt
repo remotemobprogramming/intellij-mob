@@ -5,6 +5,7 @@
 package com.nowsprinting.intellij_mob.action.done
 
 import com.intellij.notification.NotificationType
+import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.Task.Backgroundable
@@ -18,12 +19,15 @@ import com.nowsprinting.intellij_mob.timer.TimerService
 import com.nowsprinting.intellij_mob.util.notify
 import git4idea.repo.GitRepository
 
-class DoneTask(val settings: MobProjectSettings, project: Project, title: String) : Backgroundable(project, title) {
+class DoneTask(val settings: MobProjectSettings, val e: AnActionEvent, project: Project, title: String) :
+    Backgroundable(project, title) {
     private val logger = Logger.getInstance(javaClass)
     private val notifyContents = mutableListOf<String>()
     private var completed = false
     private var doNotRun = false
+    private var needOpenCommitDialog = false
     private lateinit var repository: GitRepository
+    private lateinit var coAuthors: Set<String>
 
     override fun run(indicator: ProgressIndicator) {
         val fractionPerCommandSection = 1.0 / 10
@@ -79,19 +83,17 @@ class DoneTask(val settings: MobProjectSettings, project: Project, title: String
         }
         indicator.fraction += fractionPerCommandSection
 
-        val coAuthors = getCoAuthors(settings, repository)
-
         if (repository.hasMobProgrammingBranchOrigin(settings)) {
+            coAuthors = getCoAuthors(settings, repository)  // create before squash
             if (!mergeRemoteWipBranchToBaseBranch(indicator)) {
                 return
             }
+            needOpenCommitDialog = true
         } else {
             if (!noRemoteWipBranch()) {
                 return
             }
         }
-
-        openGitCommitDialog(coAuthors)
 
         indicator.fraction = 1.0
         completed = true
@@ -125,6 +127,9 @@ class DoneTask(val settings: MobProjectSettings, project: Project, title: String
         }
         VirtualFileManager.getInstance().asyncRefresh {
             logger.debug(MobBundle.message("mob.logging.refresh"))
+            if (needOpenCommitDialog) {
+                openGitCommitAndPushDialog(project, coAuthors)
+            }
         }
     }
 
@@ -178,12 +183,6 @@ class DoneTask(val settings: MobProjectSettings, project: Project, title: String
         if (changes.isNotEmpty()) {
             notifyContents.add(changes.substring(2))
         }
-        notifyContents.add(
-            String.format(
-                MobBundle.message("mob.notify_content.notify"),
-                MobBundle.message("mob.done.please_commit_and_push")
-            )
-        )
         return true
     }
 
@@ -206,9 +205,5 @@ class DoneTask(val settings: MobProjectSettings, project: Project, title: String
     private fun stopTimer() {
         val timer = TimerService.getInstance(project)
         timer?.stop()
-    }
-
-    private fun openGitCommitDialog(coAuthors: Set<String>) {
-        // TODO:
     }
 }

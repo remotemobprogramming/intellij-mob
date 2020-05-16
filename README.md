@@ -120,17 +120,17 @@ Open Help | Diagnostic Tools | Debug Log Settings…, and input `#com.nowsprinti
 
 ### 1.0
 
-- Open commit & push dialog after done
+- Open commit & push dialog after "done"
+- Set `Co-authored-by:` trailer to commit message automatically
 
 ### 1.x
 
 - Good looking timer widget on statusbar
 - Restart timer action launch from statusbar
-- Set `Co-authored-by:` trailer to commit message automatically
 - Integration tests
 - Refactor: dialogs uses `DialogWrapper`
 - Refactor: tests about `GitRepository`
-- Input Validation on dialogs
+- Input validation on dialogs
 - Support multiple repository
 - Can rollback on "done" by splitting the done process into two phases
 

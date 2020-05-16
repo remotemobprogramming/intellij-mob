@@ -1,4 +1,6 @@
 ## Unreleased
+- Open commit & push dialog after "done"
+- Set `Co-authored-by:` trailer to commit message automatically
 
 ## 1.0-beta2
 - Add shortcut for show done dialog (ALT+M, D)
