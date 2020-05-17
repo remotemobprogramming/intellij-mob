@@ -15,8 +15,8 @@ import java.awt.Robot
 import java.awt.event.KeyEvent
 
 /**
- * Start screenshare with Zoom (macOS or Linux with xdotool, requires configuration in zoom to work)
- * It only works if you activate make the screenshare hotkey in zoom globally available, and keep the default shortcut at CMD+SHIFT+S (macOS)/ ALT+S (Linux).
+ * Start screenshare with Zoom (requires configuration in zoom to work)
+ * It only works if you activate make the screenshare hotkey in zoom globally available, and keep the default shortcut at CMD+SHIFT+S (macOS)/ ALT+S (Windows, Linux).
  * And if run on macOS Catalina (or later?), Got to Security & Privacy > Privacy tab > Accessibility > Add `IntelliJ IDEA.app`
  */
 class ShareAction : AnAction() {
@@ -55,6 +55,11 @@ class ShareAction : AnAction() {
             return intArrayOf(
                 KeyEvent.VK_SHIFT,
                 KeyEvent.VK_META,  // command key
+                KeyEvent.VK_S
+            )
+        } else if (os.startsWith("windows")) {
+            return intArrayOf(
+                KeyEvent.VK_ALT,
                 KeyEvent.VK_S
             )
         } else if (os.startsWith("linux")) {    // TODO: not test yet on Linux

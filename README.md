@@ -74,16 +74,16 @@ Please commit & push into base branch yourself.
 - Next : pushes all changes to `origin/mob-session`in a `mob next [ci-skip]` commit
 - Done : squashes all changes in `mob-session` into staging of `master` and removes `mob-session` and `origin/mob-session`
 - Set "Timer" in start dialog : start a specific minute timer, notify by a balloon if expired
-- Select "Also activates screenshare in zoom" in start dialog : start screen sharing in Zoom (macOS or Linux with xdotool olny. and requires Zoom configuration)
+- Select "Also activates screenshare in Zoom" in start dialog : start screen sharing in Zoom (requires Zoom configuration)
 - Select "Stay in WIP branch after executing 'Next' and checkout base branch" in next dialog : after handover code, stay on mob session branch
 - Resets Any Unfinished Mob Session : deletes `mob-session` and `origin/mob-session`
 
 ### Zoom Screen Share Integration
 
-The "Also activates screenshare in zoom" feature uses the zoom keyboard shortcut "Start/Stop Screen Sharing". This only works if you
+The "Also activates screenshare in Zoom" feature uses the Zoom keyboard shortcut "Start/Stop Screen Sharing". This only works if you
 
 - make the shortcut globally available (Zoom > Preferences > Keyboard Shortcuts), and
-- keep the default shortcut at CMD+SHIFT+S (macOS)/ ALT+S (Linux).
+- keep the default shortcut at CMD+SHIFT+S (macOS)/ ALT+S (Windows, Linux).
 - setting under System Preferences required on macOS Catalina (or later?); Security & Privacy -> Privacy tab -> Accessibility, and add your IntelliJ Platform Based IDEs .app
 
 [More tips on setting up Zoom for effective screen sharing.](https://effectivehomeoffice.com/setup-zoom-for-effective-screen-sharing/)
