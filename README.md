@@ -20,8 +20,8 @@ There are three ways to install.
 
 ### Stable channel of JetBrains Plugins Repository
 
-**TBD:**
-Publish to stable channel in the near future!
+1. Open Settings(Windows, Linux) / Preferences(macOS)... | Plugins
+1. Search "Mob" and install
 
 ### EAP channel of JetBrains Plugins Repository
 
@@ -118,15 +118,13 @@ Open Help | Diagnostic Tools | Debug Log Settings…, and input `#com.nowsprinti
 
 ## Milestones
 
-### 1.0
+### 1.1
 
-- Open commit & push dialog after "done"
-- Set `Co-authored-by:` trailer to commit message automatically
+- Good looking timer widget on statusbar
+- Pause/resume timer action launch from statusbar
 
 ### 1.x
 
-- Good looking timer widget on statusbar
-- Restart timer action launch from statusbar
 - Integration tests
 - Refactor: dialogs uses `DialogWrapper`
 - Refactor: tests about `GitRepository`
