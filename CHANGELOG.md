@@ -1,4 +1,13 @@
 ## Unreleased
+
+## 1.0
+- Launch mob start, next, done, reset in IDE menu | VCS | Mob
+- Display timer on statusbar
+- Timer expired notification
+- Open commit & push dialog after "done", and set `Co-authored-by:` trailer
+- "start" also activates screenshare in Zoom (optional)
+
+## 1.0-rc1 (not released)
 - Open commit & push dialog after "done"
 - Set `Co-authored-by:` trailer to commit message automatically
 - Support start Zoom screenshare on Windows
