@@ -144,6 +144,6 @@ Original [mob](https://github.com/remotemobprogramming/mob) developed and mainta
 
 <!-- Original contributions and testing by Jochen Christ, Martin Huber, Franziska Dessart, and Nikolas Hermann. Thank you! -->
 
-Original logo designed by [Sonja Scheungrab](https://twitter.com/multebaerr).
+Original and plugin logo designed by [Sonja Scheungrab](https://twitter.com/multebaerr).
 
 Port to IntelliJ plugin by [Koji Hasegawa](https://twitter.com/nowsprinting)
