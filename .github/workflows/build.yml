@@ -49,20 +49,16 @@ jobs:
       with:
         path: build/distributions
 
-    - name: Check version format in tag
+    - uses: nowsprinting/check-version-format-action@v1
       id: version
-      run: |
-        if [[ ${{ github.ref }} =~ ^refs/tags/v[0-9]+(\.[0-9]+)*$ ]]; then
-          echo ::set-output name=is_stable::true
-        fi
-
+      with:
+        prefix: 'v'
     - name: Publish plugin to EAP channel
       run: ./gradlew publishPlugin
       env:
         INTELLIJ_PUBLISH_TOKEN: ${{ secrets.JETBRAINS_MARKETPLACE_TOKEN }}
         INTELLIJ_PUBLISH_CHANNEL: eap
-      if: contains(github.ref, 'tags/v')  # Even stable releases need to be uploaded to the eap channel. see: https://plugins.jetbrains.com/docs/marketplace/custom-release-channels.html#CustomReleaseChannels-ChannelPriorityNotice
-
+      if: steps.version.outputs.is_valid == 'true'  # Even stable releases need to be uploaded to the eap channel. see: https://plugins.jetbrains.com/docs/marketplace/custom-release-channels.html#CustomReleaseChannels-ChannelPriorityNotice
     - name: Publish plugin to Stable channel
       run: ./gradlew publishPlugin
       env:
