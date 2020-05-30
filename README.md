@@ -12,6 +12,7 @@ it useful for [Remote Mob Programming](https://www.remotemobprogramming.org).
 - mob keeps your `master` branch clean
 - mob creates WIP commits on the `mob-session` branch
 - mob notifies you when it's time to handover
+- mob squash commits at done session and set `Co-authored-by:` trailer in commit message
 
 
 ## How to install

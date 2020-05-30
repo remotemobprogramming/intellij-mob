@@ -15,6 +15,7 @@
         <li>mob keeps your <code>master</code> branch clean</li>
         <li>mob creates WIP commits on the <code>mob-session</code> branch</li>
         <li>mob notifies you when it's time to handover</li>
+        <li>mob squash commits at done session and set <code>Co-authored-by:</code> trailer in commit message</li>
     </ul>
     <p>See <a href="https://github.com/remotemobprogramming/intellij-mob">GitHub repository</a> for more information.</p>
     ]]></description>
