@@ -8,7 +8,7 @@
     <vendor url="https://github.com/nowsprinting">Koji Hasegawa</vendor>
 
     <description><![CDATA[
-    <p>Swift <a href="https://www.remotemobprogramming.org/#git-handover">git handover</a> with mob IntelliJ plugin, it useful for <a href="https://www.remotemobprogramming.org">Remote Mob Programming</a>.</p>
+    <p>Swift <a href="https://www.remotemobprogramming.org/#git-handover">git handover</a> and timer with mob IntelliJ plugin, it useful for <a href="https://www.remotemobprogramming.org">Remote Mob Programming</a>.</p>
     <ul>
         <li>mob IntelliJ plugin is a ported <a href="https://github.com/remotemobprogramming/mob">mob command line tool</a></li>
         <li>mob is the fasted way to <a href="https://www.remotemobprogramming.org/#git-handover" rel="nofollow">handover code via git</a></li>

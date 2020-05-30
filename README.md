@@ -4,7 +4,7 @@
 
 ![mob Logo](documents/logo.svg)
 
-Swift [git handover](https://www.remotemobprogramming.org/#git-handover) with mob IntelliJ plugin,
+Swift [git handover](https://www.remotemobprogramming.org/#git-handover) and timer with mob IntelliJ plugin,
 it useful for [Remote Mob Programming](https://www.remotemobprogramming.org).
 
 - mob IntelliJ plugin is ported [mob command line tool](https://github.com/remotemobprogramming/mob)
