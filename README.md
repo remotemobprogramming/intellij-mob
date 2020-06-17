@@ -119,7 +119,7 @@ Open Help | Diagnostic Tools | Debug Log Settings…, and input `#com.nowsprinti
 
 ## Milestones
 
-### 1.1
+### 1.2
 
 - Good looking timer widget on statusbar
 - Pause/resume timer action launch from statusbar

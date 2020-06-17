@@ -1,5 +1,9 @@
 ## Unreleased
 
+## 1.1
+- Build for 2020.2
+- Include icon
+
 ## 1.0
 - Launch mob start, next, done, reset in IDE menu | VCS | Mob
 - Display timer on statusbar
