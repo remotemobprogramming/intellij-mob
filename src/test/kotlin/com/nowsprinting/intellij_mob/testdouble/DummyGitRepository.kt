@@ -12,6 +12,7 @@ import git4idea.GitLocalBranch
 import git4idea.GitVcs
 import git4idea.branch.GitBranchesCollection
 import git4idea.repo.*
+import git4idea.status.GitStagingAreaHolder
 
 internal open class DummyGitRepository : GitRepository {
     override fun getRepositoryFiles(): GitRepositoryFiles {
@@ -24,6 +25,10 @@ internal open class DummyGitRepository : GitRepository {
 
     override fun getInfo(): GitRepoInfo {
         throw Exception("Not yet implemented")
+    }
+
+    override fun getStagingAreaHolder(): GitStagingAreaHolder {
+        TODO("Not yet implemented")
     }
 
     override fun toLogString(): String {
@@ -67,10 +72,6 @@ internal open class DummyGitRepository : GitRepository {
     }
 
     override fun getCurrentBranchName(): String? {
-        throw Exception("Not yet implemented")
-    }
-
-    override fun getConflictsHolder(): GitConflictsHolder {
         throw Exception("Not yet implemented")
     }
 
