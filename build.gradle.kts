@@ -29,7 +29,7 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = "202-EAP-SNAPSHOT"
+    version = "2020.1"
     setPlugins("git4idea")
 }
 configure<JavaPluginConvention> {
