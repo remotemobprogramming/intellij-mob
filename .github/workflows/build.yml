@@ -49,8 +49,8 @@ jobs:
       with:
         path: build/distributions
 
-    - uses: ChrisCarini/intellij-platform-plugin-verifier-action@v0.0.2
-      id: verify
+    - name: Check plugin compatibility
+      uses: ChrisCarini/intellij-platform-plugin-verifier-action@v0.0.2
       with:
         ide-versions: |
           ideaIC:2020.1
@@ -66,10 +66,6 @@ jobs:
           goland:LATEST-EAP-SNAPSHOT
           pycharmPC:LATEST-EAP-SNAPSHOT
           pycharmPY:LATEST-EAP-SNAPSHOT
-    - name: cat log by intellij-platform-plugin-verifier
-      run: |
-        echo "The verifier log file [${{steps.verify.outputs.verification-output-log-filename}}] contents : " ;
-        cat ${{steps.verify.outputs.verification-output-log-filename}}
 
     - uses: nowsprinting/check-version-format-action@v1
       id: version
