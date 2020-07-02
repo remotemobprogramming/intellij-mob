@@ -1,7 +1,7 @@
 ## Unreleased
 
-## 1.1
-- Build for 2020.2
+## 1.0.1
+- Support for 2020.2
 - Include icon
 
 ## 1.0

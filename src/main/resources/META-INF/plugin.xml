@@ -25,8 +25,8 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>Git4Idea</depends>
 
-    <!-- see: https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html -->
-    <idea-version since-build="201.6668.121"/>
+    <!-- <idea-version> attribute is replaced by patchPluginXml in build.gradle.kts
+         see: https://www.jetbrains.org/intellij/sdk/docs/tutorials/build_system/gradle_guide.html#patching-the-plugin-configuration-file -->
 
     <extensions defaultExtensionNs="com.intellij">
         <projectConfigurable

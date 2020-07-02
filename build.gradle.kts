@@ -29,7 +29,7 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = "2020.1"
+    version = "LATEST-EAP-SNAPSHOT"
     setPlugins("git4idea")
 }
 configure<JavaPluginConvention> {
@@ -56,6 +56,8 @@ tasks.getByName<org.jetbrains.intellij.tasks.PatchPluginXmlTask>("patchPluginXml
     changeNotes(
         changeNotesFromChangeLog()
     )
+    sinceBuild("201.6668.121")
+    untilBuild("202.*")
 }
 
 /**
