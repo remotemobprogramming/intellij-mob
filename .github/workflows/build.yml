@@ -66,8 +66,7 @@ jobs:
           goland:LATEST-EAP-SNAPSHOT
           pycharmPC:LATEST-EAP-SNAPSHOT
           pycharmPY:LATEST-EAP-SNAPSHOT
-          riderRD:LATEST-EAP-SNAPSHOT
-    - name: Log by intellij-platform-plugin-verifier
+    - name: cat log by intellij-platform-plugin-verifier
       run: |
         echo "The verifier log file [${{steps.verify.outputs.verification-output-log-filename}}] contents : " ;
         cat ${{steps.verify.outputs.verification-output-log-filename}}
