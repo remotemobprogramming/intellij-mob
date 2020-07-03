@@ -10,8 +10,8 @@
     <description><![CDATA[
     <p>Swift <a href="https://www.remotemobprogramming.org/#git-handover">git handover</a> and timer with mob IntelliJ plugin, it useful for <a href="https://www.remotemobprogramming.org">Remote Mob Programming</a>.</p>
     <ul>
-        <li>mob IntelliJ plugin is a ported <a href="https://github.com/remotemobprogramming/mob">mob command line tool</a></li>
-        <li>mob is the fasted way to <a href="https://www.remotemobprogramming.org/#git-handover" rel="nofollow">handover code via git</a></li>
+        <li>mob IntelliJ plugin is a port of <a href="https://github.com/remotemobprogramming/mob">mob command line tool</a></li>
+        <li>mob is the fast way to <a href="https://www.remotemobprogramming.org/#git-handover" rel="nofollow">handover code via git</a></li>
         <li>mob keeps your <code>master</code> branch clean</li>
         <li>mob creates WIP commits on the <code>mob-session</code> branch</li>
         <li>mob notifies you when it's time to handover</li>

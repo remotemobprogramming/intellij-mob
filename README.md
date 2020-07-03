@@ -1,14 +1,16 @@
 # Swift git handover with mob IntelliJ plugin
 
 ![build](https://github.com/remotemobprogramming/intellij-mob/workflows/build/badge.svg)
+![version](https://img.shields.io/jetbrains/plugin/v/14266-mob)
+![rating](https://img.shields.io/jetbrains/plugin/r/rating/14266-mob)
 
 ![mob Logo](documents/logo.svg)
 
 Swift [git handover](https://www.remotemobprogramming.org/#git-handover) and timer with mob IntelliJ plugin,
 it useful for [Remote Mob Programming](https://www.remotemobprogramming.org).
 
-- mob IntelliJ plugin is ported [mob command line tool](https://github.com/remotemobprogramming/mob)
-- mob is the fasted way to [handover code via git](https://www.remotemobprogramming.org/#git-handover)
+- mob IntelliJ plugin is a port of [mob command line tool](https://github.com/remotemobprogramming/mob)
+- mob is the fast way to [handover code via git](https://www.remotemobprogramming.org/#git-handover)
 - mob keeps your `master` branch clean
 - mob creates WIP commits on the `mob-session` branch
 - mob notifies you when it's time to handover
