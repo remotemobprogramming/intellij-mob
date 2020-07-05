@@ -148,3 +148,5 @@ hs_err_pid*
 !gradle-wrapper.jar
 !gradle-wrapper.properties
 
+# automatically creates by intellij-platform-plugin-verifier-action
+/verification-*
