@@ -1,5 +1,9 @@
 ## Unreleased
 
+## 1.0.2
+- Fix meta wording
+- Fix versioning
+
 ## 1.0.1.dirty
 - Support for 2020.2
 - Include icon
