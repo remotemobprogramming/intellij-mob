@@ -1,6 +1,6 @@
 ## Unreleased
 
-## 1.0.1
+## 1.0.1.dirty
 - Support for 2020.2
 - Include icon
 
