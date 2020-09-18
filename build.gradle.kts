@@ -7,6 +7,7 @@ plugins {
     java
     kotlin("jvm") version "1.3.71"
     id("com.palantir.git-version") version "0.12.3"
+    jacoco
 }
 
 group = "com.nowsprinting"
@@ -45,6 +46,14 @@ tasks {
     test {
         useJUnitPlatform {
             includeEngines("junit-jupiter")
+        }
+        finalizedBy(jacocoTestReport)   // report is always generated after tests run
+    }
+    jacocoTestReport {
+        reports {
+            xml.isEnabled = true
+            csv.isEnabled = false
+            html.destination = file("${buildDir}/reports/jacocoHtml")
         }
     }
     publishPlugin {
