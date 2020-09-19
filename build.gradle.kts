@@ -8,6 +8,7 @@ plugins {
     kotlin("jvm") version "1.3.71"
     id("com.palantir.git-version") version "0.12.3"
     jacoco
+    id("io.gitlab.arturbosch.detekt") version "1.11.0"
 }
 
 group = "com.nowsprinting"
@@ -18,6 +19,13 @@ version = suppressPrefix(gitVersion())
 
 repositories {
     mavenCentral()
+    jcenter {
+        content {
+            // just allow to include kotlinx projects
+            // detekt needs 'kotlinx-html' for the html report
+            includeGroup("org.jetbrains.kotlinx")
+        }
+    }
 }
 
 dependencies {
@@ -35,6 +43,14 @@ intellij {
 }
 configure<JavaPluginConvention> {
     sourceCompatibility = JavaVersion.VERSION_1_8
+}
+detekt {
+    config = files("$projectDir/config/detekt/detekt.yml")
+    reports {
+        html.enabled = true // observe findings in your browser with structure and code snippets
+        xml.enabled = true // checkstyle like format mainly for integrations like Jenkins
+        txt.enabled = false // similar to the console output, contains issue signature to manually edit baseline files
+    }
 }
 tasks {
     compileKotlin {
