@@ -58,7 +58,7 @@ jobs:
         args: >
           -Dsonar.projectKey=remotemobprogramming_intellij-mob
           -Dsonar.organization=remotemobprogramming
-          -Dsonar.sources=src/main
+          -Dsonar.sources=src/main/kotlin
           -Dsonar.exclusions=**/*.form,**/resources
           -Dsonar.tests=src/test
           -Dsonar.junit.reportPaths=build/test-results/test
