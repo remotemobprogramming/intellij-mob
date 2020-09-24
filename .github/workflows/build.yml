@@ -76,22 +76,9 @@ jobs:
         path: build/distributions
 
     - name: Check plugin compatibility
-      uses: ChrisCarini/intellij-platform-plugin-verifier-action@v0.0.2
+      uses: ChrisCarini/intellij-platform-plugin-verifier-action@v1.0.3
       with:
-        ide-versions: |
-          ideaIC:2020.1
-          ideaIU:2020.1
-          clion:2020.1
-          goland:2020.1
-          pycharmPC:2020.1
-          pycharmPY:2020.1
-          riderRD:2020.1
-          ideaIC:LATEST-EAP-SNAPSHOT
-          ideaIU:LATEST-EAP-SNAPSHOT
-          clion:LATEST-EAP-SNAPSHOT
-          goland:LATEST-EAP-SNAPSHOT
-          pycharmPC:LATEST-EAP-SNAPSHOT
-          pycharmPY:LATEST-EAP-SNAPSHOT
+        ide-versions: .github/workflows/ide_versions_file.txt
 
     - uses: nowsprinting/check-version-format-action@v1
       id: version
