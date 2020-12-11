@@ -32,6 +32,10 @@ open class DummyChangeListManager : ChangeListManager() {
         throw Exception("Not yet implemented")
     }
 
+    override fun getStatus(file: FilePath): FileStatus {
+        TODO("Not yet implemented")
+    }
+
     override fun getAffectedPaths(): MutableList<File> {
         throw Exception("Not yet implemented")
     }
@@ -68,6 +72,10 @@ open class DummyChangeListManager : ChangeListManager() {
         throw Exception("Not yet implemented")
     }
 
+    override fun getUnversionedFilesPaths(): MutableList<FilePath> {
+        TODO("Not yet implemented")
+    }
+
     override fun getDefaultListName(): String {
         throw Exception("Not yet implemented")
     }
@@ -102,6 +110,10 @@ open class DummyChangeListManager : ChangeListManager() {
 
     override fun isIgnoredFile(file: FilePath): Boolean {
         throw Exception("Not yet implemented")
+    }
+
+    override fun getIgnoredFilePaths(): MutableList<FilePath> {
+        TODO("Not yet implemented")
     }
 
     override fun addFilesToIgnore(vararg ignoredFiles: IgnoredFileBean?) {
@@ -161,6 +173,10 @@ open class DummyChangeListManager : ChangeListManager() {
         state: ModalityState?
     ) {
         throw Exception("Not yet implemented")
+    }
+
+    override fun areChangeListsEnabled(): Boolean {
+        TODO("Not yet implemented")
     }
 
     override fun haveChangesUnder(vf: VirtualFile): ThreeState {
