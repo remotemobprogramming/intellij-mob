@@ -38,7 +38,7 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = "LATEST-EAP-SNAPSHOT"
+    version = "2020.3"
     setPlugins("git4idea")
 }
 configure<JavaPluginConvention> {
@@ -53,12 +53,19 @@ detekt {
     }
 }
 tasks {
-    compileKotlin {
+    // Set the compatibility versions to 1.8
+    withType<JavaCompile> {
+        sourceCompatibility = "1.8"
+        targetCompatibility = "1.8"
+    }
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions.jvmTarget = "1.8"
     }
-    compileTestKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+
+    withType<io.gitlab.arturbosch.detekt.Detekt> {
+        jvmTarget = "1.8"
     }
+
     test {
         useJUnitPlatform {
             includeEngines("junit-jupiter")
