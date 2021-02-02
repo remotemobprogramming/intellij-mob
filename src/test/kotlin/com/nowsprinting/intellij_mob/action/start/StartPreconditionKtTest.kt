@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Copyright 2020-2021 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package com.nowsprinting.intellij_mob.action.start
@@ -246,8 +246,8 @@ internal class StartPreconditionKtTest {
         assertEquals(MobBundle.message("mob.validate_reason.has_uncommitted_changes"), errorMessage)
     }
 
+    @Disabled("ApplicationManager.getApplication() returns null in tests. Since 2020.3")
     @Test
-    @Disabled // ApplicationManager.getApplication() returns null, since 2020.3
     fun checkStartPrecondition_hasUncommittedChanges_failure() {
         val settings = createSettings()
         val origin = GitRemote("origin", listOf<String>(), listOf<String>(), listOf<String>(), listOf<String>())
