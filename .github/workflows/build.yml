@@ -80,9 +80,9 @@ jobs:
       uses: ChrisCarini/intellij-platform-plugin-verifier-action@v0.0.2
       with:
         ide-versions: |
-          ideaIC:2020.1
-          goland:2020.1
-          riderRD:2020.1
+          ideaIC:2020.3
+          goland:2020.3
+          riderRD:2020.3
           ideaIC:LATEST-EAP-SNAPSHOT
           goland:LATEST-EAP-SNAPSHOT
 

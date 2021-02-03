@@ -88,7 +88,7 @@ tasks.getByName<org.jetbrains.intellij.tasks.PatchPluginXmlTask>("patchPluginXml
     changeNotes(
         changeNotesFromChangeLog()
     )
-    sinceBuild("201.6668.121")
+    sinceBuild("203")
     untilBuild(null)
 }
 
