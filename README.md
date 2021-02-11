@@ -45,7 +45,7 @@ Alpha, Beta, and RC versions will only be released on EAP channel.
 
 ## How to use
 
-VCS | Mob | Start Mob Programming as Typist... (shortcut: ALT+M, S)
+Git | Mob | Start Mob Programming as Typist... (shortcut: ALT+M, S)
 
 ![menu](documents/menu.png)
 
@@ -55,7 +55,7 @@ Click OK, so switched to a separate branch. Start mob programming!
 
 When handover to the next person,
 
-VCS | Mob | Next : Handover to Next Typist... (shortcut: ALT+M, N)
+Git | Mob | Next : Handover to Next Typist... (shortcut: ALT+M, N)
 
 ![next dialog](documents/next.png)
 
@@ -66,7 +66,7 @@ Continue with "Start" and handover to the next person with "Next".
 
 When you're done,
 
-VCS | Mob | Done : Finish Mob Session... (shortcut: ALT+M, D)
+Git | Mob | Done : Finish Mob Session... (shortcut: ALT+M, D)
 
 After confirm in a dialog,
 get your changes into the staging area of the `master` branch. 
