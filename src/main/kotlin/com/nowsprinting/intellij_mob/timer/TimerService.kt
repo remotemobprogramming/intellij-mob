@@ -1,11 +1,10 @@
 /*
- * Copyright 2020 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Copyright 2020-2021 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package com.nowsprinting.intellij_mob.timer
 
-import com.intellij.notification.NotificationDisplayType
-import com.intellij.notification.NotificationGroup
+import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.diagnostic.Logger
@@ -110,7 +109,7 @@ class TimerService {
     }
 
     private fun notifyExpire() {
-        val stickyGroup = NotificationGroup("Mob Timer", NotificationDisplayType.STICKY_BALLOON, false)
+        val stickyGroup = NotificationGroupManager.getInstance().getNotificationGroup("Mob Timer")
         val notification = stickyGroup.createNotification(
             MobBundle.message("mob.timer.expired.title"),
             NotificationType.INFORMATION

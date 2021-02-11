@@ -1,11 +1,11 @@
 /*
- * Copyright 2020 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Copyright 2020-2021 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 plugins {
-    id("org.jetbrains.intellij") version "0.4.21"
+    id("org.jetbrains.intellij") version "0.6.5"
     java
-    kotlin("jvm") version "1.3.71"
+    kotlin("jvm") version "1.4.21"
     id("com.palantir.git-version") version "0.12.3"
     jacoco
     id("io.gitlab.arturbosch.detekt") version "1.11.0"
@@ -38,7 +38,7 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = "LATEST-EAP-SNAPSHOT"
+    version = "2020.3"
     setPlugins("git4idea")
 }
 configure<JavaPluginConvention> {
@@ -53,12 +53,19 @@ detekt {
     }
 }
 tasks {
-    compileKotlin {
+    // Set the compatibility versions to 1.8
+    withType<JavaCompile> {
+        sourceCompatibility = "1.8"
+        targetCompatibility = "1.8"
+    }
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions.jvmTarget = "1.8"
     }
-    compileTestKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+
+    withType<io.gitlab.arturbosch.detekt.Detekt> {
+        jvmTarget = "1.8"
     }
+
     test {
         useJUnitPlatform {
             includeEngines("junit-jupiter")
@@ -81,7 +88,7 @@ tasks.getByName<org.jetbrains.intellij.tasks.PatchPluginXmlTask>("patchPluginXml
     changeNotes(
         changeNotesFromChangeLog()
     )
-    sinceBuild("201.6668.121")
+    sinceBuild("203")
     untilBuild(null)
 }
 

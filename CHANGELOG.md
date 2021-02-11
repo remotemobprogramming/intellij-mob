@@ -1,4 +1,5 @@
 ## Unreleased
+- Support for 2020.3
 
 ## 1.0.2
 - Fix meta wording

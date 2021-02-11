@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Copyright 2020-2021 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package com.nowsprinting.intellij_mob.testdouble
@@ -30,6 +30,10 @@ open class DummyChangeListManager : ChangeListManager() {
 
     override fun getChange(file: FilePath?): Change? {
         throw Exception("Not yet implemented")
+    }
+
+    override fun getStatus(file: FilePath): FileStatus {
+        TODO("Not yet implemented")
     }
 
     override fun getAffectedPaths(): MutableList<File> {
@@ -68,6 +72,10 @@ open class DummyChangeListManager : ChangeListManager() {
         throw Exception("Not yet implemented")
     }
 
+    override fun getUnversionedFilesPaths(): MutableList<FilePath> {
+        TODO("Not yet implemented")
+    }
+
     override fun getDefaultListName(): String {
         throw Exception("Not yet implemented")
     }
@@ -102,6 +110,10 @@ open class DummyChangeListManager : ChangeListManager() {
 
     override fun isIgnoredFile(file: FilePath): Boolean {
         throw Exception("Not yet implemented")
+    }
+
+    override fun getIgnoredFilePaths(): MutableList<FilePath> {
+        TODO("Not yet implemented")
     }
 
     override fun addFilesToIgnore(vararg ignoredFiles: IgnoredFileBean?) {
@@ -161,6 +173,10 @@ open class DummyChangeListManager : ChangeListManager() {
         state: ModalityState?
     ) {
         throw Exception("Not yet implemented")
+    }
+
+    override fun areChangeListsEnabled(): Boolean {
+        TODO("Not yet implemented")
     }
 
     override fun haveChangesUnder(vf: VirtualFile): ThreeState {

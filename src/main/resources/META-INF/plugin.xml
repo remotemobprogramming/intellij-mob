@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2020 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+  ~ Copyright 2020-2021 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
   -->
 
 <idea-plugin>
@@ -40,6 +40,8 @@
                 id="com.nowsprinting.intellij_mob.TimerWidget"
                 implementation="com.nowsprinting.intellij_mob.timer.statusbar.TimerWidgetFactory"
                 order="before gitWidget"/>
+        <notificationGroup id="Mob" displayType="BALLOON"/>
+        <notificationGroup id="Mob Timer" displayType="STICKY_BALLOON"/>
     </extensions>
 
     <actions>
@@ -61,7 +63,7 @@
         <action id="com.nowsprinting.intellij_mob.share" class="com.nowsprinting.intellij_mob.action.share.ShareAction"
                 text="Screenshare with Zoom"/>
         <group id="com.nowsprinting.intellij_mob" text="Mob" popup="true">
-            <add-to-group group-id="VcsGlobalGroup" anchor="after" relative-to-action="Git.Menu"/>
+            <add-to-group group-id="Git.MainMenu" anchor="last"/>
             <reference id="com.nowsprinting.intellij_mob.start"/>
             <reference id="com.nowsprinting.intellij_mob.next"/>
             <reference id="com.nowsprinting.intellij_mob.done"/>

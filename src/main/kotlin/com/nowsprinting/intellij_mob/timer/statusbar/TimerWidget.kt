@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Copyright 2020-2021 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package com.nowsprinting.intellij_mob.timer.statusbar
@@ -12,11 +12,11 @@ import com.intellij.openapi.wm.StatusBarWidget.MultipleTextValuesPresentation
 import com.intellij.openapi.wm.StatusBarWidget.WidgetPresentation
 import com.intellij.openapi.wm.impl.status.EditorBasedWidget
 import com.intellij.util.Consumer
+import com.intellij.util.concurrency.annotations.RequiresEdt
 import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.timer.TimerListener
 import com.nowsprinting.intellij_mob.timer.TimerService
 import com.nowsprinting.intellij_mob.timer.TimerState
-import org.jetbrains.annotations.CalledInAwt
 import java.awt.event.MouseEvent
 import javax.swing.Icon
 
@@ -87,7 +87,7 @@ class TimerWidget(project: Project) : EditorBasedWidget(project), MultipleTextVa
         update()
     }
 
-    @CalledInAwt
+    @RequiresEdt
     private fun update() {
         if (project.isDisposed) return
         myStatusBar.updateWidget(ID())
