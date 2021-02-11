@@ -63,7 +63,7 @@
         <action id="com.nowsprinting.intellij_mob.share" class="com.nowsprinting.intellij_mob.action.share.ShareAction"
                 text="Screenshare with Zoom"/>
         <group id="com.nowsprinting.intellij_mob" text="Mob" popup="true">
-            <add-to-group group-id="VcsGlobalGroup" anchor="after" relative-to-action="Git.Menu"/>
+            <add-to-group group-id="Git.MainMenu" anchor="last"/>
             <reference id="com.nowsprinting.intellij_mob.start"/>
             <reference id="com.nowsprinting.intellij_mob.next"/>
             <reference id="com.nowsprinting.intellij_mob.done"/>
