@@ -1,4 +1,6 @@
 ## Unreleased
+
+## 1.0.3
 - Support for 2020.3
 
 ## 1.0.2
