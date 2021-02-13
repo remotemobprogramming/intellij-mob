@@ -19,6 +19,7 @@ version = suppressPrefix(gitVersion())
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
