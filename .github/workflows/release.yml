@@ -1,0 +1,86 @@
+# Copyright 2020-2021 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+
+name: Release by Tag
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Cache Gradle dependencies
+      - name: Setup Gradle Dependencies Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
+
+      # Cache Gradle Wrapper
+      - name: Setup Gradle Wrapper Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Run tests
+        run: ./gradlew test
+      - name: Upload test results
+        uses: actions/upload-artifact@v2
+        with:
+          path: build/reports/tests  # Not specify name reason is workaround "zip in zip" problem, see: https://github.com/actions/upload-artifact/issues/39
+        if: always()  # Keep the test result as an artifact even if tests fails
+
+      # Run verifyPlugin Gradle task
+      - name: Verify Plugin
+        run: ./gradlew verifyPlugin
+
+      - name: Build plugin
+        run: ./gradlew buildPlugin
+
+      - name: Upload build
+        uses: actions/upload-artifact@v2
+        with:
+          path: build/distributions
+
+      - uses: nowsprinting/check-version-format-action@v1
+        id: version
+        with:
+          prefix: 'v'
+
+      - name: Publish plugin to EAP channel
+        run: ./gradlew publishPlugin
+        env:
+          INTELLIJ_PUBLISH_TOKEN: ${{ secrets.JETBRAINS_MARKETPLACE_TOKEN }}
+          INTELLIJ_PUBLISH_CHANNEL: eap
+        if: steps.version.outputs.is_valid == 'true'  # Even stable releases need to be uploaded to the eap channel. see: https://plugins.jetbrains.com/docs/marketplace/custom-release-channels.html#CustomReleaseChannels-ChannelPriorityNotice
+
+      - name: Publish plugin to Stable channel
+        run: ./gradlew publishPlugin
+        env:
+          INTELLIJ_PUBLISH_TOKEN: ${{ secrets.JETBRAINS_MARKETPLACE_TOKEN }}
+          INTELLIJ_PUBLISH_CHANNEL: Stable
+        if: steps.version.outputs.is_stable == 'true'
+
+      - uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow # selectable (default: repo,message)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # optional
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }} # required
+        if: always() # Pick up events even if the job fails or is canceled.

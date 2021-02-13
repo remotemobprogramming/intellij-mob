@@ -1,3 +1,0 @@
-ideaIC:2020.3
-goland:2020.3
-riderRD:2020.3

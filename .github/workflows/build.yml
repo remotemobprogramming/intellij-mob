@@ -1,3 +1,5 @@
+# Copyright 2020-2021 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+#
 # This workflow will build a Java project with Gradle
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
@@ -7,37 +9,42 @@ on:
   push:
     branches-ignore:  # Branches corresponding to this will not record the start of the job in GitHub Actions
       - 'mob-session'
-    tags:
-      - 'v*'
-    paths-ignore:
-      - '**.md'
   pull_request:
 
 jobs:
+
   build:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci-skip]')"  # Jobs ignored in this step are marked as "skipped" in GitHub Actions
 
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/cache@v2
+
+    # Cache Gradle dependencies
+    - name: Setup Gradle Dependencies Cache
+      uses: actions/cache@v2
       with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
+        path: ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
+
+    # Cache Gradle Wrapper
+    - name: Setup Gradle Wrapper Cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
 
     - name: Set up JDK 11
       uses: actions/setup-java@v1
       with:
         java-version: 11
+
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
     - name: Run tests
       run: ./gradlew test
+
     - name: Upload test results
       uses: actions/upload-artifact@v2
       with:
@@ -46,6 +53,7 @@ jobs:
 
     - name: Run detekt
       run: ./gradlew detekt
+
     - name: Upload detekt results
       uses: actions/upload-artifact@v2
       with:
@@ -69,35 +77,41 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         JAVA_HOME: '' # Avoid 'java: not found' error
 
+    # Run verifyPlugin Gradle task
+    - name: Verify Plugin
+      run: ./gradlew verifyPlugin
+
     - name: Build plugin
       run: ./gradlew buildPlugin
+
     - name: Upload build
       uses: actions/upload-artifact@v2
       with:
         path: build/distributions
 
-    - name: Check plugin compatibility
-      uses: ChrisCarini/intellij-platform-plugin-verifier-action@v1.0.3
-      with:
-        ide-versions: .github/workflows/ide_versions_file.txt
+    # Set environment variables
+    - name: Export Properties
+      id: properties
+      shell: bash
+      run: |
+        PROPERTIES="$(./gradlew properties --console=plain -q)"
+        IDE_VERSIONS="$(echo "$PROPERTIES" | grep "^pluginVerifierIdeVersions:" | base64)"
 
-    - uses: nowsprinting/check-version-format-action@v1
-      id: version
-      with:
-        prefix: 'v'
-    - name: Publish plugin to EAP channel
-      run: ./gradlew publishPlugin
-      env:
-        INTELLIJ_PUBLISH_TOKEN: ${{ secrets.JETBRAINS_MARKETPLACE_TOKEN }}
-        INTELLIJ_PUBLISH_CHANNEL: eap
-      if: steps.version.outputs.is_valid == 'true'  # Even stable releases need to be uploaded to the eap channel. see: https://plugins.jetbrains.com/docs/marketplace/custom-release-channels.html#CustomReleaseChannels-ChannelPriorityNotice
-    - name: Publish plugin to Stable channel
-      run: ./gradlew publishPlugin
-      env:
-        INTELLIJ_PUBLISH_TOKEN: ${{ secrets.JETBRAINS_MARKETPLACE_TOKEN }}
-        INTELLIJ_PUBLISH_CHANNEL: Stable
-      if: steps.version.outputs.is_stable == 'true'
+        echo "::set-output name=ideVersions::$IDE_VERSIONS"
+        echo "::set-output name=pluginVerifierHomeDir::~/.pluginVerifier"
 
+    # Cache Plugin Verifier IDEs
+    - name: Setup Plugin Verifier IDEs Cache
+      uses: actions/cache@v2
+      with:
+        path: ${{ steps.properties.outputs.pluginVerifierHomeDir }}/ides
+        key: ${{ runner.os }}-plugin-verifier-${{ steps.properties.outputs.ideVersions }}
+
+    # Run IntelliJ Plugin Verifier action using GitHub Action
+    - name: Verify Plugin
+      run: ./gradlew runPluginVerifier -Pplugin.verifier.home.dir=${{ steps.properties.outputs.pluginVerifierHomeDir }}
+
+    # Notification
     - uses: 8398a7/action-slack@v3
       with:
         status: ${{ job.status }}
