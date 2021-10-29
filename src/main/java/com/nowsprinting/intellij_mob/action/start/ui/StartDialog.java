@@ -15,6 +15,7 @@ public class StartDialog extends JDialog {
     private JButton buttonOK;
     private JButton buttonCancel;
     private JTextField timerMinutes;
+    private JCheckBox timerSound;
     private JCheckBox startWithShare;
     private JButton buttonOpenSettings;
     private JLabel message;
@@ -97,6 +98,14 @@ public class StartDialog extends JDialog {
 
     public void setTimerMinutes(int timerMinutes) {
         this.timerMinutes.setText(Integer.toString(timerMinutes));
+    }
+
+    public boolean isTimerSound() {
+        return this.timerSound.isSelected();
+    }
+
+    public void setTimerSound(boolean timerSound) {
+        this.timerSound.setSelected(timerSound);
     }
 
     public boolean isStartWithShare() {

@@ -14,6 +14,7 @@ public class MobSettingsForm {
     JTextField baseBranch;
     JTextField remoteName;
     JTextField timerMinutes;
+    JCheckBox timerSound;
     JCheckBox startWithShare;
     JTextField wipCommitMessage;
     JCheckBox nextStay;
@@ -27,6 +28,7 @@ public class MobSettingsForm {
         if (!baseBranch.getText().equals(settings.baseBranch)) return true;
         if (!remoteName.getText().equals(settings.remoteName)) return true;
         if (!timerMinutes.getText().equals(timerMinutesIfZeroReturnEmpty(settings))) return true;
+        if (!timerSound.isSelected() == settings.timerSound) return true;
         if (!startWithShare.isSelected() == settings.startWithShare) return true;
         if (!wipCommitMessage.getText().equals(settings.wipCommitMessage)) return true;
         if (!nextStay.isSelected() == settings.nextStay) return true;
@@ -42,6 +44,7 @@ public class MobSettingsForm {
         } catch (NumberFormatException e) {
             settings.timerMinutes = 0;
         }
+        settings.timerSound = timerSound.isSelected();
         settings.startWithShare = startWithShare.isSelected();
         settings.wipCommitMessage = wipCommitMessage.getText();
         settings.nextStay = nextStay.isSelected();
@@ -52,6 +55,7 @@ public class MobSettingsForm {
         baseBranch.setText(settings.baseBranch);
         remoteName.setText(settings.remoteName);
         timerMinutes.setText(timerMinutesIfZeroReturnEmpty(settings));
+        timerSound.setSelected(settings.timerSound);
         startWithShare.setSelected(settings.startWithShare);
         wipCommitMessage.setText(settings.wipCommitMessage);
         nextStay.setSelected(settings.nextStay);

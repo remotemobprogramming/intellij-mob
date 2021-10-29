@@ -37,6 +37,7 @@ class StartAction : AnAction() {
         val dialog = StartDialog()
         dialog.title = e.presentation.text.removeSuffix("...")
         dialog.timerMinutes = settings.timerMinutes
+        dialog.isTimerSound = settings.timerSound
         dialog.isStartWithShare = settings.startWithShare
         dialog.setPreconditionResult(canExecute, reason)
         dialog.pack()
@@ -49,6 +50,7 @@ class StartAction : AnAction() {
 
         if (dialog.isOk) {
             settings.timerMinutes = dialog.timerMinutes
+            settings.timerSound = dialog.isTimerSound
             settings.startWithShare = dialog.isStartWithShare
             // Do not call saveAllDocuments() before run start task, Because there may be changes in mob.xml
             StartTask(settings, e, project, dialog.title).queue()

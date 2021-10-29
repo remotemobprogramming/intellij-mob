@@ -25,6 +25,7 @@ public class MobProjectSettings implements PersistentStateComponent<MobProjectSe
     public String baseBranch;
     public String wipBranch;
     public int timerMinutes;
+    public boolean timerSound;
     public boolean startWithShare;
     public String wipCommitMessage;
     public boolean nextStay;
@@ -49,6 +50,7 @@ public class MobProjectSettings implements PersistentStateComponent<MobProjectSe
         baseBranch = readStringDefaultFromResourceBundle("mob.settings.default.base_branch");
         wipBranch = readStringDefaultFromResourceBundle("mob.settings.default.wip_branch");
         timerMinutes = readIntDefaultFromResourceBundle("mob.settings.default.timer_minutes", 0);
+        timerSound = readBooleanDefaultFromResourceBundle("mob.settings.default.timer_sound");
         startWithShare = readBooleanDefaultFromResourceBundle("mob.settings.default.start_with_share");
         wipCommitMessage = readStringDefaultFromResourceBundle("mob.settings.default.wip_commit_message");
         nextStay = readBooleanDefaultFromResourceBundle("mob.settings.default.next_stay");
