@@ -1,4 +1,5 @@
 ## Unreleased
+- Optionally play sound when timer ends
 
 ## 1.0.3
 - Support for 2020.3
