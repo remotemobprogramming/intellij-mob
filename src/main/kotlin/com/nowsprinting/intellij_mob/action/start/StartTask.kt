@@ -214,7 +214,7 @@ class StartTask(val settings: MobProjectSettings, val e: AnActionEvent, project:
     private fun startTimer() {
         val timer = TimerService.getInstance(project)
         if (timer != null && !timer.isRunning()) {
-            timer.start(settings.timerMinutes)
+            timer.start(minutes = settings.timerMinutes, sound = settings.timerSound)
             val message = MobBundle.message("mob.timer.start_successful")
             notifyContents.add(String.format(MobBundle.message("mob.notify_content.notify"), message))
         } else {

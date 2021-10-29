@@ -12,6 +12,7 @@ import com.intellij.openapi.project.Project
 import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.action.done.DoneNotificationAction
 import com.nowsprinting.intellij_mob.action.next.NextNotificationAction
+import com.nowsprinting.intellij_mob.util.Sound
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -29,6 +30,7 @@ class TimerService {
     private val logger = Logger.getInstance(javaClass)
     private var startTime: LocalDateTime? = null
     private var expireTime: LocalDateTime? = null
+    private var timerSound = true;
     private var notified = false
     private var timerListeners = mutableSetOf<TimerListener>()
 
@@ -50,11 +52,12 @@ class TimerService {
         }
     }
 
-    fun start(minutes: Int = 0, now: LocalDateTime = LocalDateTime.now()) {
+    fun start(minutes: Int = 0, now: LocalDateTime = LocalDateTime.now(), sound: Boolean = true) {
         startTime = now
         if (minutes > 0) {
             expireTime = startTime?.plusMinutes(minutes.toLong())
         }
+        timerSound = sound;
         notifyUpdate()
         logger.info("mob timer started")
     }
@@ -109,6 +112,9 @@ class TimerService {
     }
 
     private fun notifyExpire() {
+        if (timerSound) {
+            Sound("timer").play()
+        }
         val stickyGroup = NotificationGroupManager.getInstance().getNotificationGroup("Mob Timer")
         val notification = stickyGroup.createNotification(
             MobBundle.message("mob.timer.expired.title"),
