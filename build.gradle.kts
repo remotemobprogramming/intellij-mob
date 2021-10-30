@@ -56,6 +56,10 @@ detekt {
     }
 }
 
+jacoco {
+    toolVersion = "0.8.7"
+}
+
 tasks {
     // Set the compatibility versions to 1.8
     withType<JavaCompile> {
