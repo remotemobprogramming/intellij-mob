@@ -42,9 +42,11 @@ intellij {
     version = "2020.3"
     setPlugins("git4idea")
 }
+
 configure<JavaPluginConvention> {
     sourceCompatibility = JavaVersion.VERSION_1_8
 }
+
 detekt {
     config = files("$projectDir/config/detekt/detekt.yml")
     reports {
@@ -53,6 +55,7 @@ detekt {
         txt.enabled = false // similar to the console output, contains issue signature to manually edit baseline files
     }
 }
+
 tasks {
     // Set the compatibility versions to 1.8
     withType<JavaCompile> {
@@ -85,6 +88,7 @@ tasks {
         channels(arrayOf(System.getenv("INTELLIJ_PUBLISH_CHANNEL")))
     }
 }
+
 tasks.getByName<org.jetbrains.intellij.tasks.PatchPluginXmlTask>("patchPluginXml") {
     changeNotes(
         changeNotesFromChangeLog()
