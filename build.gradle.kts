@@ -30,7 +30,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
     implementation("com.googlecode.soundlibs:jlayer:1.0.1.4")
     testImplementation("io.mockk:mockk:1.12.0")
     testImplementation("org.junit.jupiter", "junit-jupiter-api", "5.6.2")
