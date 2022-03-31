@@ -36,7 +36,7 @@ public class MobSettingsForm {
     public void applyEditorTo(MobProjectSettings settings) {
         settings.wipBranch = wipBranch.getText().trim();
         settings.baseBranch = baseBranch.getText().trim();
-        settings.remoteName = remoteName.getText();
+        settings.remoteName = remoteName.getText().trim();
         try {
             settings.timerMinutes = Integer.parseInt(timerMinutes.getText());
         } catch (NumberFormatException e) {

@@ -248,4 +248,13 @@ class MobSettingsFormTest {
         sut.applyEditorTo(settings)
         Assertions.assertEquals("mob-session", settings.wipBranch)
     }
+    
+    @Test
+    fun applyEditorTo_modified_remoteName_with_blanks() {
+        val settings = createDefaultSettings()
+        val sut = createDefaultForm()
+        sut.remoteName.text = "   upstream    "
+        sut.applyEditorTo(settings)
+        Assertions.assertEquals("upstream", settings.remoteName)
+    }
 }
