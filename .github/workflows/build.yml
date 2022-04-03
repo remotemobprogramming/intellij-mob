@@ -7,9 +7,14 @@ name: build
 
 on:
   push:
-    branches-ignore:  # Branches corresponding to this will not record the start of the job in GitHub Actions
-      - 'mob-session'
+    branches:
+      - master
+    paths-ignore:
+      - '**.md'
   pull_request:
+    types: [ opened, synchronize, reopened ]  # Same as default
+    paths-ignore:
+      - '**.md'
 
 jobs:
 
