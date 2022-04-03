@@ -57,7 +57,7 @@ jobs:
     - name: Setup Plugin Verifier IDEs Cache
       uses: actions/cache@v2.1.7
       with:
-        path: ${{ steps.properties.outputs.pluginVerifierHomeDir }}/ides
+        path: ~/.pluginVerifier/ides
         key: plugin-verifier-${{ hashFiles('build/listProductsReleases.txt') }}
 
     # Run Verify Plugin task and IntelliJ Plugin Verifier tool
