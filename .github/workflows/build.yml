@@ -58,25 +58,6 @@ jobs:
         path: build/reports/tests  # Not specify name reason is workaround "zip in zip" problem, see: https://github.com/actions/upload-artifact/issues/39
       if: always()  # Keep the test result as an artifact even if tests fails
 
-    # Cache Plugin Verifier IDEs
-    - name: Setup Plugin Verifier IDEs Cache
-      uses: actions/cache@v2.1.7
-      with:
-        path: ~/.pluginVerifier/ides
-        key: plugin-verifier-${{ hashFiles('build/listProductsReleases.txt') }}
-
-    # Run Verify Plugin task and IntelliJ Plugin Verifier tool
-    - name: Run Plugin Verification tasks
-      run: ./gradlew runPluginVerifier -Pplugin.verifier.home.dir=~/.pluginVerifier
-
-    # Collect Plugin Verifier Result
-    - name: Collect Plugin Verifier Result
-      uses: actions/upload-artifact@v2
-      with:
-        name: pluginVerifier-result
-        path: ${{ github.workspace }}/build/reports/pluginVerifier
-      if: always()  # Keep the test result as an artifact even if tests fails
-
     - name: Run detekt
       run: ./gradlew detekt
 
