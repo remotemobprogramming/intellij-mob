@@ -230,4 +230,31 @@ class MobSettingsFormTest {
         sut.applyEditorTo(settings)
         Assertions.assertTrue(settings.nextStay)
     }
+    
+    @Test
+    fun applyEditorTo_modified_baseBranch_with_blanks() {
+        val settings = createDefaultSettings()
+        val sut = createDefaultForm()
+        sut.baseBranch.text = "  develop    "
+        sut.applyEditorTo(settings)
+        Assertions.assertEquals("develop", settings.baseBranch)
+    }
+    
+    @Test
+    fun applyEditorTo_modified_wipBranch_with_blanks() {
+        val settings = createDefaultSettings()
+        val sut = createDefaultForm()
+        sut.wipBranch.text = "  mob-session    "
+        sut.applyEditorTo(settings)
+        Assertions.assertEquals("mob-session", settings.wipBranch)
+    }
+    
+    @Test
+    fun applyEditorTo_modified_remoteName_with_blanks() {
+        val settings = createDefaultSettings()
+        val sut = createDefaultForm()
+        sut.remoteName.text = "   upstream    "
+        sut.applyEditorTo(settings)
+        Assertions.assertEquals("upstream", settings.remoteName)
+    }
 }
