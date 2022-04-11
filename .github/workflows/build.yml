@@ -23,7 +23,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, '[ci-skip]')"  # Jobs ignored in this step are marked as "skipped" in GitHub Actions
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     # Cache Gradle dependencies
     - name: Setup Gradle Dependencies Cache
