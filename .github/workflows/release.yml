@@ -42,7 +42,7 @@ jobs:
         run: ./gradlew test
 
       - name: Upload test results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           path: build/reports/tests  # Not specify name reason is workaround "zip in zip" problem, see: https://github.com/actions/upload-artifact/issues/39
         if: always()  # Keep the test result as an artifact even if tests fails
@@ -51,7 +51,7 @@ jobs:
         run: ./gradlew buildPlugin
 
       - name: Upload build
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           path: build/distributions
 
