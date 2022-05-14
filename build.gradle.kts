@@ -103,6 +103,7 @@ tasks {
     }
     jacocoTestReport {
         dependsOn(test)
+        reports.xml.required.set(true)
     }
 
     // Configure UI tests plugin
