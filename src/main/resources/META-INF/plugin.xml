@@ -7,23 +7,9 @@
     <name>Mob</name>
     <vendor url="https://github.com/nowsprinting">Koji Hasegawa</vendor>
 
-    <description><![CDATA[
-    <p>Swift <a href="https://www.remotemobprogramming.org/#git-handover">git handover</a> and timer with mob IntelliJ plugin, it useful for <a href="https://www.remotemobprogramming.org">Remote Mob Programming</a>.</p>
-    <ul>
-        <li>mob IntelliJ plugin is a port of <a href="https://github.com/remotemobprogramming/mob">mob command line tool</a></li>
-        <li>mob is the fast way to <a href="https://www.remotemobprogramming.org/#git-handover" rel="nofollow">handover code via git</a></li>
-        <li>mob keeps your <code>master</code> branch clean</li>
-        <li>mob creates WIP commits on the <code>mob-session</code> branch</li>
-        <li>mob notifies you when it's time to handover</li>
-        <li>mob squash commits at done session and set <code>Co-authored-by:</code> trailer in commit message</li>
-    </ul>
-    <p>See <a href="https://github.com/remotemobprogramming/intellij-mob">GitHub repository</a> for more information.</p>
-    ]]></description>
-
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
-    <depends>Git4Idea</depends>
 
     <!-- <idea-version> attribute is replaced by patchPluginXml in build.gradle.kts
          see: https://www.jetbrains.org/intellij/sdk/docs/tutorials/build_system/gradle_guide.html#patching-the-plugin-configuration-file -->

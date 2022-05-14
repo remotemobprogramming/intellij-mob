@@ -3,11 +3,13 @@
 ![build](https://github.com/remotemobprogramming/intellij-mob/workflows/build/badge.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=remotemobprogramming_intellij-mob&metric=alert_status)](https://sonarcloud.io/dashboard?id=remotemobprogramming_intellij-mob)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=remotemobprogramming_intellij-mob&metric=coverage)](https://sonarcloud.io/dashboard?id=remotemobprogramming_intellij-mob)
-![version](https://img.shields.io/jetbrains/plugin/v/14266-mob)
-![rating](https://img.shields.io/jetbrains/plugin/r/rating/14266-mob)
+[![Version](https://img.shields.io/jetbrains/plugin/v/14266-mob.svg)](https://plugins.jetbrains.com/plugin/14266-mob)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/14266-mob.svg)](https://plugins.jetbrains.com/plugin/14266-mob)
+[![rating](https://img.shields.io/jetbrains/plugin/r/rating/14266-mob)](https://plugins.jetbrains.com/plugin/14266-mob)
 
 ![mob Logo](documents/logo.svg)
 
+<!-- Plugin description -->
 Swift [git handover](https://www.remotemobprogramming.org/#git-handover) and timer with mob IntelliJ plugin,
 it useful for [Remote Mob Programming](https://www.remotemobprogramming.org).
 
@@ -17,6 +19,7 @@ it useful for [Remote Mob Programming](https://www.remotemobprogramming.org).
 - mob creates WIP commits on the `mob-session` branch
 - mob notifies you when it's time to handover
 - mob squash commits at done session and set `Co-authored-by:` trailer in commit message
+<!-- Plugin description end -->
 
 
 ## How to install
