@@ -18,19 +18,19 @@ plugins {
     id("com.palantir.git-version") version "0.15.0"
 }
 
-dependencies {
-    testImplementation("org.jetbrains.kotlin:kotlin-test-common")
-    testImplementation("io.mockk:mockk:1.12.4")
-    testCompileOnly("org.junit.jupiter", "junit-jupiter-api", "5.8.2")
-    testRuntimeOnly("org.junit.jupiter", "junit-jupiter-engine", "5.8.2")
-}
-
 group = properties("pluginGroup")
 version = properties("pluginVersion")
 
 // Configure project's dependencies
 repositories {
     mavenCentral()
+}
+
+dependencies {
+    testImplementation("org.jetbrains.kotlin:kotlin-test-common")
+    testImplementation("io.mockk:mockk:1.12.4")
+    testCompileOnly("org.junit.jupiter", "junit-jupiter-api", "5.8.2")
+    testRuntimeOnly("org.junit.jupiter", "junit-jupiter-engine", "5.8.2")
 }
 
 // Set the JVM language level used to compile sources and generate files - Java 11 is required since 2020.3
