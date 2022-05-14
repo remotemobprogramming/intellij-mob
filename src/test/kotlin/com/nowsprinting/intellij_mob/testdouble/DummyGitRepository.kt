@@ -4,13 +4,13 @@
 
 package com.nowsprinting.intellij_mob.testdouble
 
-import com.intellij.dvcs.ignore.VcsRepositoryIgnoredFilesHolder
 import com.intellij.dvcs.repo.Repository
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import git4idea.GitLocalBranch
 import git4idea.GitVcs
 import git4idea.branch.GitBranchesCollection
+import git4idea.ignore.GitRepositoryIgnoredFilesHolder
 import git4idea.repo.*
 import git4idea.status.GitStagingAreaHolder
 
@@ -75,7 +75,7 @@ internal open class DummyGitRepository : GitRepository {
         throw Exception("Not yet implemented")
     }
 
-    override fun getIgnoredFilesHolder(): VcsRepositoryIgnoredFilesHolder {
+    override fun getIgnoredFilesHolder(): GitRepositoryIgnoredFilesHolder {
         throw Exception("Not yet implemented")
     }
 
