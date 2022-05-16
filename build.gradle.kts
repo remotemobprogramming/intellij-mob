@@ -13,7 +13,7 @@ plugins {
     id("org.jetbrains.changelog") version "1.3.1"
     // Gradle Qodana Plugin
     id("org.jetbrains.qodana") version "0.1.13"
-
+    // JaCoCo Plugin
     id("jacoco")
     id("com.palantir.git-version") version "0.15.0"
 }
@@ -27,10 +27,8 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.jetbrains.kotlin:kotlin-test-common")
+    testImplementation("org.junit.jupiter", "junit-jupiter", "5.8.2")
     testImplementation("io.mockk:mockk:1.12.4")
-    testCompileOnly("org.junit.jupiter", "junit-jupiter-api", "5.8.2")
-    testRuntimeOnly("org.junit.jupiter", "junit-jupiter-engine", "5.8.2")
 }
 
 // Set the JVM language level used to compile sources and generate files - Java 11 is required since 2020.3
@@ -99,7 +97,7 @@ tasks {
         useJUnitPlatform {
             includeEngines("junit-jupiter")
         }
-        finalizedBy(jacocoTestReport)   // report is always generated after tests run
+        finalizedBy(jacocoTestReport)
     }
     jacocoTestReport {
         dependsOn(test)
