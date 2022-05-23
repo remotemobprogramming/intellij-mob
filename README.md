@@ -1,10 +1,10 @@
 # Swift git handover with mob IntelliJ plugin
 
 ![build](https://github.com/remotemobprogramming/intellij-mob/workflows/build/badge.svg)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=remotemobprogramming_intellij-mob&metric=alert_status)](https://sonarcloud.io/dashboard?id=remotemobprogramming_intellij-mob)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=remotemobprogramming_intellij-mob&metric=coverage)](https://sonarcloud.io/dashboard?id=remotemobprogramming_intellij-mob)
-![version](https://img.shields.io/jetbrains/plugin/v/14266-mob)
-![rating](https://img.shields.io/jetbrains/plugin/r/rating/14266-mob)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=remotemobprogramming_intellij-mob&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=remotemobprogramming_intellij-mob)
+[![Version](https://img.shields.io/jetbrains/plugin/v/14266-mob.svg)](https://plugins.jetbrains.com/plugin/14266-mob)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/14266-mob.svg)](https://plugins.jetbrains.com/plugin/14266-mob)
+[![rating](https://img.shields.io/jetbrains/plugin/r/rating/14266-mob.svg)](https://plugins.jetbrains.com/plugin/14266-mob)
 
 ![mob Logo](documents/logo.svg)
 
