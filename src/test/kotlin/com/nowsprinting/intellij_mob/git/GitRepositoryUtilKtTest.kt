@@ -11,7 +11,7 @@ import com.nowsprinting.intellij_mob.testdouble.FakeLogger
 import git4idea.repo.GitRepositoryManager
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 internal class GitRepositoryUtilKtTest {
@@ -39,7 +39,7 @@ internal class GitRepositoryUtilKtTest {
             mockRepositoryManager,
             FakeLogger()
         )
-        assertTrue(actual is GitRepositoryResult.Success)
+        Assertions.assertTrue(actual is GitRepositoryResult.Success)
     }
 
     @Test
@@ -51,8 +51,8 @@ internal class GitRepositoryUtilKtTest {
             mockRepositoryManager,
             FakeLogger()
         )
-
-        assertTrue(actual is GitRepositoryResult.Failure)
+        kotlin.test.assertTrue(actual is GitRepositoryResult.Failure)
+        kotlin.test.assertEquals("repository not found in this project", actual.reason)
     }
 
     @Test
@@ -67,7 +67,7 @@ internal class GitRepositoryUtilKtTest {
             mockRepositoryManager,
             FakeLogger()
         )
-
-        assertTrue(actual is GitRepositoryResult.Failure)
+        kotlin.test.assertTrue(actual is GitRepositoryResult.Failure)
+        kotlin.test.assertEquals("multiple repositories is not support yet", actual.reason)
     }
 }

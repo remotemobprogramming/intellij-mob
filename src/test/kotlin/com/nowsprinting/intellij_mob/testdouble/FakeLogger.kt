@@ -13,8 +13,7 @@ internal open class FakeLogger : Logger() {
         println(t?.stackTrace)
     }
 
-    @Suppress("UnstableApiUsage")
-    override fun setLevel(level: Level) {
+    override fun setLevel(level: Level?) {
         throw Exception("Not yet implemented")
     }
 

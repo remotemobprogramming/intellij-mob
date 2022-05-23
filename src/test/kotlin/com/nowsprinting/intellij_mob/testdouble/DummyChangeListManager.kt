@@ -165,6 +165,16 @@ open class DummyChangeListManager : ChangeListManager() {
         throw Exception("Not yet implemented")
     }
 
+    override fun invokeAfterUpdate(
+        afterUpdate: Runnable,
+        mode: InvokeAfterUpdateMode,
+        title: String?,
+        dirtyScopeManager: Consumer<in VcsDirtyScopeManager>?,
+        state: ModalityState?
+    ) {
+        throw Exception("Not yet implemented")
+    }
+
     override fun areChangeListsEnabled(): Boolean {
         TODO("Not yet implemented")
     }
@@ -234,6 +244,10 @@ open class DummyChangeListManager : ChangeListManager() {
     }
 
     override fun isFileAffected(file: VirtualFile): Boolean {
+        throw Exception("Not yet implemented")
+    }
+
+    override fun removeImplicitlyIgnoredDirectory(path: String) {
         throw Exception("Not yet implemented")
     }
 
