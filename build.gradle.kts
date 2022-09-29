@@ -5,7 +5,7 @@
 plugins {
     id("org.jetbrains.intellij") version "0.6.5"
     java
-    kotlin("jvm") version "1.4.21"
+    kotlin("jvm") version "1.7.20"
     id("com.palantir.git-version") version "0.12.3"
     jacoco
     id("io.gitlab.arturbosch.detekt") version "1.11.0"
