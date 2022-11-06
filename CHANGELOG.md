@@ -1,5 +1,9 @@
+<!-- Keep a Changelog guide -> https://keepachangelog.com -->
+
+# intellij-mob Changelog
+
 ## [Unreleased]
-- Support for 2022.1
+- Support for 2022.2
 
 ## 1.0.3
 - Support for 2020.3

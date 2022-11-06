@@ -1,28 +1,49 @@
-# Copyright 2020-2021 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+# GitHub Actions Workflow created for testing and preparing the plugin release in following steps:
+# - validate Gradle Wrapper,
+# - run 'test' and 'verifyPlugin' tasks,
+# - run Qodana inspections,
+# - run 'buildPlugin' task and prepare artifact for the further tests,
+# - run 'runPluginVerifier' task,
+# - create a draft release.
 #
-# This workflow will build a Java project with Gradle
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+# Workflow is triggered on push and pull_request events.
+#
+# GitHub Actions reference: https://help.github.com/en/actions
+#
+## JBIJPPTPL
 
-name: build
-
+name: Build
 on:
+  # Trigger the workflow on pushes to only the 'main' branch (this avoids duplicate checks being run e.g. for dependabot pull requests)
   push:
     branches:
       - master
-    paths-ignore:
-      - '**.md'
+  # Trigger the workflow on any pull request
   pull_request:
-    types: [ opened, synchronize, reopened ]  # Same as default
-    paths-ignore:
-      - '**.md'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
 
+  # Run Gradle Wrapper Validation Action to verify the wrapper's checksum
+  # Run verifyPlugin, IntelliJ Plugin Verifier, and test Gradle tasks
+  # Build plugin and provide the artifact for the next workflow jobs
   build:
+    name: Build
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[ci-skip]')"  # Jobs ignored in this step are marked as "skipped" in GitHub Actions
-
+    outputs:
+      version: ${{ steps.properties.outputs.version }}
+      changelog: ${{ steps.properties.outputs.changelog }}
     steps:
+
+      # Free GitHub Actions Environment Disk Space
+      - name: Maximize Build Space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
 
       # Check out current repository
       - name: Fetch Sources
@@ -30,14 +51,14 @@ jobs:
 
       # Validate wrapper
       - name: Gradle Wrapper Validation
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/wrapper-validation-action@v1.0.4 # pinned version, do not use v1.0.5
 
       # Setup Java 11 environment for the next steps
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
           distribution: zulu
-          java-version: 11
+          java-version: 17
           cache: gradle
 
       # Set environment variables
@@ -72,6 +93,31 @@ jobs:
           name: tests-result
           path: ${{ github.workspace }}/build/reports/tests
 
+      # Collect code coverage
+      - name: Collect code coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-coverage
+          path: ${{ github.workspace }}/build/reports/jacoco/test/html
+
+      # Sonar
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@v1.7
+        with:
+          args: >
+            -Dsonar.projectKey=nowsprinting_intellij-mob
+            -Dsonar.organization=remotemobprogramming
+            -Dsonar.sources=src/main/kotlin
+            -Dsonar.exclusions=*.form,**/resources
+            -Dsonar.tests=src/test/kotlin
+            -Dsonar.junit.reportPaths=build/test-results/test/*.xml
+            -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          JAVA_HOME: '' # Avoid 'java: not found' error
+        if: github.repository_owner == 'remotemobprogramming' # Skip because can not read secrets from the public fork
+
       # Cache Plugin Verifier IDEs
       - name: Setup Plugin Verifier IDEs Cache
         uses: actions/cache@v3
@@ -91,31 +137,13 @@ jobs:
           name: pluginVerifier-result
           path: ${{ github.workspace }}/build/reports/pluginVerifier
 
-      # Sonar
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@v1.6
-        with:
-          args: >
-            -Dsonar.projectKey=remotemobprogramming_intellij-mob
-            -Dsonar.organization=remotemobprogramming
-            -Dsonar.sources=src/main/kotlin
-            -Dsonar.exclusions=*.form,**/resources
-            -Dsonar.tests=src/test/kotlin
-            -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
-            -Dsonar.junit.reportPaths=build/test-results/test/*.xml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          JAVA_HOME: '' # Avoid 'java: not found' error
-        if: github.repository_owner == 'remotemobprogramming' # Skip because can not read secrets from the public fork
-
       # Prepare plugin archive content for creating artifact
       - name: Prepare Plugin Artifact
         id: artifact
         shell: bash
         run: |
           cd ${{ github.workspace }}/build/distributions
-          FILENAME=$(ls ./*.zip)
+          FILENAME=`ls *.zip`
           unzip "$FILENAME" -d content
 
           echo "::set-output name=filename::${FILENAME:0:-4}"
@@ -126,3 +154,15 @@ jobs:
         with:
           name: ${{ steps.artifact.outputs.filename }}
           path: ./build/distributions/content/*/*
+
+      # Notification
+      - uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,job,pullRequest
+          mention: here
+          if_mention: failure
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # optional
+        if: always() # Pick up events even if the job fails or is canceled.
