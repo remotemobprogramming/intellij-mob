@@ -1,16 +1,16 @@
 /*
- * Copyright 2020-2021 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Copyright 2020-2022 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package com.nowsprinting.intellij_mob.testdouble
 
-import com.intellij.dvcs.ignore.VcsRepositoryIgnoredFilesHolder
 import com.intellij.dvcs.repo.Repository
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import git4idea.GitLocalBranch
 import git4idea.GitVcs
 import git4idea.branch.GitBranchesCollection
+import git4idea.ignore.GitRepositoryIgnoredFilesHolder
 import git4idea.repo.*
 import git4idea.status.GitStagingAreaHolder
 
@@ -39,6 +39,7 @@ internal open class DummyGitRepository : GitRepository {
         throw Exception("Not yet implemented")
     }
 
+    @Deprecated("Deprecated in Java")
     override fun getGitDir(): VirtualFile {
         throw Exception("Not yet implemented")
     }
@@ -75,7 +76,7 @@ internal open class DummyGitRepository : GitRepository {
         throw Exception("Not yet implemented")
     }
 
-    override fun getIgnoredFilesHolder(): VcsRepositoryIgnoredFilesHolder {
+    override fun getIgnoredFilesHolder(): GitRepositoryIgnoredFilesHolder {
         throw Exception("Not yet implemented")
     }
 
