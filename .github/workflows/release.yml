@@ -55,7 +55,7 @@ jobs:
         with:
           path: build/distributions
 
-      - uses: nowsprinting/check-version-format-action@v1
+      - uses: nowsprinting/check-version-format-action@v3
         id: version
         with:
           prefix: 'v'
