@@ -1,84 +1,109 @@
-# Copyright 2020-2021 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+# GitHub Actions Workflow created for handling the release process based on the draft release prepared
+# with the Build workflow. Running the publishPlugin task requires the PUBLISH_TOKEN secret provided.
 
-name: Release by Tag
-
+name: Release
 on:
-  push:
-    tags:
-      - 'v*'
+  release:
+    types: [prereleased, released]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
 
-  build:
+  # Prepare and publish the plugin to the Marketplace repository
+  release:
+    name: Publish Plugin
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
-      - uses: actions/checkout@v3
 
-      # Cache Gradle dependencies
-      - name: Setup Gradle Dependencies Cache
-        uses: actions/cache@v3
+      # Check out current repository
+      - name: Fetch Sources
+        uses: actions/checkout@v3
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
+          ref: ${{ github.event.release.tag_name }}
 
-      # Cache Gradle Wrapper
-      - name: Setup Gradle Wrapper Cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-
-      - name: Gradle Wrapper Validation
-        uses: gradle/wrapper-validation-action@v1.0.4
-
-      - name: Set up JDK 11
+      # Setup Java 11 environment for the next steps
+      - name: Setup Java
         uses: actions/setup-java@v3
         with:
           distribution: zulu
-          java-version: 11
+          java-version: 17
+          cache: gradle
 
-      - name: Run tests
-        run: ./gradlew test
+      # Set environment variables
+      - name: Export Properties
+        id: properties
+        shell: bash
+        run: |
+          CHANGELOG="$(cat << 'EOM' | sed -e 's/^[[:space:]]*$//g' -e '/./,$!d'
+          ${{ github.event.release.body }}
+          EOM
+          )"
+          
+          CHANGELOG="${CHANGELOG//'%'/'%25'}"
+          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
+          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
 
-      - name: Upload test results
-        uses: actions/upload-artifact@v3
-        with:
-          path: build/reports/tests  # Not specify name reason is workaround "zip in zip" problem, see: https://github.com/actions/upload-artifact/issues/39
-        if: always()  # Keep the test result as an artifact even if tests fails
+          echo "changelog=$CHANGELOG" >> "$GITHUB_OUTPUT"
 
-      - name: Build plugin
-        run: ./gradlew buildPlugin
-
-      - name: Upload build
-        uses: actions/upload-artifact@v3
-        with:
-          path: build/distributions
-
-      - uses: nowsprinting/check-version-format-action@v1
-        id: version
-        with:
-          prefix: 'v'
-
-      - name: Publish plugin to EAP channel
-        run: ./gradlew publishPlugin
+      # Update Unreleased section with the current release note
+      - name: Patch Changelog
+        if: ${{ steps.properties.outputs.changelog != '' }}
         env:
-          INTELLIJ_PUBLISH_TOKEN: ${{ secrets.JETBRAINS_MARKETPLACE_TOKEN }}
-          INTELLIJ_PUBLISH_CHANNEL: eap
-        if: steps.version.outputs.is_valid == 'true'  # Even stable releases need to be uploaded to the eap channel. see: https://plugins.jetbrains.com/docs/marketplace/custom-release-channels.html#CustomReleaseChannels-ChannelPriorityNotice
+          CHANGELOG: ${{ steps.properties.outputs.changelog }}
+        run: |
+          ./gradlew patchChangelog --release-note="$CHANGELOG"
 
-      - name: Publish plugin to Stable channel
-        run: ./gradlew publishPlugin
+      # Publish the plugin to the Marketplace
+      - name: Publish Plugin
         env:
-          INTELLIJ_PUBLISH_TOKEN: ${{ secrets.JETBRAINS_MARKETPLACE_TOKEN }}
-          INTELLIJ_PUBLISH_CHANNEL: Stable
-        if: steps.version.outputs.is_stable == 'true'
+          PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+          CERTIFICATE_CHAIN: ${{ secrets.CERTIFICATE_CHAIN }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          PRIVATE_KEY_PASSWORD: ${{ secrets.PRIVATE_KEY_PASSWORD }}
+        run: ./gradlew publishPlugin
 
+      # Upload artifact as a release asset
+      - name: Upload Release Asset
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ github.event.release.tag_name }} ./build/distributions/*
+
+      # Create pull request
+      - name: Create Pull Request
+        if: ${{ steps.properties.outputs.changelog != '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${{ github.event.release.tag_name }}"
+          BRANCH="changelog-update-$VERSION"
+
+          git config user.email "action@github.com"
+          git config user.name "GitHub Action"
+
+          git checkout -b $BRANCH
+          git commit -am "Changelog update - $VERSION"
+          git push --set-upstream origin $BRANCH
+
+          gh pr create \
+            --title "Changelog update - \`$VERSION\`" \
+            --body "Current pull request contains patched \`CHANGELOG.md\` file for the \`$VERSION\` version." \
+            --base main \
+            --head $BRANCH
+
+      # Notification
       - uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
-          fields: repo,message,commit,author,action,eventName,ref,workflow # selectable (default: repo,message)
+          fields: repo,message,job,pullRequest
+          mention: here
+          if_mention: failure
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # optional
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # optional
         if: always() # Pick up events even if the job fails or is canceled.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Copyright 2020-2022 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package com.nowsprinting.intellij_mob.action.done
@@ -14,7 +14,6 @@ import com.intellij.openapi.vcs.changes.LocalChangeList
 import com.intellij.openapi.vcs.changes.ui.CommitChangeListDialog
 import com.nowsprinting.intellij_mob.MobBundle
 import com.nowsprinting.intellij_mob.util.notify
-import git4idea.checkin.GitCommitAndPushExecutor
 
 private val logger = Logger.getInstance("#com.nowsprinting.intellij_mob.action.done.GitCommitAndPushExecutorHelperKt")
 
@@ -29,7 +28,6 @@ fun openGitCommitAndPushDialog(project: Project, coAuthors: Set<String>) {
         try {
             val changes = ChangeListManager.getInstance(project).allChanges
             val initialSelection = LocalChangeList.createEmptyChangeList(project, LocalChangeList.getDefaultName())
-            val executor = GitCommitAndPushExecutor()
             val initialCommitMessage = StringBuilder(MobBundle.message("mob.done.commit_dialog.initial_commit_message"))
             for (author in coAuthors) {
                 initialCommitMessage.append("%nCo-authored-by: $author")
@@ -40,7 +38,7 @@ fun openGitCommitAndPushDialog(project: Project, coAuthors: Set<String>) {
                 project,
                 changes,
                 initialSelection,
-                executor,
+                null,
                 String.format(initialCommitMessage.toString())
             )
             logger.debug(MobBundle.message("mob.done.commit_dialog.closed"))

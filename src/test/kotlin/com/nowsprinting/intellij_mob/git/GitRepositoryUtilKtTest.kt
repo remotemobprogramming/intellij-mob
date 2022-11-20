@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Copyright 2020-2022 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package com.nowsprinting.intellij_mob.git
@@ -51,8 +51,8 @@ internal class GitRepositoryUtilKtTest {
             mockRepositoryManager,
             FakeLogger()
         )
-        kotlin.test.assertTrue(actual is GitRepositoryResult.Failure)
-        kotlin.test.assertEquals("repository not found in this project", actual.reason)
+        Assertions.assertTrue(actual is GitRepositoryResult.Failure)
+        Assertions.assertEquals("repository not found in this project", (actual as GitRepositoryResult.Failure).reason)
     }
 
     @Test
@@ -67,7 +67,10 @@ internal class GitRepositoryUtilKtTest {
             mockRepositoryManager,
             FakeLogger()
         )
-        kotlin.test.assertTrue(actual is GitRepositoryResult.Failure)
-        kotlin.test.assertEquals("multiple repositories is not support yet", actual.reason)
+        Assertions.assertTrue(actual is GitRepositoryResult.Failure)
+        Assertions.assertEquals(
+            "multiple repositories is not support yet",
+            (actual as GitRepositoryResult.Failure).reason
+        )
     }
 }

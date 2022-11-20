@@ -1,120 +1,126 @@
-/*
- * Copyright 2020-2021 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
- */
+import org.jetbrains.changelog.Changelog
+import org.jetbrains.changelog.markdownToHTML
+
+fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
-    id("org.jetbrains.intellij") version "0.6.5"
-    java
-    kotlin("jvm") version "1.4.21"
-    id("com.palantir.git-version") version "0.12.3"
-    jacoco
-    id("io.gitlab.arturbosch.detekt") version "1.11.0"
+    // Java support
+    id("java")
+    // Kotlin support
+    id("org.jetbrains.kotlin.jvm") version "1.7.21"
+    // Gradle IntelliJ Plugin
+    id("org.jetbrains.intellij") version "1.10.0"
+    // Gradle Changelog Plugin
+    id("org.jetbrains.changelog") version "2.0.0"
+    // JaCoCo Plugin
+    id("jacoco")
 }
 
-group = "com.nowsprinting"
+group = properties("pluginGroup")
+version = properties("pluginVersion")
 
-val gitVersion: groovy.lang.Closure<String> by extra
-val suppressPrefix = { s: Any -> (s as String).replace("^v".toRegex(), "") }
-version = suppressPrefix(gitVersion())
-
+// Configure project's dependencies
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0")
-    testImplementation("io.mockk:mockk:1.9")
-    testCompile("org.junit.jupiter", "junit-jupiter-api", "5.6.2")
-    testRuntime("org.junit.jupiter", "junit-jupiter-engine", "5.6.2")
+    testImplementation(platform("org.junit:junit-bom:5.9.1"))
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher") {
+        because("Only needed to run tests in a version of IntelliJ IDEA that bundles older versions")
+    }
+    testImplementation("org.junit.jupiter", "junit-jupiter", "5.8.2")
+    testImplementation("org.junit.jupiter", "junit-jupiter-params", "5.8.2")
+    testImplementation("io.mockk:mockk:1.13.2")
 }
 
-// See https://github.com/JetBrains/gradle-intellij-plugin/
+// Set the JVM language level used to build project. Use Java 11 for 2020.3+, and Java 17 for 2022.2+. See: https://jb.gg/intellij-platform-versions
+kotlin {
+    jvmToolchain(11)
+}
+
+// Configure Gradle IntelliJ Plugin - read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
 intellij {
-    version = "2020.3"
-    setPlugins("git4idea")
+    pluginName.set(properties("pluginName"))
+    version.set(properties("platformVersion"))
+    type.set(properties("platformType"))
+
+    // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
+    plugins.set(properties("platformPlugins").split(',').map(String::trim).filter(String::isNotEmpty))
 }
-configure<JavaPluginConvention> {
-    sourceCompatibility = JavaVersion.VERSION_1_8
+
+// Configure Gradle Changelog Plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
+changelog {
+    groups.set(emptyList())
+    repositoryUrl.set(properties("pluginRepositoryUrl"))
 }
-detekt {
-    config = files("$projectDir/config/detekt/detekt.yml")
-    reports {
-        html.enabled = true // observe findings in your browser with structure and code snippets
-        xml.enabled = true // checkstyle like format mainly for integrations like Jenkins
-        txt.enabled = false // similar to the console output, contains issue signature to manually edit baseline files
-    }
-}
+
 tasks {
-    // Set the compatibility versions to 1.8
-    withType<JavaCompile> {
-        sourceCompatibility = "1.8"
-        targetCompatibility = "1.8"
-    }
-    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions.jvmTarget = "1.8"
+    wrapper {
+        gradleVersion = properties("gradleVersion")
     }
 
-    withType<io.gitlab.arturbosch.detekt.Detekt> {
-        jvmTarget = "1.8"
+    patchPluginXml {
+        version.set(properties("pluginVersion"))
+        sinceBuild.set(properties("pluginSinceBuild"))
+        untilBuild.set(properties("pluginUntilBuild"))
+
+        // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
+        pluginDescription.set(
+            file("README.md").readText().lines().run {
+                val start = "<!-- Plugin description -->"
+                val end = "<!-- Plugin description end -->"
+
+                if (!containsAll(listOf(start, end))) {
+                    throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
+                }
+                subList(indexOf(start) + 1, indexOf(end))
+            }.joinToString("\n").let { markdownToHTML(it) }
+        )
+
+        // Get the latest available change notes from the changelog file
+        changeNotes.set(provider {
+            with(changelog) {
+                renderItem(
+                    getOrNull(properties("pluginVersion")) ?: getLatest(),
+                    Changelog.OutputType.HTML,
+                )
+            }
+        })
     }
 
     test {
         useJUnitPlatform {
             includeEngines("junit-jupiter")
         }
-        finalizedBy(jacocoTestReport)   // report is always generated after tests run
+        finalizedBy(jacocoTestReport)
     }
     jacocoTestReport {
-        reports {
-            xml.isEnabled = true
-            csv.isEnabled = false
-            html.destination = file("${buildDir}/reports/jacocoHtml")
-        }
+        dependsOn(test)
+        reports.xml.required.set(true)
     }
+
+    // Configure UI tests plugin
+    // Read more: https://github.com/JetBrains/intellij-ui-test-robot
+    runIdeForUiTests {
+        systemProperty("robot-server.port", "8082")
+        systemProperty("ide.mac.message.dialogs.as.sheets", "false")
+        systemProperty("jb.privacy.policy.text", "<!--999.999-->")
+        systemProperty("jb.consents.confirmation.enabled", "false")
+    }
+
+    signPlugin {
+        certificateChain.set(System.getenv("CERTIFICATE_CHAIN"))
+        privateKey.set(System.getenv("PRIVATE_KEY"))
+        password.set(System.getenv("PRIVATE_KEY_PASSWORD"))
+    }
+
     publishPlugin {
-        token(System.getenv("INTELLIJ_PUBLISH_TOKEN"))
-        channels(arrayOf(System.getenv("INTELLIJ_PUBLISH_CHANNEL")))
+        dependsOn("patchChangelog")
+        token.set(System.getenv("PUBLISH_TOKEN"))
+        // pluginVersion is based on the SemVer (https://semver.org) and supports pre-release labels, like 2.1.7-alpha.3
+        // Specify pre-release label to publish the plugin in a custom Release Channel automatically. Read more:
+        // https://plugins.jetbrains.com/docs/intellij/deployment.html#specifying-a-release-channel
+        channels.set(listOf(properties("pluginVersion").split('-').getOrElse(1) { "default" }.split('.').first()))
     }
-}
-tasks.getByName<org.jetbrains.intellij.tasks.PatchPluginXmlTask>("patchPluginXml") {
-    changeNotes(
-        changeNotesFromChangeLog()
-    )
-    sinceBuild("203")
-    untilBuild(null)
-}
-
-/**
- * Create latest version change notes from CHANGELOG.md
- */
-fun changeNotesFromChangeLog(): String {
-    val builder = StringBuilder()
-    builder.append("<ul>")
-    builder.append(latestChangeLog())
-    builder.append("</ul>")
-    return builder.toString()
-}
-
-fun latestChangeLog(): String {
-    val builder = StringBuilder()
-    val changelog = File("CHANGELOG.md")
-    var inLatestVersion = false
-    changelog.bufferedReader().use() {
-        it.lineSequence()
-            .filter(String::isNotBlank)
-            .forEach {
-                if (it.startsWith("#")) {
-                    if (inLatestVersion && builder.isNotEmpty()) {
-                        return@use  // break, found older version
-                    } else {
-                        inLatestVersion = true
-                        return@forEach  // continue next line
-                    }
-                }
-                builder.append("<li>${it.substring(2)}</li>")
-            }
-    }
-    return builder.toString()
 }

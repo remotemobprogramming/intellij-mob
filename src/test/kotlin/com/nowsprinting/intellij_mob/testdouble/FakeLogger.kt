@@ -1,9 +1,10 @@
 /*
- * Copyright 2020-2021 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Copyright 2020-2022 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package com.nowsprinting.intellij_mob.testdouble
 
+import com.intellij.openapi.diagnostic.LogLevel
 import com.intellij.openapi.diagnostic.Logger
 import org.apache.log4j.Level
 
@@ -13,7 +14,13 @@ internal open class FakeLogger : Logger() {
         println(t?.stackTrace)
     }
 
-    override fun setLevel(level: Level?) {
+    @Deprecated("Deprecated in Java", ReplaceWith("throw Exception(\"Not yet implemented\")"))
+    @Suppress("UnstableApiUsage")
+    override fun setLevel(level: Level) {
+        throw Exception("Not yet implemented")
+    }
+
+    override fun setLevel(level: LogLevel) {
         throw Exception("Not yet implemented")
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Copyright 2020-2022 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package com.nowsprinting.intellij_mob.testdouble
@@ -11,7 +11,6 @@ import com.intellij.openapi.vcs.FilePath
 import com.intellij.openapi.vcs.FileStatus
 import com.intellij.openapi.vcs.changes.*
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.util.Consumer
 import com.intellij.util.ThreeState
 import java.io.File
 
@@ -80,6 +79,7 @@ open class DummyChangeListManager : ChangeListManager() {
         throw Exception("Not yet implemented")
     }
 
+    @Deprecated("Deprecated in Java")
     override fun getFilesToIgnore(): Array<IgnoredFileBean> {
         throw Exception("Not yet implemented")
     }
@@ -96,10 +96,12 @@ open class DummyChangeListManager : ChangeListManager() {
         throw Exception("Not yet implemented")
     }
 
+    @Deprecated("Deprecated in Java", ReplaceWith("throw Exception(\"Not yet implemented\")"))
     override fun registerCommitExecutor(executor: CommitExecutor) {
         throw Exception("Not yet implemented")
     }
 
+    @Deprecated("Deprecated in Java", ReplaceWith("throw Exception(\"Not yet implemented\")"))
     override fun reopenFiles(paths: MutableList<out FilePath>) {
         throw Exception("Not yet implemented")
     }
@@ -116,10 +118,12 @@ open class DummyChangeListManager : ChangeListManager() {
         TODO("Not yet implemented")
     }
 
+    @Deprecated("Deprecated in Java", ReplaceWith("throw Exception(\"Not yet implemented\")"))
     override fun addFilesToIgnore(vararg ignoredFiles: IgnoredFileBean?) {
         throw Exception("Not yet implemented")
     }
 
+    @Deprecated("Deprecated in Java", ReplaceWith("throw Exception(\"Not yet implemented\")"))
     override fun addDirectoryToIgnoreImplicitly(path: String) {
         throw Exception("Not yet implemented")
     }
@@ -144,6 +148,7 @@ open class DummyChangeListManager : ChangeListManager() {
         throw Exception("Not yet implemented")
     }
 
+    @Deprecated("Deprecated in Java", ReplaceWith("throw Exception(\"Not yet implemented\")"))
     override fun setFilesToIgnore(vararg ignoredFiles: IgnoredFileBean?) {
         throw Exception("Not yet implemented")
     }
@@ -160,16 +165,6 @@ open class DummyChangeListManager : ChangeListManager() {
         afterUpdate: Runnable,
         mode: InvokeAfterUpdateMode,
         title: String?,
-        state: ModalityState?
-    ) {
-        throw Exception("Not yet implemented")
-    }
-
-    override fun invokeAfterUpdate(
-        afterUpdate: Runnable,
-        mode: InvokeAfterUpdateMode,
-        title: String?,
-        dirtyScopeManager: Consumer<in VcsDirtyScopeManager>?,
         state: ModalityState?
     ) {
         throw Exception("Not yet implemented")
@@ -203,6 +198,8 @@ open class DummyChangeListManager : ChangeListManager() {
         throw Exception("Not yet implemented")
     }
 
+    @Deprecated("Deprecated in Java")
+    @Suppress("UnstableApiUsage")
     override fun getVcsFor(change: Change): AbstractVcs? {
         throw Exception("Not yet implemented")
     }
@@ -244,10 +241,6 @@ open class DummyChangeListManager : ChangeListManager() {
     }
 
     override fun isFileAffected(file: VirtualFile): Boolean {
-        throw Exception("Not yet implemented")
-    }
-
-    override fun removeImplicitlyIgnoredDirectory(path: String) {
         throw Exception("Not yet implemented")
     }
 

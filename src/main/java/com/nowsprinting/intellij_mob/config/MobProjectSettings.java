@@ -30,7 +30,7 @@ public class MobProjectSettings implements PersistentStateComponent<MobProjectSe
     public boolean nextStay;
 
     public static MobProjectSettings getInstance(Project project) {
-        return ServiceManager.getService(project, MobProjectSettings.class);
+        return project.getService(MobProjectSettings.class);
     }
 
     @Override

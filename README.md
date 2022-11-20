@@ -8,6 +8,7 @@
 
 ![mob Logo](documents/logo.svg)
 
+<!-- Plugin description -->
 Swift [git handover](https://www.remotemobprogramming.org/#git-handover) and timer with mob IntelliJ plugin,
 it useful for [Remote Mob Programming](https://www.remotemobprogramming.org).
 
@@ -17,6 +18,7 @@ it useful for [Remote Mob Programming](https://www.remotemobprogramming.org).
 - mob creates WIP commits on the `mob-session` branch
 - mob notifies you when it's time to handover
 - mob squash commits at done session and set `Co-authored-by:` trailer in commit message
+<!-- Plugin description end -->
 
 
 ## How to install
