@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Copyright 2020-2022 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package com.nowsprinting.intellij_mob.action.share
@@ -13,6 +13,7 @@ import com.nowsprinting.intellij_mob.util.notifyWarning
 import java.awt.AWTException
 import java.awt.Robot
 import java.awt.event.KeyEvent
+import java.util.*
 
 /**
  * Start screenshare with Zoom (requires configuration in zoom to work)
@@ -50,7 +51,7 @@ class ShareAction : AnAction() {
     }
 
     private fun keysByOS(): IntArray {
-        val os = System.getProperty("os.name").toLowerCase()
+        val os = System.getProperty("os.name").lowercase(Locale.getDefault())
         if (os.startsWith("mac")) {
             return intArrayOf(
                 KeyEvent.VK_SHIFT,

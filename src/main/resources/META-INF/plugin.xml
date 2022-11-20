@@ -10,6 +10,7 @@
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
+    <depends>Git4Idea</depends>
 
     <!-- <idea-version> attribute is replaced by patchPluginXml in build.gradle.kts
          see: https://www.jetbrains.org/intellij/sdk/docs/tutorials/build_system/gradle_guide.html#patching-the-plugin-configuration-file -->

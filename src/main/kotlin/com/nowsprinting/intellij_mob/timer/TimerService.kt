@@ -1,12 +1,13 @@
 /*
- * Copyright 2020-2021 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ * Copyright 2020-2022 Koji Hasegawa. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
  */
 
 package com.nowsprinting.intellij_mob.timer
 
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
-import com.intellij.openapi.components.ServiceManager
+import com.intellij.openapi.components.Service
+import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.nowsprinting.intellij_mob.MobBundle
@@ -25,6 +26,7 @@ enum class TimerState {
     ELAPSED_TIME
 }
 
+@Service
 class TimerService {
     private val logger = Logger.getInstance(javaClass)
     private var startTime: LocalDateTime? = null
@@ -134,8 +136,9 @@ class TimerService {
     } // may it leak???
 
     companion object {
+        @JvmStatic
         fun getInstance(project: Project): TimerService? {
-            return ServiceManager.getService(project, TimerService::class.java)
+            return project.service<TimerService>()
         }
     }
 }
