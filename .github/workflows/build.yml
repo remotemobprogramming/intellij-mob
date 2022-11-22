@@ -104,7 +104,7 @@ jobs:
 
       # Sonar
       - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@v1.7
+        uses: sonarsource/sonarcloud-github-action@v1.8
         with:
           args: >
             -Dsonar.projectKey=remotemobprogramming_intellij-mob
