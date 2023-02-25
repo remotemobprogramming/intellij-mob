@@ -25,6 +25,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions: write-all
 jobs:
 
   # Run Gradle Wrapper Validation Action to verify the wrapper's checksum

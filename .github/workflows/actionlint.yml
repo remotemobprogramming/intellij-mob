@@ -11,6 +11,8 @@ on:
     paths:
       - .github/workflows/**
 
+permissions:
+  contents: read
 jobs:
   lint:
     runs-on: ubuntu-latest
