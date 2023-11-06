@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.9.3"))
+    testImplementation(platform("org.junit:junit-bom:5.10.1"))
     testRuntimeOnly("org.junit.platform:junit-platform-launcher") {
         because("Only needed to run tests in a version of IntelliJ IDEA that bundles older versions")
     }
