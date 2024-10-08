@@ -4,8 +4,14 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions: write-all
+
 jobs:
   update_release_draft:
     runs-on: ubuntu-latest
