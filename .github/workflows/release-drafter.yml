@@ -9,6 +9,7 @@ permissions: write-all
 jobs:
   update_release_draft:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
       - uses: release-drafter/release-drafter@v6
