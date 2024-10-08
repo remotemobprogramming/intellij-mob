@@ -8,6 +8,7 @@ permissions: write-all
 jobs:
   pr-labeler:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
       - uses: TimonVS/pr-labeler-action@v5
