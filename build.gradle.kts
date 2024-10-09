@@ -31,7 +31,7 @@ dependencies {
     }
     testImplementation("org.junit.jupiter", "junit-jupiter", "5.8.2")
     testImplementation("org.junit.jupiter", "junit-jupiter-params", "5.8.2")
-    testImplementation("io.mockk:mockk:1.13.12")
+    testImplementation("io.mockk:mockk:1.13.13")
 }
 
 // Set the JVM language level used to build project. Use Java 11 for 2020.3+, and Java 17 for 2022.2+. See: https://jb.gg/intellij-platform-versions
